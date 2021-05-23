@@ -47,6 +47,7 @@ pushd %LUAJIT_PATH%
     pushd src
         call msvcbuild.bat
         copy *.lib dist
+        copy *.dll dist
     popd
     
     @REM roboRIO build
@@ -54,11 +55,12 @@ pushd %LUAJIT_PATH%
     %ATHENA_MAKE% %ATHENA_FLAGS%
     pushd src
         copy *.a dist
+        copy *.so dist
     popd
 
     @REM Make zip
     pushd src\dist
-        tar -acf luajit.zip include *.lib *.a
+        tar -acf luajit.zip include *.lib *.dll *.a *.so
     popd
 popd
 
