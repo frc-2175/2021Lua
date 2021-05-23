@@ -7,9 +7,7 @@
 #include <frc/TimedRobot.h>
 #include <frc/drive/DifferentialDrive.h>
 
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include <lua.hpp>
 
 /**
  * This is a demo program showing the use of the DifferentialDrive class.

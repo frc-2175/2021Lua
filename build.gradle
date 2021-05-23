@@ -41,7 +41,7 @@ deploy {
 def includeSrcInIncludeRoot = false
 
 // Set this to true to enable desktop support.
-def includeDesktopSupport = true
+def includeDesktopSupport = false
 
 // Enable simulation gui support. Must check the box in vscode to enable support
 // upon debugging
@@ -73,19 +73,8 @@ model {
                     srcDir 'src/main/cpp'
                     include '**/*.cpp', '**/*.cc'
                 }
-                source {
-                    srcDir 'src/lua-5.4.3/src'
-                    include '**/*.c'
-                    exclude '**/lua.c', '**/luac.c'
-                }
-                // source {
-                //     srcDir 'src/LuaJIT-2.1/src'
-                //     include '**/*.c'
-                // }
                 exportedHeaders {
                     srcDir 'src/main/include'
-                    // srcDir 'src/LuaJIT-2.1/src'
-                    srcDir 'src/lua-5.4.3/src'
                     if (includeSrcInIncludeRoot) {
                         srcDir 'src/main/cpp'
                     }
@@ -95,6 +84,8 @@ model {
             // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
             wpi.deps.vendor.cpp(it)
             wpi.deps.wpilib(it)
+
+            wpi.useLibrary(it, "libluajit")
         }
     }
     testSuites {
@@ -111,6 +102,20 @@ model {
             wpi.deps.vendor.cpp(it)
             wpi.deps.wpilib(it)
             wpi.deps.googleTest(it)
+
+            wpi.useLibrary(it, "libluajit")
+        }
+    }
+    libraries {
+        libluajit(jaci.gradle.nativedeps.NativeLib) {
+            headerDirs << 'include'
+            staticMatchers << '**/*.a'
+
+            file = project.file("lib/libluajit.zip")
+            targetPlatforms << wpi.platforms.roborio
+            if (includeDesktopSupport) {
+                targetPlatforms << wpi.platforms.desktop
+            }
         }
     }
 }

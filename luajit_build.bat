@@ -22,14 +22,23 @@ setlocal
 
 @REM Removing `2>/dev/null` is not portable but it does work for this specific case.
 
+set LUAJIT_PATH=src\LuaJIT-2.1
 set YEAR=2021
 set PATH=%PATH%;%USERPROFILE%\.gradle\toolchains\frc\%YEAR%\roborio\bin
 
 set FLAGS=HOST_CC="gcc -m32" CROSS=arm-frc%YEAR%-linux-gnueabi- TARGET_CFLAGS="-mcpu=cortex-a9 -mfloat-abi=softfp" TARGET_SYS="Linux"
 
-pushd src\LuaJIT-2.1
+pushd %LUAJIT_PATH%
 @REM frc%YEAR%-make clean %FLAGS%
 frc%YEAR%-make %FLAGS%
+pushd src
+mkdir include
+copy *.h include
+copy *.hpp include
+tar -acf libluajit.zip libluajit.a libluajit.so include
 popd
+popd
+
+move %LUAJIT_PATH%\src\libluajit.zip lib
 
 endlocal
