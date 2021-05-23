@@ -11,6 +11,10 @@ setlocal
 
 @REM http://mingw-w64.org/doku.php/download#mingw-builds
 
+@REM Then make sure that you have a recent copy of Visual Studio installed. You MUST
+@REM run this script from a Visual Studio command prompt, and you MUST make sure that
+@REM it will compile as x64 instead of x86.
+
 @REM You then may also need to modify the src/Makefile in LuaJIT to remove
 @REM `2>/dev/null` from `TARGET_AR`. I believe that due to a bug in the target and
 @REM host detection - it should never be applied when the host is Windows, but it
@@ -20,25 +24,44 @@ setlocal
 @REM https://github.com/LuaJIT/LuaJIT/issues/336
 @REM https://github.com/LuaJIT/LuaJIT/commit/82151a4514e6538086f3f5e01cb8d4b22287b14f
 
-@REM Removing `2>/dev/null` is not portable but it does work for this specific case.
+@REM Removing `2>/dev/null` is not portable but it does work for this specific case,
+@REM and I think it just shuts up a warning.
 
-set LUAJIT_PATH=src\LuaJIT-2.1
+set LUAJIT_PATH=LuaJIT-2.1
 set YEAR=2021
 set PATH=%PATH%;%USERPROFILE%\.gradle\toolchains\frc\%YEAR%\roborio\bin
 
-set FLAGS=HOST_CC="gcc -m32" CROSS=arm-frc%YEAR%-linux-gnueabi- TARGET_CFLAGS="-mcpu=cortex-a9 -mfloat-abi=softfp" TARGET_SYS="Linux"
+set ATHENA_MAKE=frc%YEAR%-make
+set ATHENA_FLAGS=HOST_CC="gcc -m32" CROSS=arm-frc%YEAR%-linux-gnueabi- TARGET_CFLAGS="-mcpu=cortex-a9 -mfloat-abi=softfp" TARGET_SYS="Linux"
 
 pushd %LUAJIT_PATH%
-@REM frc%YEAR%-make clean %FLAGS%
-frc%YEAR%-make %FLAGS%
-pushd src
-mkdir include
-copy *.h include
-copy *.hpp include
-tar -acf libluajit.zip libluajit.a libluajit.so include
-popd
+    pushd src
+        rmdir /Q /S dist
+        mkdir dist
+        mkdir dist\include
+        copy *.h dist\include
+        copy *.hpp dist\include
+    popd
+
+    @REM Windows build
+    pushd src
+        call msvcbuild.bat
+        copy *.lib dist
+    popd
+    
+    @REM roboRIO build
+    %ATHENA_MAKE% clean %ATHENA_FLAGS%
+    %ATHENA_MAKE% %ATHENA_FLAGS%
+    pushd src
+        copy *.a dist
+    popd
+
+    @REM Make zip
+    pushd src\dist
+        tar -acf luajit.zip include *.lib *.a
+    popd
 popd
 
-move %LUAJIT_PATH%\src\libluajit.zip lib
+move %LUAJIT_PATH%\src\dist\luajit.zip lib
 
 endlocal

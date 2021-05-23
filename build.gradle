@@ -41,7 +41,7 @@ deploy {
 def includeSrcInIncludeRoot = false
 
 // Set this to true to enable desktop support.
-def includeDesktopSupport = false
+def includeDesktopSupport = true
 
 // Enable simulation gui support. Must check the box in vscode to enable support
 // upon debugging
@@ -64,9 +64,6 @@ model {
     components {
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
-            if (includeDesktopSupport) {
-                targetPlatform wpi.platforms.desktop
-            }
 
             sources.cpp {
                 source {
@@ -85,37 +82,45 @@ model {
             wpi.deps.vendor.cpp(it)
             wpi.deps.wpilib(it)
 
-            wpi.useLibrary(it, "libluajit")
+            wpi.useLibrary(it, "luajit_athena")
         }
-    }
-    testSuites {
-        frcUserProgramTest(GoogleTestTestSuiteSpec) {
-            testing $.components.frcUserProgram
+        simulatorProgram(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.desktop
 
             sources.cpp {
                 source {
-                    srcDir 'src/test/cpp'
-                    include '**/*.cpp'
+                    srcDir 'src/main/cpp'
+                    include '**/*.cpp', '**/*.cc'
+                }
+                exportedHeaders {
+                    srcDir 'src/main/include'
+                    if (includeSrcInIncludeRoot) {
+                        srcDir 'src/main/cpp'
+                    }
                 }
             }
 
+            // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
             wpi.deps.vendor.cpp(it)
             wpi.deps.wpilib(it)
-            wpi.deps.googleTest(it)
 
-            wpi.useLibrary(it, "libluajit")
+            wpi.useLibrary(it, "luajit_win64")
         }
     }
     libraries {
-        libluajit(jaci.gradle.nativedeps.NativeLib) {
+        // See the following for platform details:
+        // https://github.com/wpilibsuite/native-utils/blob/main/ToolchainPlugin/src/main/java/edu/wpi/first/toolchain/NativePlatforms.java
+        luajit_athena(jaci.gradle.nativedeps.NativeLib) {
             headerDirs << 'include'
-            staticMatchers << '**/*.a'
-
-            file = project.file("lib/libluajit.zip")
+            staticMatchers << '*.a'
+            file = project.file("lib/luajit.zip")
             targetPlatforms << wpi.platforms.roborio
-            if (includeDesktopSupport) {
-                targetPlatforms << wpi.platforms.desktop
-            }
+        }
+        luajit_win64(jaci.gradle.nativedeps.NativeLib) {
+            headerDirs << 'include'
+            staticMatchers << '*.lib'
+            file = project.file("lib/luajit.zip")
+            targetPlatforms << wpi.platforms.desktop
         }
     }
 }

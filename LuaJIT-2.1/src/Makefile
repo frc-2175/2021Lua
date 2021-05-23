@@ -173,6 +173,10 @@ else
   endif
 endif
 
+ifneq (Windows,$(HOST_SYS))
+  TARGET_AR+= 2>/dev/null
+endif
+
 ##############################################################################
 # Flags and options for host and target.
 ##############################################################################
@@ -311,7 +315,6 @@ ifeq (Windows,$(TARGET_SYS))
   TARGET_XSHLDFLAGS= -shared -Wl,--out-implib,$(TARGET_DLLDOTANAME)
   TARGET_DYNXLDOPTS=
 else
-#   TARGET_AR+= 2>/dev/null
 ifeq (,$(shell $(TARGET_CC) -o /dev/null -c -x c /dev/null -fno-stack-protector 2>/dev/null || echo 1))
   TARGET_XCFLAGS+= -fno-stack-protector
 endif
@@ -709,7 +712,7 @@ include Makefile.dep
 
 $(LUAJIT_A): $(LJVMCORE_O)
 	$(E) "AR        $@"
-	$(TARGET_AR) $@ $(LJVMCORE_O)
+	$(Q)$(TARGET_AR) $@ $(LJVMCORE_O)
 
 # The dependency on _O, but linking with _DYNO is intentional.
 $(LUAJIT_SO): $(LJVMCORE_O)

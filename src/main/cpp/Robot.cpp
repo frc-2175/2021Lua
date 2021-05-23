@@ -23,19 +23,19 @@ class Robot : public frc::TimedRobot {
 
 public:
   void RobotInit() override {
-    L = luaL_newstate();
-    int result = luaL_dostring(L, "return 'Hello from Lua!'");
-    if (result) {
-      printf("Failed to run script: %s\n", lua_tostring(L, -1));
-      return;
-    }
+    // L = luaL_newstate();
+    // int result = luaL_dostring(L, "return 'Hello from Lua!'");
+    // if (result) {
+    //   printf("Failed to run script: %s\n", lua_tostring(L, -1));
+    //   return;
+    // }
 
-    /* Get the returned value at the top of the stack (index -1) */
-    const char* ret = lua_tostring(L, -1);
+    // /* Get the returned value at the top of the stack (index -1) */
+    // const char* ret = lua_tostring(L, -1);
 
-    printf("Script returned: %s\n", ret);
+    // printf("Script returned: %s\n", ret);
 
-    lua_pop(L, 1);  /* Take the returned value out of the stack */
+    // lua_pop(L, 1);  /* Take the returned value out of the stack */
   }
 
 #if 0
