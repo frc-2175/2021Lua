@@ -113,12 +113,14 @@ model {
         luajit_athena(jaci.gradle.nativedeps.NativeLib) {
             headerDirs << 'include'
             staticMatchers << '*.a'
+            dynamicMatchers << '*.so'
             file = project.file("lib/luajit.zip")
             targetPlatforms << wpi.platforms.roborio
         }
         luajit_win64(jaci.gradle.nativedeps.NativeLib) {
             headerDirs << 'include'
             staticMatchers << '*.lib'
+            dynamicMatchers << '*.dll'
             file = project.file("lib/luajit.zip")
             targetPlatforms << wpi.platforms.desktop
         }
