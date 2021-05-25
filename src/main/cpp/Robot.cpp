@@ -29,11 +29,22 @@ public:
     luaL_openlibs(L);
     int result = luaL_dostring(L,
       "print(\"Hello from Lua.\")\n"
-      "local ffi = require(\"ffi\")\n"
+      "ffi = require(\"ffi\")\n"
       "ffi.cdef[[\n"
       "int printf(const char *fmt, ...);\n"
+      "void* PWMSparkMax_new(int channel);\n"
+      "void PWMSparkMax_Set(void* m, double value);\n"
+      "void* DifferentialDrive_new(void* leftMotor, void* rightMotor);\n"
+      "void DifferentialDrive_ArcadeDrive(void* d, double xSpeed, double zRotation, bool squareInputs);\n"
+      "void* Joystick_new(int port);\n"
+      "double Joystick_GetX(void* j);\n"
+      "double Joystick_GetY(void* j);\n"
       "]]\n"
       "ffi.C.printf(\"Hello from %s via %s!\\n\", \"C++\", \"Lua\")\n"
+      "leftMotor = ffi.C.PWMSparkMax_new(2)\n"
+      "rightMotor = ffi.C.PWMSparkMax_new(3)\n"
+      "stick = ffi.C.Joystick_new(0)\n"
+      "robotDrive = ffi.C.DifferentialDrive_new(leftMotor, rightMotor)\n"
     );
     if (result) {
       printf("Failed to run script: %s\n", lua_tostring(L, -1));
@@ -44,6 +55,17 @@ public:
   void TeleopPeriodic() override {
     // Drive with arcade style
     robotDrive.ArcadeDrive(stick.GetY(), stick.GetX());
+
+    int result = luaL_dostring(L,
+      // "print(ffi.C.Joystick_GetX(stick), ffi.C.Joystick_GetY(stick))\n"
+      // "ffi.C.PWMSparkMax_Set(leftMotor, ffi.C.Joystick_GetX(stick))\n"
+      // "ffi.C.PWMSparkMax_Set(rightMotor, ffi.C.Joystick_GetY(stick))\n"
+      "ffi.C.DifferentialDrive_ArcadeDrive(robotDrive, ffi.C.Joystick_GetY(stick), ffi.C.Joystick_GetX(stick), false)\n"
+    );
+    if (result) {
+      printf("Failed to run script: %s\n", lua_tostring(L, -1));
+      return;
+    }
   }
 };
 
