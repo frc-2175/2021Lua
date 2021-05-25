@@ -9,63 +9,94 @@
 
 #include <lua.hpp>
 
-/**
- * This is a demo program showing the use of the DifferentialDrive class.
- * Runs the motors with arcade steering.
- */
-class Robot : public frc::TimedRobot {
-  frc::PWMSparkMax leftMotor{0};
-  frc::PWMSparkMax rightMotor{1};
-  frc::DifferentialDrive robotDrive{leftMotor, rightMotor};
-  frc::Joystick stick{0};
+const char* luaSearchPaths[] = {
+  ".\\src\\lua\\",
+  "/home/lvuser/lua/"
+};
 
+int runLuaFile(lua_State* L, const char* filename) {
+  int fileFindError = 0;
+  for (auto searchpath : luaSearchPaths) {
+    char filenamebuf[1024];
+    sprintf(filenamebuf, "%s%s", searchpath, filename);
+    printf("Trying to load file %s...\n", filenamebuf);
+
+    fileFindError = luaL_loadfile(L, filenamebuf);
+    if (fileFindError) {
+      printf("Failed to load file %s: %s\n", filename, lua_tostring(L, -1));
+    } else {
+      break;
+    }
+  }
+
+  if (fileFindError) {
+    return fileFindError;
+  }
+
+  int result = lua_pcall(L, 0, LUA_MULTRET, 0);
+  if (result) {
+    printf("Failed to run %s: %s\n", filename, lua_tostring(L, -1));
+  }
+  return result;
+}
+
+int runLuaString(lua_State* L, const char* str) {
+  int result = luaL_dostring(L, str);
+  if (result) {
+    printf("Failed to run script: %s\n", lua_tostring(L, -1));
+  }
+
+  return result;
+}
+
+class Robot : public frc::TimedRobot {
   lua_State *L;
 
 public:
   void RobotInit() override {
-    printf("Hello from %s.\n", "C++");
-
     L = luaL_newstate();
     luaL_openlibs(L);
-    int result = luaL_dostring(L,
-      "print(\"Hello from Lua.\")\n"
-      "ffi = require(\"ffi\")\n"
-      "ffi.cdef[[\n"
-      "int printf(const char *fmt, ...);\n"
-      "void* PWMSparkMax_new(int channel);\n"
-      "void PWMSparkMax_Set(void* m, double value);\n"
-      "void* DifferentialDrive_new(void* leftMotor, void* rightMotor);\n"
-      "void DifferentialDrive_ArcadeDrive(void* d, double xSpeed, double zRotation, bool squareInputs);\n"
-      "void* Joystick_new(int port);\n"
-      "double Joystick_GetX(void* j);\n"
-      "double Joystick_GetY(void* j);\n"
-      "]]\n"
-      "ffi.C.printf(\"Hello from %s via %s!\\n\", \"C++\", \"Lua\")\n"
-      "leftMotor = ffi.C.PWMSparkMax_new(2)\n"
-      "rightMotor = ffi.C.PWMSparkMax_new(3)\n"
-      "stick = ffi.C.Joystick_new(0)\n"
-      "robotDrive = ffi.C.DifferentialDrive_new(leftMotor, rightMotor)\n"
-    );
-    if (result) {
-      printf("Failed to run script: %s\n", lua_tostring(L, -1));
-      return;
-    }
+
+    runLuaFile(L, "init.lua");
+    runLuaFile(L, "robot.lua");
+
+    runLuaString(L, "robot.robotInit()");
+  }
+
+  void RobotPeriodic() override {
+    runLuaString(L, "robot.robotPeriodic()");
+  }
+
+  void DisabledInit() override {
+    runLuaString(L, "robot.disabledInit()");
+  }
+
+  void DisabledPeriodic() override {
+    runLuaString(L, "robot.disabledPeriodic()");
+  }
+
+  void AutonomousInit() override {
+    runLuaString(L, "robot.autonomousInit()");
+  }
+
+  void AutonomousPeriodic() override {
+    runLuaString(L, "robot.autonomousPeriodic()");
+  }
+
+  void TeleopInit() override {
+    runLuaString(L, "robot.teleopInit()");
   }
 
   void TeleopPeriodic() override {
-    // Drive with arcade style
-    robotDrive.ArcadeDrive(stick.GetY(), stick.GetX());
+    runLuaString(L, "robot.teleopPeriodic()");
+  }
 
-    int result = luaL_dostring(L,
-      // "print(ffi.C.Joystick_GetX(stick), ffi.C.Joystick_GetY(stick))\n"
-      // "ffi.C.PWMSparkMax_Set(leftMotor, ffi.C.Joystick_GetX(stick))\n"
-      // "ffi.C.PWMSparkMax_Set(rightMotor, ffi.C.Joystick_GetY(stick))\n"
-      "ffi.C.DifferentialDrive_ArcadeDrive(robotDrive, ffi.C.Joystick_GetY(stick), ffi.C.Joystick_GetX(stick), false)\n"
-    );
-    if (result) {
-      printf("Failed to run script: %s\n", lua_tostring(L, -1));
-      return;
-    }
+  void SimulationInit() override {
+    runLuaString(L, "robot.simulationInit()");
+  }
+
+  void SimulationPeriodic() override {
+    runLuaString(L, "robot.simulationPeriodic()");
   }
 };
 
