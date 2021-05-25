@@ -1,5 +1,3 @@
-require("wpilib")
-
 function robot.robotInit()
     leftMotor = PWMSparkMax:new(2)
     rightMotor = PWMSparkMax:new(3)

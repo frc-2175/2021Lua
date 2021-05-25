@@ -6,6 +6,8 @@
 
 package.path = package.path .. ";.\\src\\lua\\?.lua;.\\src\\lua\\?\\init.lua"
 
+require("wpilib")
+
 robot = {
     robotInit = function() end,
     robotPeriodic = function() end,
