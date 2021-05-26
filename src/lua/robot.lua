@@ -1,26 +1,30 @@
 function robot.robotInit()
-    leftMotor = PWMSparkMax:new(2)
-    rightMotor = PWMSparkMax:new(3)
+    leftMotor = TalonSRX:new(1)
+    rightMotor = TalonSRX:new(2)
     gamepad = Joystick:new(0)
     robotDrive = DifferentialDrive:new(leftMotor, rightMotor)
 end
 
 function robot.teleopPeriodic()
     robotDrive:arcadeDrive(
-        gamepad:getY(),
-        gamepad:getX()
+        -gamepad:getAxis(XboxAxes.Y),
+        gamepad:getAxis(XboxAxes.RightStickX)
     )
 end
 
 function robot.autonomousInit()
     autoRoutine = coroutine.create(function()
-        while not gamepad:getButtonPressed(XBOX_A) do
-            robotDrive:arcadeDrive(math.sin(getTimeSeconds()), 0)
+        function getSpeed()
+            return 0.75 * math.sin(3 * getTimeSeconds())
+        end
+
+        while not gamepad:getButtonPressed(XboxButtons.A) do
+            robotDrive:arcadeDrive(getSpeed(), 0)
             coroutine.yield()
         end
 
-        while not gamepad:getButtonPressed(XBOX_A) do
-            robotDrive:arcadeDrive(0, math.sin(getTimeSeconds()))
+        while not gamepad:getButtonPressed(XboxButtons.A) do
+            robotDrive:arcadeDrive(0, getSpeed())
             coroutine.yield()
         end
 

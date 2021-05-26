@@ -12,36 +12,44 @@ ffi.cdef[[
 
 -- Constants
 
-GAMEPAD_X = 1
-GAMEPAD_A = 2
-GAMEPAD_B = 3
-GAMEPAD_Y = 4
-GAMEPAD_LEFT_BUMPER = 5
-GAMEPAD_RIGHT_BUMPER = 6
-GAMEPAD_LEFT_TRIGGER = 7
-GAMEPAD_RIGHT_TRIGGER = 8
-GAMEPAD_SELECT = 9
-GAMEPAD_START = 10
-GAMEPAD_LEFT_STICK_PRESS = 11
-GAMEPAD_RIGHT_STICK_PRESS = 12
+GamepadButtons = {
+    X = 1,
+    A = 2,
+    B = 3,
+    Y = 4,
+    LeftBumper = 5,
+    RightBumper = 6,
+    LeftTrigger = 7,
+    RightTrigger = 8,
+    Select = 9,
+    Start = 10,
+    LeftStick = 11,
+    RightStick = 12,
+}
 
-XBOX_A = 1
-XBOX_B = 2
-XBOX_X = 3
-XBOX_Y = 4
-XBOX_LEFT_BUMPER = 5
-XBOX_RIGHT_BUMPER = 6
-XBOX_SELECT = 7
-XBOX_START = 8
-XBOX_LEFT_STICK_PRESS = 9
-XBOX_RIGHT_STICK_PRESS = 10
+-- TODO: Gamepad axes
 
-XBOX_AXIS_X = 0
-XBOX_AXIS_Y = 1
-XBOX_AXIS_LEFT_TRIGGER = 2
-XBOX_AXIS_RIGHT_TRIGGER = 3
-XBOX_AXIS_RIGHT_STICK_X = 4
-XBOX_AXIS_RIGHT_STICK_Y = 5
+XboxButtons = {
+    A = 1,
+    B = 2,
+    X = 3,
+    Y = 4,
+    LeftBumper = 5,
+    RightBumper = 6,
+    Select = 7,
+    Start = 8,
+    LeftStick = 9,
+    RightStick = 10,
+}
+
+XboxAxes = {
+    X = 0,
+    Y = 1,
+    LeftTrigger = 2,
+    RightTrigger = 3,
+    RightStickX = 4,
+    RightStickY = 5,
+}
 
 
 -- Joystick

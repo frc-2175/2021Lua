@@ -51,52 +51,58 @@ int runLuaString(lua_State* L, const char* str) {
 
 class Robot : public frc::TimedRobot {
   lua_State *L;
+  bool ok = false;
 
 public:
   void RobotInit() override {
     L = luaL_newstate();
     luaL_openlibs(L);
 
-    runLuaFile(L, "init.lua");
-    runLuaFile(L, "robot.lua");
+    int initError = runLuaFile(L, "init.lua");
+    if (!initError) {
+      ok = true;
+    }
 
-    runLuaString(L, "robot.robotInit()");
+    if (ok) {
+      runLuaFile(L, "robot.lua");
+      runLuaString(L, "robot.robotInit()");
+    }
   }
 
   void RobotPeriodic() override {
-    runLuaString(L, "robot.robotPeriodic()");
+    if (ok) runLuaString(L, "robot.robotPeriodic()");
   }
 
   void DisabledInit() override {
-    runLuaString(L, "robot.disabledInit()");
+    if (ok) runLuaString(L, "robot.disabledInit()");
   }
 
   void DisabledPeriodic() override {
-    runLuaString(L, "robot.disabledPeriodic()");
+    if (ok) runLuaString(L, "robot.disabledPeriodic()");
   }
 
   void AutonomousInit() override {
-    runLuaString(L, "robot.autonomousInit()");
+    if (ok) runLuaString(L, "robot.autonomousInit()");
   }
 
   void AutonomousPeriodic() override {
-    runLuaString(L, "robot.autonomousPeriodic()");
+    if (ok) runLuaString(L, "robot.autonomousPeriodic()");
   }
 
   void TeleopInit() override {
-    runLuaString(L, "robot.teleopInit()");
+    if (ok) runLuaString(L, "robot.teleopInit()");
   }
 
   void TeleopPeriodic() override {
-    runLuaString(L, "robot.teleopPeriodic()");
+    if (ok) runLuaString(L, "robot.teleopPeriodic()");
   }
 
   void SimulationInit() override {
-    runLuaString(L, "robot.simulationInit()");
+    if (ok) runLuaString(L, "robot.simulationInit()");
   }
 
   void SimulationPeriodic() override {
-    runLuaString(L, "robot.simulationPeriodic()");
+    if (ok) runLuaString(L, "robot.simulationPeriodic()");
   }
 };
 
