@@ -1,10 +1,10 @@
 local ffi = require("ffi")
 ffi.cdef[[
-void* PWMSparkMax_new(int channel);
-void* PWMSparkMax_toSpeedController(void* m);
-void PWMSparkMax_Set(void* m, double value);
-void* DifferentialDrive_new(void* leftMotor, void* rightMotor);
-void DifferentialDrive_ArcadeDrive(void* d, double xSpeed, double zRotation, bool squareInputs);
+    void* PWMSparkMax_new(int channel);
+    void* PWMSparkMax_toSpeedController(void* m);
+    void PWMSparkMax_Set(void* m, double value);
+    void* DifferentialDrive_new(void* leftMotor, void* rightMotor);
+    void DifferentialDrive_ArcadeDrive(void* d, double xSpeed, double zRotation, bool squareInputs);
 ]]
 
 local function makeMotorController(motor, toSCFunc)
