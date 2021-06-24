@@ -13,9 +13,17 @@ function robot.teleopPeriodic()
         gamepad:getAxis(XboxAxes.RightStickX)
     )
 
-    if gamepad:getButtonPressed(XboxButtons.B) then
-        intakePutOut()
-    end
+    --intake piston 
+    if gamepad:getButtonPressed(XboxButtons.B) then 
+        intakePutOut() 
+    end 
+    --[[ 
+    else if gamepad:getButtonPressed(XboxButtons.RightTrigger) or gamepad:getButtonPressed(XboxButtons.RightBumper) 
+        intakePutOut() 
+    else if gamepad:getButtonReleased(XboxButtons.RightTrigger) or gamepad:getButtonReleased(XboxButtons.RightBumper) 
+        intakePutIn() 
+    end 
+    --]] 
 end
 
 function robot.autonomousInit()
