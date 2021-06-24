@@ -1,3 +1,4 @@
+#include <ctre/phoenix/motorcontrol/can/WPI_TalonFX.h>
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
 #include <frc/PWMSparkMax.h>
 #include <frc/TimedRobot.h>
@@ -43,6 +44,31 @@ LUAFUNC void TalonSRX_Set(void* m, double value) {
 
 LUAFUNC void TalonSRX_SetInverted(void* m, int invertType) {
     ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)m)
+        ->SetInverted((ctre::phoenix::motorcontrol::InvertType)invertType);
+}
+
+
+// Talon FX
+
+LUAFUNC void* TalonFX_new(int deviceNumber) {
+    return new ctre::phoenix::motorcontrol::can::WPI_TalonFX{deviceNumber};
+}
+
+LUAFUNC void* TalonFX_toSpeedController(void* m) {
+    frc::SpeedController* sc = (ctre::phoenix::motorcontrol::can::WPI_TalonFX*)m;
+    return sc;
+}
+
+LUAFUNC double TalonFX_Get(void* m) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)m)->Get();
+}
+
+LUAFUNC void TalonFX_Set(void* m, double value) {
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)m)->Set(value);
+}
+
+LUAFUNC void TalonFX_SetInverted(void* m, int invertType) {
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)m)
         ->SetInverted((ctre::phoenix::motorcontrol::InvertType)invertType);
 }
 

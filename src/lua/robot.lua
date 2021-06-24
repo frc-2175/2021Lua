@@ -1,5 +1,7 @@
+require("intake")
+
 function robot.robotInit()
-    leftMotor = TalonSRX:new(1)
+    leftMotor = TalonFX:new(1)
     rightMotor = TalonSRX:new(2)
     gamepad = Joystick:new(0)
     robotDrive = DifferentialDrive:new(leftMotor, rightMotor)
@@ -10,6 +12,10 @@ function robot.teleopPeriodic()
         -gamepad:getAxis(XboxAxes.Y),
         gamepad:getAxis(XboxAxes.RightStickX)
     )
+
+    if gamepad:getButtonPressed(XboxButtons.B) then
+        intakePutOut()
+    end
 end
 
 function robot.autonomousInit()

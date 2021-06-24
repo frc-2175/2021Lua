@@ -10,6 +10,12 @@ ffi.cdef[[
     void TalonSRX_Set(void* m, double value);
     void TalonSRX_SetInverted(void* m, int invertType);
 
+    void* TalonFX_new(int deviceNumber);
+    void* TalonFX_toSpeedController(void* m);
+    double TalonFX_Get(void* m);
+    void TalonFX_Set(void* m, double value);
+    void TalonFX_SetInverted(void* m, int invertType);
+
     void* DifferentialDrive_new(void* leftMotor, void* rightMotor);
     void DifferentialDrive_ArcadeDrive(void* d, double xSpeed, double zRotation, bool squareInputs);
 ]]
@@ -78,6 +84,30 @@ end
 
 function TalonSRX:setInverted(invertType)
     ffi.C.TalonSRX_SetInverted(self.motor, invertType)
+end
+
+
+-- Talon FX
+
+TalonFX = {}
+
+function TalonFX:new(deviceNumber)
+    o = makeMotorController(ffi.C.TalonFX_new(deviceNumber), ffi.C.TalonFX_toSpeedController)
+    setmetatable(o, self)
+    self.__index = self
+    return o
+end
+
+function TalonFX:get()
+    return ffi.C.TalonFX_Get(self.motor)
+end
+
+function TalonFX:set(value)
+    ffi.C.TalonFX_Set(self.motor, value)
+end
+
+function TalonFX:setInverted(invertType)
+    ffi.C.TalonFX_SetInverted(self.motor, invertType)
 end
 
 
