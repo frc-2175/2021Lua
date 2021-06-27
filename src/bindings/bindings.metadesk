@@ -1,0 +1,72 @@
+@include("<frc/Joystick.h>")
+io: {
+  @class("frc::Joystick")
+  Joystick: {
+    @constructor new(int port)
+    double GetX()
+    double GetY()
+  }
+}
+
+
+@include("<ctre/phoenix/motorcontrol/can/WPI_TalonFX.h>")
+@include("<ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>")
+@include("<frc/PWMSparkMax.h>")
+@include("<frc/TimedRobot.h>")
+@include("<frc/drive/DifferentialDrive.h>")
+motors: {
+  @class("frc::PWMSparkMax")
+  PWMSparkMax: {
+    @constructor new(int channel)
+    @convert("frc::SpeedController") toSpeedController()
+    void Set(double value)
+  }
+
+  @class("ctre::phoenix::motorcontrol::can::WPI_TalonSRX")
+  TalonSRX: {
+    @constructor new(int deviceNumber)
+    @convert("frc::SpeedController") toSpeedController()
+    double Get()
+    void Set(double value)
+    void SetInverted(@cast("ctre::phoenix::motorcontrol::InvertType") int invertType)
+  }
+
+  @class("ctre::phoenix::motorcontrol::can::WPI_TalonFX")
+  TalonFX: {
+    @constructor new(int deviceNumber)
+    @convert("frc::SpeedController") toSpeedController()
+    double Get()
+    void Set(double value)
+    void SetInverted(@cast("ctre::phoenix::motorcontrol::InvertType") int invertType)
+  }
+
+  @class("frc::DifferentialDrive")
+  DifferentialDrive: {
+    void* new(void* leftMotor, void* rightMotor) """
+      auto l = (frc::SpeedController*)leftMotor;
+      auto r = (frc::SpeedController*)rightMotor;
+      return new frc::DifferentialDrive(*l, *r);
+    """
+    void ArcadeDrive(double xSpeed, double zRotation, bool squareInputs)
+  }
+}
+
+
+@include("<frc/Solenoid.h>")
+@include("<frc/DoubleSolenoid.h>")
+solenoids: {
+  @class("frc::DoubleSolenoid")
+  DoubleSolenoid: {
+    @constructor new(int forwardChannel, int reverseChannel)
+    void Set()
+  }
+}
+
+
+@include("<frc/Timer.h>")
+time: {
+  @raw_func
+  "double GetFPGATimestamp()": """
+    return frc::Timer::GetFPGATimestamp();
+  """
+}

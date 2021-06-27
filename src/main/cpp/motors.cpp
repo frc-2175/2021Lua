@@ -10,7 +10,7 @@
 // PWM Spark Max
 
 LUAFUNC void* PWMSparkMax_new(int channel) {
-    return new frc::PWMSparkMax{channel};
+    return new frc::PWMSparkMax(channel);
 }
 
 LUAFUNC void* PWMSparkMax_toSpeedController(void* m) {
@@ -26,7 +26,7 @@ LUAFUNC void PWMSparkMax_Set(void* m, double value) {
 // Talon SRX
 
 LUAFUNC void* TalonSRX_new(int deviceNumber) {
-    return new ctre::phoenix::motorcontrol::can::WPI_TalonSRX{deviceNumber};
+    return new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(deviceNumber);
 }
 
 LUAFUNC void* TalonSRX_toSpeedController(void* m) {
@@ -51,7 +51,7 @@ LUAFUNC void TalonSRX_SetInverted(void* m, int invertType) {
 // Talon FX
 
 LUAFUNC void* TalonFX_new(int deviceNumber) {
-    return new ctre::phoenix::motorcontrol::can::WPI_TalonFX{deviceNumber};
+    return new ctre::phoenix::motorcontrol::can::WPI_TalonFX(deviceNumber);
 }
 
 LUAFUNC void* TalonFX_toSpeedController(void* m) {
@@ -78,7 +78,7 @@ LUAFUNC void TalonFX_SetInverted(void* m, int invertType) {
 LUAFUNC void* DifferentialDrive_new(void* leftMotor, void* rightMotor) {
     auto l = (frc::SpeedController*)leftMotor;
     auto r = (frc::SpeedController*)rightMotor;
-    return new frc::DifferentialDrive{*l, *r};
+    return new frc::DifferentialDrive(*l, *r);
 }
 
 LUAFUNC void DifferentialDrive_ArcadeDrive(void* d, double xSpeed, double zRotation, bool squareInputs) {
