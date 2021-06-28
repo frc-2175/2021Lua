@@ -5,9 +5,9 @@
 
 #include "luadef.h"
 
-LUAFUNC void* DoubleSolenoid_new(int forwardChannel, int reverseChannel) {
+LUAFUNC void* DoubleSolenoid_new(void* _m, int forwardChannel, int reverseChannel) {
 }
 
-LUAFUNC void DoubleSolenoid_Set() {
+LUAFUNC void DoubleSolenoid_Set(void* _m) {
 }
 

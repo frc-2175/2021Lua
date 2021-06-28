@@ -4,12 +4,15 @@
 
 #include "luadef.h"
 
-LUAFUNC void* Joystick_new(int port) {
+LUAFUNC void* Joystick_new(void* _m, int port) {
+    return new frc::Joystick(port);
 }
 
-LUAFUNC double Joystick_GetX() {
+LUAFUNC double Joystick_GetX(void* _m) {
+    return ((frc::Joystick*)_m)->GetX();
 }
 
-LUAFUNC double Joystick_GetY() {
+LUAFUNC double Joystick_GetY(void* _m) {
+    return ((frc::Joystick*)_m)->GetY();
 }
 

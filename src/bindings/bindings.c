@@ -1,7 +1,10 @@
+#include <assert.h>
+
 #include "./md.h"
 #include "./md.c"
 
 #define NodeLine(node) MD_CodeLocFromNode(node).line
+#define MAX_ARGS 16
 
 void printIndent(int level) {
     for (int i = 0; i < level; i++) {
@@ -29,17 +32,96 @@ void DumpNode(MD_Node* node) {
     DumpNodeR(node, "*", 0);
 }
 
-MD_String8 ParseType(MD_Node* type, MD_Node** next) {
-    MD_String8List typePieces = {0};
-    MD_PushStringToList(&typePieces, type->string);
-    *next = type->next;
+MD_String8 ParseType(MD_Node* start, MD_Node* end) {
+    MD_String8List pieces = {0};
+    for (MD_Node* it = start; it != end; it = it->next) {
+        MD_PushStringToList(&pieces, it->string);
+    }
+    return MD_JoinStringList(pieces, MD_S8Lit(""));
+}
 
-    if (MD_StringMatch(type->next->string, MD_S8Lit("*"), 0)) {
-        MD_PushStringToList(&typePieces, type->next->string);
-        *next = type->next->next;
+typedef struct {
+    MD_String8 ReturnType;
+    MD_String8 Name;
+    MD_String8 CustomBody;
+    
+    int NumArgs;
+    MD_String8 ArgTypes[MAX_ARGS];
+    MD_String8 ArgNames[MAX_ARGS];
+    MD_String8 ArgCasts[MAX_ARGS];
+
+    MD_Node* After;
+
+    MD_String8 Error;
+} ParseFuncResult;
+
+ParseFuncResult ParseFunc(MD_Node* n) {
+    ParseFuncResult res = {0};
+
+    MD_Node* argsNode = NULL;
+    MD_Node* terminator = NULL;
+
+    for (MD_EachNode(it, n)) {
+        if (
+            (it->flags & MD_NodeFlag_ParenLeft)
+            && (it->flags & MD_NodeFlag_ParenRight)
+        ) {
+            if (argsNode) {
+                return (ParseFuncResult) {
+                    .Error = MD_S8Lit("Found multiple sets of arguments for method"),
+                };
+            }
+            argsNode = it;
+        }
+
+        if (it->flags & MD_NodeFlag_BeforeSemicolon) {
+            // This node terminates the definition
+            terminator = it;
+            break;
+        }
+    }
+    if (!argsNode) {
+        return (ParseFuncResult) {
+            .Error = MD_S8Lit("Did not find arguments for method"),
+        };
+    }
+    
+    MD_Node* nameNode = argsNode->prev;
+    res.Name = nameNode->string;
+
+    // Everything before the name is the type
+    res.ReturnType = ParseType(n, nameNode);
+
+    // Arg parsing - args are separated by commas
+    res.NumArgs = 0;
+    MD_Node* argStart = NULL;
+    for (MD_EachNode(it, argsNode->first_child)) {
+        if (!argStart) {
+            argStart = it;
+        }
+
+        if (it->flags & MD_NodeFlag_BeforeComma || MD_NodeIsNil(it->next)) {
+            res.ArgNames[res.NumArgs] = it->string;
+            res.ArgTypes[res.NumArgs] = ParseType(argStart, it);
+            
+            MD_Node* castTag = MD_TagFromString(argStart, MD_S8Lit("cast"));
+            if (!MD_NodeIsNil(castTag)) {
+                res.ArgCasts[res.NumArgs] = castTag->first_child->string;
+            }
+
+            res.NumArgs++;
+            argStart = NULL;
+        }
     }
 
-    return MD_JoinStringList(typePieces, MD_S8Lit(""));
+    // Custom body
+    if (argsNode != terminator) {
+        res.CustomBody = argsNode->next->string;
+    }
+
+    res.After = terminator->next;
+
+    return res;
 }
 
 int main(int argc, char** argv) {
@@ -72,6 +154,7 @@ int main(int argc, char** argv) {
             } else {
                 fclose(cppfile);
                 fprintf(stderr, "ERROR (line %d): Unrecognized tag on file: %.*s\n", NodeLine(tag), MD_StringExpand(tag->string));                return 1;
+                return 1;
             }
         }
         fprintf(cppfile, "\n");
@@ -79,111 +162,88 @@ int main(int argc, char** argv) {
         fprintf(cppfile, "#include \"luadef.h\"\n\n");
 
         for (MD_EachNode(fentry, f->first_child)) {
-            if (MD_NodeHasTag(fentry, MD_S8Lit("raw_func"))) {
-                fprintf(stderr, ".");
-                MD_String8 signature = fentry->string;
-                MD_String8 body = fentry->first_child->string;
-                fprintf(cppfile, "LUAFUNC %.*s {%.*s}\n\n", MD_StringExpand(signature), MD_StringExpand(body));
-                MD_PushStringToList(&ffiDefs, MD_PushStringF("%.*s;", MD_StringExpand(signature)));
-            } else if (MD_NodeHasTag(fentry, MD_S8Lit("class"))) {
-                MD_String8 className = fentry->string;
-                MD_String8 cppClass;
-                for (MD_EachNode(tag, fentry->first_tag)) {
-                    if (MD_StringMatch(tag->string, MD_S8Lit("class"), 0)) {
-                        cppClass = tag->first_child->string;
-                    } else {
-                        fclose(cppfile);
-                        fprintf(stderr, "ERROR (line %d): Unrecognized tag on class: %.*s\n", NodeLine(tag), MD_StringExpand(tag->string));
-                        return 1;
-                    }
-                }
+            if (MD_NodeHasTag(fentry, MD_S8Lit("class"))) {
+                MD_String8 cppName = MD_TagFromString(fentry, MD_S8Lit("class"))->first_child->string;
+                MD_String8 luaName = fentry->string;
 
-                MD_Node* funcNode = fentry->first_child;
+                MD_Node* fNode = fentry->first_child;
                 while (1) {
-                    if (MD_NodeIsNil(funcNode)) {
+                    if (MD_NodeIsNil(fNode)) {
                         break;
                     }
 
-                    fprintf(stderr, ".");
+                    ParseFuncResult res = ParseFunc(fNode);
+                    if (res.Error.size > 0) {
+                        fclose(cppfile);
+                        fprintf(stderr, "ERROR: %.*s\n", MD_StringExpand(res.Error));
+                        return 1;
+                    }
 
-                    MD_String8 returnType;
-                    MD_String8 funcName;
+                    MD_String8 returnType = res.ReturnType;
+                    MD_String8 name = MD_PushStringF("%.*s_%.*s", MD_StringExpand(luaName), MD_StringExpand(res.Name));
+                    MD_String8 body = {0};
 
-                    MD_Node* argsNode;
-                    MD_String8 customBody;
+                    MD_String8List callArgs = {0};
+                    for (int i = 0; i < res.NumArgs; i++) {
+                        MD_PushStringToList(&callArgs, res.ArgNames[i]);
+                    }
 
-                    MD_Node* nextFuncNode;
-
-                    if (MD_NodeHasTag(funcNode, MD_S8Lit("constructor"))) {
-                        // Constructors have no defined return type (the C++ code always
-                        // returns void*) and no possibility for a custom function body.
-
+                    if (MD_NodeHasTag(fNode, MD_S8Lit("constructor"))) {
                         returnType = MD_S8Lit("void*");
-                        funcName = funcNode->string;
-                        argsNode = funcNode->next;
-                        nextFuncNode = argsNode->next;
+
+                        body = MD_PushStringF(
+                            "    return new %.*s(%.*s);",
+                            MD_StringExpand(cppName),
+                            MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
+                        );
+                    } else if (MD_NodeHasTag(fNode, MD_S8Lit("converter"))) {
+                        returnType = MD_S8Lit("void*");
+
+                        MD_String8 convertTo = MD_TagFromString(fNode, MD_S8Lit("converter"))->first_child->string;
+                        body = MD_PushStringF(
+                            "    %.*s* _converted = (%.*s)_m;\n"
+                            "    return _converted;",
+                            MD_StringExpand(convertTo),
+                            MD_StringExpand(cppName)
+                        );
                     } else {
-                        MD_Node* afterType;
-                        returnType = ParseType(funcNode, &afterType);
-                        funcName = afterType->string;
-                        argsNode = afterType->next;
-                        nextFuncNode = argsNode->next;
-
-                        if (MD_NodeHasTag(funcNode, MD_S8Lit("custom"))) {
-                            customBody = argsNode->next->string;
-                            nextFuncNode = argsNode->next->next;
-                        }
+                        MD_b32 doReturn = !MD_StringMatch(returnType, MD_S8Lit("void"), 0);
+                        body = MD_PushStringF(
+                            "    %.*s((%.*s*)_m)->%.*s(%.*s);",
+                            MD_StringExpand(MD_S8Lit(doReturn ? "return " : "")),
+                            MD_StringExpand(cppName),
+                            MD_StringExpand(res.Name),
+                            MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
+                        );
                     }
 
-                    int numArgs = 0;
-                    MD_String8 argTypes[16] = {0};
-                    MD_String8 argNames[16] = {0};
-                    MD_String8 argCasts[16] = {0};
-
-                    MD_Node* arg = argsNode->first_child;
-                    while (1) {
-                        if (MD_NodeIsNil(arg)) {
-                            break;
-                        }
-
-                        for (MD_EachNode(tag, arg->first_tag)) {
-                            if (MD_StringMatch(tag->string, MD_S8Lit("cast"), 0)) {
-                                argCasts[numArgs] = tag->first_child->string;
-                            } else {
-                                fclose(cppfile);
-                                fprintf(stderr, "ERROR (line %d): Unrecognized tag for function argument: %.*s\n", NodeLine(tag), MD_StringExpand(tag->string));
-                                return 1;
-                            }
-                        }
-
-                        MD_Node* afterType;
-                        argTypes[numArgs] = ParseType(arg, &afterType);
-                        argNames[numArgs] = afterType->string;
-                        numArgs++;
-
-                        arg = afterType->next;
+                    if (returnType.size == 0) {
+                        returnType = MD_S8Lit("void");
+                    }
+                    if (res.CustomBody.size > 0) {
+                        body = res.CustomBody;
                     }
 
-                    MD_String8 signature = MD_PushStringF("%.*s %.*s_%.*s", MD_StringExpand(returnType), MD_StringExpand(className), MD_StringExpand(funcName));
-
-                    fprintf(cppfile, "LUAFUNC %.*s(", MD_StringExpand(signature));
-                    for (int i = 0; i < numArgs; i++) {
-                        if (i > 0) {
-                            fprintf(cppfile, ", ");
-                        }
-                        fprintf(cppfile, "%.*s %.*s", MD_StringExpand(argTypes[i]), MD_StringExpand(argNames[i]));
+                    MD_String8List argsList = {0};
+                    MD_PushStringToList(&argsList, MD_S8Lit("void* _m"));
+                    for (int i = 0; i < res.NumArgs; i++) {
+                        MD_PushStringToList(&argsList, MD_PushStringF("%.*s %.*s", MD_StringExpand(res.ArgTypes[i]), MD_StringExpand(res.ArgNames[i])));
                     }
-                    fprintf(cppfile, ") {\n");
-                    fprintf(cppfile, "}\n\n");
+                    MD_String8 signature = MD_PushStringF(
+                        "%.*s %.*s(%.*s)",
+                        MD_StringExpand(returnType),
+                        MD_StringExpand(name),
+                        MD_StringExpand(MD_JoinStringList(argsList, MD_S8Lit(", ")))
+                    );
 
-                    MD_PushStringToList(&ffiDefs, MD_PushStringF("%.*s;", MD_StringExpand(signature)));
-
-                    funcNode = nextFuncNode;
+                    fprintf(cppfile,
+                        "LUAFUNC %.*s {\n%.*s\n}\n\n",
+                        MD_StringExpand(signature),
+                        MD_StringExpand(body)
+                    );
+                    
+                    fNode = res.After;
                 }
-            } else {
-                fclose(cppfile);
-                fprintf(stderr, "ERROR (line %d): Unrecognized entry type\n", NodeLine(fentry));
-                return 1;
             }
         }
 
