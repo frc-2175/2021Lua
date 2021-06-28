@@ -8,7 +8,6 @@ io: {
   }
 }
 
-/*
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonFX.h>")
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>")
 @include("<frc/PWMSparkMax.h>")
@@ -56,7 +55,7 @@ motors: {
 @include("<frc/DoubleSolenoid.h>")
 solenoids: {
   @class("frc::DoubleSolenoid")
-  DoubleSolenoid {
+  DoubleSolenoid: {
     @constructor new(int forwardChannel, int reverseChannel);
     Set();
   }
@@ -69,4 +68,3 @@ time: {
     return frc::Timer::GetFPGATimestamp();
   """;
 }
-*/

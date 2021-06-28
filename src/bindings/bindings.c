@@ -185,7 +185,16 @@ int main(int argc, char** argv) {
 
                     MD_String8List callArgs = {0};
                     for (int i = 0; i < res.NumArgs; i++) {
-                        MD_PushStringToList(&callArgs, res.ArgNames[i]);
+                        MD_String8 cast = MD_S8Lit("");
+                        if (res.ArgCasts[i].size > 0) {
+                            cast = MD_PushStringF("(%.*s)", MD_StringExpand(res.ArgCasts[i]));
+                        }
+
+                        MD_PushStringToList(&callArgs, MD_PushStringF(
+                            "%.*s%.*s",
+                            MD_StringExpand(cast),
+                            MD_StringExpand(res.ArgNames[i])
+                        ));
                     }
 
                     if (MD_NodeHasTag(fNode, MD_S8Lit("constructor"))) {
@@ -201,7 +210,7 @@ int main(int argc, char** argv) {
 
                         MD_String8 convertTo = MD_TagFromString(fNode, MD_S8Lit("converter"))->first_child->string;
                         body = MD_PushStringF(
-                            "    %.*s* _converted = (%.*s)_m;\n"
+                            "    %.*s* _converted = (%.*s*)_m;\n"
                             "    return _converted;",
                             MD_StringExpand(convertTo),
                             MD_StringExpand(cppName)
@@ -209,7 +218,8 @@ int main(int argc, char** argv) {
                     } else {
                         MD_b32 doReturn = !MD_StringMatch(returnType, MD_S8Lit("void"), 0);
                         body = MD_PushStringF(
-                            "    %.*s((%.*s*)_m)->%.*s(%.*s);",
+                            "    %.*s((%.*s*)_m)\n"
+                            "        ->%.*s(%.*s);",
                             MD_StringExpand(MD_S8Lit(doReturn ? "return " : "")),
                             MD_StringExpand(cppName),
                             MD_StringExpand(res.Name),

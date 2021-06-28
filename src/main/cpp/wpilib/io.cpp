@@ -9,10 +9,12 @@ LUAFUNC void* Joystick_new(void* _m, int port) {
 }
 
 LUAFUNC double Joystick_GetX(void* _m) {
-    return ((frc::Joystick*)_m)->GetX();
+    return ((frc::Joystick*)_m)
+        ->GetX();
 }
 
 LUAFUNC double Joystick_GetY(void* _m) {
-    return ((frc::Joystick*)_m)->GetY();
+    return ((frc::Joystick*)_m)
+        ->GetY();
 }
 
