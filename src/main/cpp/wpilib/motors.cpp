@@ -82,4 +82,3 @@ LUAFUNC void DifferentialDrive_ArcadeDrive(void* _m, double xSpeed, double zRota
     return ((frc::DifferentialDrive*)_m)
         ->ArcadeDrive(xSpeed, zRotation, squareInputs);
 }
-

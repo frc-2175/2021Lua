@@ -17,4 +17,3 @@ LUAFUNC double Joystick_GetY(void* _m) {
     return ((frc::Joystick*)_m)
         ->GetY();
 }
-

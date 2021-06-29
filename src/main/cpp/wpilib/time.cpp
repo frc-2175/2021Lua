@@ -4,3 +4,8 @@
 
 #include "luadef.h"
 
+LUAFUNC double GetFPGATimestamp(void* _m) {
+
+    return frc::Timer::GetFPGATimestamp();
+  
+}

@@ -13,4 +13,3 @@ LUAFUNC void DoubleSolenoid_Set(void* _m) {
     return ((frc::DoubleSolenoid*)_m)
         ->Set();
 }
-
