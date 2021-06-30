@@ -281,14 +281,26 @@ int main(int argc, char** argv) {
                             MD_StringExpand(cppName)
                         );
                     } else {
+                        MD_String8 cppFunc = res.Name;
+                        MD_Node* aliasTag = MD_TagFromString(fNode, MD_S8Lit("alias"));
+                        if (!MD_NodeIsNil(aliasTag)) {
+                            cppFunc = aliasTag->first_child->string;
+                        }
+
+                        MD_String8 returnCast = {0};
+                        if (MD_NodeHasTag(fNode, MD_S8Lit("explicitcast"))) {
+                            returnCast = MD_PushStringF("(%.*s) ", MD_StringExpand(returnType));
+                        }
+
                         isMethod = 1;
                         MD_b32 doReturn = !MD_StringMatch(returnType, MD_S8Lit("void"), 0);
                         body = MD_PushStringF(
-                            "    %.*s((%.*s*)_this)\n"
+                            "    %.*s%.*s((%.*s*)_this)\n"
                             "        ->%.*s(%.*s);",
                             MD_StringExpand(MD_S8Lit(doReturn ? "return " : "")),
+                            MD_StringExpand(returnCast),
                             MD_StringExpand(cppName),
-                            MD_StringExpand(res.Name),
+                            MD_StringExpand(cppFunc),
                             MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
                         );
                     }

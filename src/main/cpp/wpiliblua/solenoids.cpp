@@ -5,6 +5,34 @@
 
 #include "luadef.h"
 
+LUAFUNC void* Solenoid_new(int channel) {
+    return new frc::Solenoid(channel);
+}
+
+LUAFUNC void Solenoid_Set(void* _this, bool on) {
+    return ((frc::Solenoid*)_this)
+        ->Set(on);
+}
+
+LUAFUNC bool Solenoid_Get(void* _this) {
+    return ((frc::Solenoid*)_this)
+        ->Get();
+}
+
 LUAFUNC void* DoubleSolenoid_new(int forwardChannel, int reverseChannel) {
     return new frc::DoubleSolenoid(forwardChannel, reverseChannel);
+}
+
+LUAFUNC void* DoubleSolenoid_newWithModule(int moduleNumber, int forwardChannel, int reverseChannel) {
+    return new frc::DoubleSolenoid(moduleNumber, forwardChannel, reverseChannel);
+}
+
+LUAFUNC void DoubleSolenoid_Set(void* _this, int value) {
+    return ((frc::DoubleSolenoid*)_this)
+        ->Set((frc::DoubleSolenoid::Value)value);
+}
+
+LUAFUNC int DoubleSolenoid_Get(void* _this) {
+    return ((frc::DoubleSolenoid*)_this)
+        ->Get();
 }

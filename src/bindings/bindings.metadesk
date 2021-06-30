@@ -5,10 +5,31 @@ io: {
     @constructor new(int port);
     double GetX();
     double GetY();
+    double GetZ();
+    double GetTwist();
+    double GetThrottle();
+    bool GetTrigger();
+    bool GetTriggerPressed();
+    bool GetTriggerReleased();
+    bool GetTop();
+    bool GetTopPressed();
+    bool GetTopReleased();
+    double GetMagnitude();
+    double GetDirectionRadians();
+    double GetDirectionDegrees();
+
+    // GenericHID
     bool GetRawButton(int button);
     bool GetRawButtonPressed(int button);
     bool GetRawButtonReleased(int button);
     double GetRawAxis(int axis);
+    int GetPOV(); // Note that this takes an optional argument in case you somehow have more than one POV. I'm leaving that argument out.
+    int GetAxisCount();
+    int GetPOVCount();
+    int GetButtonCount();
+    // Someday we could do GetName if we figure out strings
+    int GetPort();
+    SetRumble(@cast("frc::GenericHID::RumbleType") int type, double value);
   }
 }
 
@@ -19,20 +40,104 @@ io: {
 @include("<frc/PWMSparkMax.h>")
 @include("<frc/drive/DifferentialDrive.h>")
 motors: {
-  @class("frc::PWMSparkMax")
-  PWMSparkMax: {
-    @constructor new(int channel);
-    @converter("frc::SpeedController") toSpeedController();
-    Set(double value);
-  }
-
   @class("ctre::phoenix::motorcontrol::can::WPI_TalonSRX")
   TalonSRX: {
     @constructor new(int deviceNumber);
     @converter("frc::SpeedController") toSpeedController();
-    double Get();
-    Set(double value);
+    @alias("Set") SetWithTalonControlMode(@cast("ctre::phoenix::motorcontrol::TalonSRXControlMode") int mode, double value);
+    int ConfigSelectedFeedbackSensor(@cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
+    int ConfigPeakCurrentLimit(int amps, int timeoutMs);
+    int ConfigPeakCurrentDuration(int milliseconds, int timeoutMs);
+    int ConfigContinuousCurrentLimit(int amps, int timeoutMs);
+    EnableCurrentLimit(bool enable);
+    @alias("Set") SetWithControlMode(@cast("ctre::phoenix::motorcontrol::ControlMode") int mode, double value);
+
+    // BaseTalon
+    double GetOutputCurrent();
+    double GetStatorCurrent();
+    double GetSupplyCurrent();
+    int ConfigVelocityMeasurementPeriod(@cast("ctre::phoenix::motorcontrol::VelocityMeasPeriod") int period, int timeoutMs);
+    int ConfigVelocityMeasurementWindow(int windowSize, int timeoutMs);
+    int ConfigForwardLimitSwitchSource(@cast("ctre::phoenix::motorcontrol::LimitSwitchSource") int limitSwitchSource, @cast("ctre::phoenix::motorcontrol::LimitSwitchNormal") int normalOpenOrClose, int timeoutMs);
+    int ConfigReverseLimitSwitchSource(@cast("ctre::phoenix::motorcontrol::LimitSwitchSource") int limitSwitchSource, @cast("ctre::phoenix::motorcontrol::LimitSwitchNormal") int normalOpenOrClose, int timeoutMs);
+    int IsFwdLimitSwitchClosed();
+    int IsRevLimitSwitchClosed();
+
+    // BaseMotorController
+    NeutralOutput();
+    SetNeutralMode(@cast("ctre::phoenix::motorcontrol::NeutralMode") int neutralMode);
+    SetSensorPhase(bool PhaseSensor);
+    @alias("SetInverted") SetInvertedBool(bool invert);
     SetInverted(@cast("ctre::phoenix::motorcontrol::InvertType") int invertType);
+    bool GetInverted();
+    int ConfigFactoryDefault(int timeoutMs);
+    int ConfigOpenloopRamp(double secondsFromNeutralToFull, int timeoutMs);
+    int ConfigClosedloopRamp(double secondsFromNeutralToFull, int timeoutMs);
+    int ConfigPeakOutputForward(double percentOut, int timeoutMs);
+    int ConfigPeakOutputReverse(double percentOut, int timeoutMs);
+    int ConfigNominalOutputForward(double percentOut, int timeoutMs);
+    int ConfigNominalOutputReverse(double percentOut, int timeoutMs);
+    int ConfigNeutralDeadband(double percentDeadband, int timeoutMs);
+    int ConfigVoltageCompSaturation(double voltage, int timeoutMs);
+    int ConfigVoltageMeasurementFilter(int filterWindowSamples, int timeoutMs);
+    EnableVoltageCompensation(bool enable);
+    bool IsVoltageCompensationEnabled();
+    double GetBusVoltage();
+    double GetMotorOutputPercent();
+    double GetMotorOutputVoltage();
+    double GetTemperature();
+    int ConfigSelectedFeedbackCoefficient(double coefficient, int pidIdx, int timeoutMs);
+    int ConfigSensorTerm(@cast("ctre::phoenix::motorcontrol::SensorTerm") int sensorTerm, @cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice);
+    double GetSelectedSensorPosition(int pidIdx);
+    double GetSelectedSensorVelocity(int pidIdx);
+    int SetSelectedSensorPosition(double sensorPos, int pidIdx, int timeoutMs);
+    int SetControlFramePeriod(@cast("ctre::phoenix::motorcontrol::ControlFrame") int frame, int periodMs);
+    OverrideLimitSwitchesEnable(bool enable);
+    int ConfigForwardSoftLimitThreshold(double forwardSensorLimit, int timeoutMs);
+    int ConfigReverseSoftLimitThreshold(double reverseSensorLimit, int timeoutMs);
+    OverrideSoftLimitsEnable(bool enable);
+    int Config_kP(int slotIdx, double value, int timeoutMs);
+    int Config_kI(int slotIdx, double value, int timeoutMs);
+    int Config_kD(int slotIdx, double value, int timeoutMs);
+    int Config_kF(int slotIdx, double value, int timeoutMs);
+    int Config_IntegralZone(int slotIdx, double value, int timeoutMs);
+    int ConfigAllowableClosedloopError(int slotIdx, double allowableCloseLoopError, int timeoutMs);
+    int ConfigMaxIntegralAccumulator(int slotIdx, double iaccum, int timeoutMs);
+    int ConfigClosedLoopPeakOutput(int slotIdx, double percentOut, int timeoutMs);
+    int ConfigClosedLoopPeriod(int slotIdx, int loopTimeMs, int timeoutMs);
+    int ConfigAuxPIDPolarity(bool invert, int timeoutMs);
+    int SetIntegralAccumulator(double iaccum, int pidIdx, int timeoutMs);
+    double GetClosedLoopError(int pidIdx);
+    double GetIntegralAccumulator(int pidIdx);
+    double GetErrorDerivative(int pidIdx);
+    int SelectProfileSlot(int slotIdx, int pidIdx);
+    double GetClosedLoopTarget(int pidIdx);
+    double GetActiveTrajectoryPosition(int pidIdx);
+    double GetActiveTrajectoryArbFeedFwd(int pidIdx);
+    int ConfigMotionCruiseVelocity(double sensorUnitsPer100ms, int timeoutMs);
+    int ConfigMotionAcceleration(double sensorUnitsPer100msPerSec, int timeoutMs);
+    int ConfigMotionSCurveStrength(int curveStrength, int timeoutMs);
+    int ClearMotionProfileTrajectories();
+    int GetMotionProfileTopLevelBufferCount();
+    // I am definitely not porting other motion profile stuff right now
+    int ConfigFeedbackNotContinuous(bool feedbackNotContinuous, int timeoutMs);
+    int ConfigClearPositionOnLimitF(bool clearPositionOnLimitF, int timeoutMs);
+    int ConfigClearPositionOnLimitR(bool clearPositionOnLimitR, int timeoutMs);
+    int ConfigClearPositionOnQuadIdx(bool clearPositionOnQuadIdx, int timeoutMs);
+    int ConfigLimitSwitchDisableNeutralOnLOS(bool limitSwitchDisableNeutralOnLOS, int timeoutMs);
+    int ConfigSoftLimitDisableNeutralOnLOS(bool softLimitDisableNeutralOnLOS, int timeoutMs);
+    int ConfigPulseWidthPeriod_EdgesPerRot(int pulseWidthPeriod_EdgesPerRot, int timeoutMs);
+    int ConfigPulseWidthPeriod_FilterWindowSz(int pulseWidthPeriod_FilterWindowSz, int timeoutMs);
+    int GetLastError();
+    // Faults?? Another time
+    int GetFirmwareVersion();
+    bool HasResetOccurred();
+    // We don't need custom signal stuff
+    int GetBaseID();
+    @explicitcast int GetControlMode();
+    Follow(@cast("ctre::phoenix::motorcontrol::IMotorController&") void* masterToFollow);
+    // Not supporting the aux PID variant of Follow right now
+    ValueUpdated();
   }
 
   @class("ctre::phoenix::motorcontrol::can::WPI_TalonFX")
@@ -61,9 +166,19 @@ motors: {
 @include("<frc/Solenoid.h>")
 @include("<frc/DoubleSolenoid.h>")
 solenoids: {
+  @class("frc::Solenoid")
+  Solenoid: {
+    @constructor new(int channel);
+    Set(bool on);
+    bool Get();
+  }
+
   @class("frc::DoubleSolenoid")
   DoubleSolenoid: {
     @constructor new(int forwardChannel, int reverseChannel);
+    @constructor newWithModule(int moduleNumber, int forwardChannel, int reverseChannel);
+    Set(@cast("frc::DoubleSolenoid::Value") int value);
+    int Get();
   }
 }
 
