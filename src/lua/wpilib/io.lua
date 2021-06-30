@@ -1,14 +1,4 @@
 local ffi = require("ffi")
-ffi.cdef[[
-    void* Joystick_new(int port);
-    double Joystick_GetX(void* j);
-    double Joystick_GetY(void* j);
-    bool Joystick_GetRawButton(void* j, int button);
-    bool Joystick_GetRawButtonPressed(void* j, int button);
-    bool Joystick_GetRawButtonReleased(void* j, int button);
-    double Joystick_GetRawAxis(void* j, int axis);
-]]
-
 
 -- Constants
 

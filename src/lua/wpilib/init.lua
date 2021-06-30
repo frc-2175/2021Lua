@@ -1,3 +1,5 @@
+require("wpilib.bindings")
+
 require("wpilib.io")
 require("wpilib.motors")
 require("wpilib.solenoids")
