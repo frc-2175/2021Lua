@@ -1,20 +1,20 @@
 local ffi = require("ffi")
 ffi.cdef[[
     void* PWMSparkMax_new(int channel);
-    void* PWMSparkMax_toSpeedController(void* m);
-    void PWMSparkMax_Set(void* m, double value);
+    void* PWMSparkMax_toSpeedController(void* _m);
+    void PWMSparkMax_Set(void* _m, double value);
 
     void* TalonSRX_new(int deviceNumber);
-    void* TalonSRX_toSpeedController(void* m);
-    double TalonSRX_Get(void* m);
-    void TalonSRX_Set(void* m, double value);
-    void TalonSRX_SetInverted(void* m, int invertType);
+    void* TalonSRX_toSpeedController(void* _m);
+    double TalonSRX_Get(void* _m);
+    void TalonSRX_Set(void* _m, double value);
+    void TalonSRX_SetInverted(void* _m, int invertType);
 
     void* TalonFX_new(int deviceNumber);
-    void* TalonFX_toSpeedController(void* m);
-    double TalonFX_Get(void* m);
-    void TalonFX_Set(void* m, double value);
-    void TalonFX_SetInverted(void* m, int invertType);
+    void* TalonFX_toSpeedController(void* _m);
+    double TalonFX_Get(void* _m);
+    void TalonFX_Set(void* _m, double value);
+    void TalonFX_SetInverted(void* _m, int invertType);
 
     void* DifferentialDrive_new(void* leftMotor, void* rightMotor);
     void DifferentialDrive_ArcadeDrive(void* d, double xSpeed, double zRotation, bool squareInputs);
@@ -116,8 +116,11 @@ end
 DifferentialDrive = {}
 
 function DifferentialDrive:new(leftMotor, rightMotor)
+    print(leftMotor, rightMotor)
     leftSC = leftMotor.toSpeedController(leftMotor.motor)
+    print(leftSC)
     rightSC = rightMotor.toSpeedController(rightMotor.motor)
+    print(rightSC)
     o = {
         drive = ffi.C.DifferentialDrive_new(leftSC, rightSC),
     }

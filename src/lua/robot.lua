@@ -1,7 +1,7 @@
 require("intake")
 
 function robot.robotInit()
-    leftMotor = TalonFX:new(1)
+    leftMotor = TalonSRX:new(1)
     rightMotor = TalonSRX:new(2)
     gamepad = Joystick:new(0)
     robotDrive = DifferentialDrive:new(leftMotor, rightMotor)

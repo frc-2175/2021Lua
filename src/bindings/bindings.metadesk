@@ -5,14 +5,18 @@ io: {
     @constructor new(int port);
     double GetX();
     double GetY();
+    bool GetRawButton(int button);
+    bool GetRawButtonPressed(int button);
+    bool GetRawButtonReleased(int button);
+    double GetRawAxis(int axis);
   }
 }
 
 
+@include("<cassert>")
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonFX.h>")
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>")
 @include("<frc/PWMSparkMax.h>")
-@include("<frc/TimedRobot.h>")
 @include("<frc/drive/DifferentialDrive.h>")
 motors: {
   @class("frc::PWMSparkMax")
@@ -43,6 +47,8 @@ motors: {
   @class("frc::DifferentialDrive")
   DifferentialDrive: {
     @constructor new(void* leftMotor, void* rightMotor) """
+      assert(leftMotor);
+      assert(rightMotor);
       auto l = (frc::SpeedController*)leftMotor;
       auto r = (frc::SpeedController*)rightMotor;
       return new frc::DifferentialDrive(*l, *r);
@@ -58,7 +64,6 @@ solenoids: {
   @class("frc::DoubleSolenoid")
   DoubleSolenoid: {
     @constructor new(int forwardChannel, int reverseChannel);
-    Set();
   }
 }
 
