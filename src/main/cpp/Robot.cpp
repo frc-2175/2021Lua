@@ -6,8 +6,8 @@
 #include <lua.hpp>
 
 const char* luaSearchPaths[] = {
-  ".\\src\\lua\\",
-  "/home/lvuser/lua/"
+  "/home/lvuser/lua/",
+  ".\\src\\lua\\"
 };
 
 int runLuaFile(lua_State* L, const char* filename) {

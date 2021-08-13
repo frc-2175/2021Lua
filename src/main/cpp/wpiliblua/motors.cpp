@@ -3,10 +3,50 @@
 #include <cassert>
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonFX.h>
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
+#include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
 #include <frc/PWMSparkMax.h>
 #include <frc/drive/DifferentialDrive.h>
 
 #include "luadef.h"
+
+LUAFUNC void* VictorSPX_new(int deviceNumber) {
+    return new ctre::phoenix::motorcontrol::can::WPI_VictorSPX(deviceNumber);
+}
+
+LUAFUNC void* VictorSPX_toSpeedController(void* _this) {
+    frc::SpeedController* _converted = (ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this;
+    return _converted;
+}
+
+LUAFUNC void* VictorSPX_toIMotorController(void* _this) {
+    ctre::phoenix::motorcontrol::IMotorController* _converted = (ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this;
+    return _converted;
+}
+
+LUAFUNC double VictorSPX_Get(void* _this) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+        ->Get();
+}
+
+LUAFUNC void VictorSPX_Set(void* _this, double value) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+        ->Set(value);
+}
+
+LUAFUNC void VictorSPX_SetInvertedBool(void* _this, bool invert) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+        ->SetInverted(invert);
+}
+
+LUAFUNC void VictorSPX_SetInverted(void* _this, int invertType) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+        ->SetInverted((ctre::phoenix::motorcontrol::InvertType)invertType);
+}
+
+LUAFUNC void VictorSPX_Follow(void* _this, void* masterToFollow) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+        ->Follow(*(ctre::phoenix::motorcontrol::IMotorController*)masterToFollow);
+}
 
 LUAFUNC void* TalonSRX_new(int deviceNumber) {
     return new ctre::phoenix::motorcontrol::can::WPI_TalonSRX(deviceNumber);
@@ -15,6 +55,21 @@ LUAFUNC void* TalonSRX_new(int deviceNumber) {
 LUAFUNC void* TalonSRX_toSpeedController(void* _this) {
     frc::SpeedController* _converted = (ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this;
     return _converted;
+}
+
+LUAFUNC void* TalonSRX_toIMotorController(void* _this) {
+    ctre::phoenix::motorcontrol::IMotorController* _converted = (ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this;
+    return _converted;
+}
+
+LUAFUNC double TalonSRX_Get(void* _this) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+        ->Get();
+}
+
+LUAFUNC void TalonSRX_Set(void* _this, double value) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+        ->Set(value);
 }
 
 LUAFUNC void TalonSRX_SetWithTalonControlMode(void* _this, int mode, double value) {
@@ -439,7 +494,7 @@ LUAFUNC int TalonSRX_GetControlMode(void* _this) {
 
 LUAFUNC void TalonSRX_Follow(void* _this, void* masterToFollow) {
     return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
-        ->Follow((ctre::phoenix::motorcontrol::IMotorController&)masterToFollow);
+        ->Follow(*(ctre::phoenix::motorcontrol::IMotorController*)masterToFollow);
 }
 
 LUAFUNC void TalonSRX_ValueUpdated(void* _this) {
@@ -456,6 +511,11 @@ LUAFUNC void* TalonFX_toSpeedController(void* _this) {
     return _converted;
 }
 
+LUAFUNC void* TalonFX_toIMotorController(void* _this) {
+    ctre::phoenix::motorcontrol::IMotorController* _converted = (ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this;
+    return _converted;
+}
+
 LUAFUNC double TalonFX_Get(void* _this) {
     return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Get();
@@ -469,6 +529,11 @@ LUAFUNC void TalonFX_Set(void* _this, double value) {
 LUAFUNC void TalonFX_SetInverted(void* _this, int invertType) {
     return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetInverted((ctre::phoenix::motorcontrol::InvertType)invertType);
+}
+
+LUAFUNC void TalonFX_Follow(void* _this, void* masterToFollow) {
+    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+        ->Follow(*(ctre::phoenix::motorcontrol::IMotorController*)masterToFollow);
 }
 
 LUAFUNC void* DifferentialDrive_new(void* leftMotor, void* rightMotor) {

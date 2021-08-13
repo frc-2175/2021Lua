@@ -48,6 +48,7 @@ typedef struct {
     int NumArgs;
     MD_String8 ArgTypes[MAX_ARGS];
     MD_String8 ArgNames[MAX_ARGS];
+    int ArgDerefs[MAX_ARGS];
     MD_String8 ArgCasts[MAX_ARGS];
 
     MD_Node* After;
@@ -103,6 +104,11 @@ ParseFuncResult ParseFunc(MD_Node* n) {
         if (it->flags & MD_NodeFlag_BeforeComma || MD_NodeIsNil(it->next)) {
             res.ArgNames[res.NumArgs] = it->string;
             res.ArgTypes[res.NumArgs] = ParseType(argStart, it);
+
+            MD_Node* derefTag = MD_TagFromString(argStart, MD_S8Lit("deref"));
+            if (!MD_NodeIsNil(derefTag)) {
+                res.ArgDerefs[res.NumArgs] = 1;
+            }
             
             MD_Node* castTag = MD_TagFromString(argStart, MD_S8Lit("cast"));
             if (!MD_NodeIsNil(castTag)) {
@@ -249,13 +255,19 @@ int main(int argc, char** argv) {
 
                     MD_String8List callArgs = {0};
                     for (int i = 0; i < res.NumArgs; i++) {
+                        MD_String8 deref = MD_S8Lit("");
+                        if (res.ArgDerefs[i]) {
+                            deref = MD_S8Lit("*");
+                        }
+
                         MD_String8 cast = MD_S8Lit("");
                         if (res.ArgCasts[i].size > 0) {
                             cast = MD_PushStringF("(%.*s)", MD_StringExpand(res.ArgCasts[i]));
                         }
 
                         MD_PushStringToList(&callArgs, MD_PushStringF(
-                            "%.*s%.*s",
+                            "%.*s%.*s%.*s",
+                            MD_StringExpand(deref),
                             MD_StringExpand(cast),
                             MD_StringExpand(res.ArgNames[i])
                         ));

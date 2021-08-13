@@ -37,13 +37,33 @@ io: {
 @include("<cassert>")
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonFX.h>")
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>")
+@include("<ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>")
 @include("<frc/PWMSparkMax.h>")
 @include("<frc/drive/DifferentialDrive.h>")
 motors: {
+  @class("ctre::phoenix::motorcontrol::can::WPI_VictorSPX")
+  VictorSPX: {
+    @constructor new(int deviceNumber);
+    @converter("frc::SpeedController") toSpeedController();
+    @converter("ctre::phoenix::motorcontrol::IMotorController") toIMotorController();
+    
+    double Get();
+    Set(double value);
+
+    @alias("SetInverted") SetInvertedBool(bool invert);
+    SetInverted(@cast("ctre::phoenix::motorcontrol::InvertType") int invertType);
+    Follow(@deref @cast("ctre::phoenix::motorcontrol::IMotorController*") void* masterToFollow);
+  }
+
   @class("ctre::phoenix::motorcontrol::can::WPI_TalonSRX")
   TalonSRX: {
     @constructor new(int deviceNumber);
     @converter("frc::SpeedController") toSpeedController();
+    @converter("ctre::phoenix::motorcontrol::IMotorController") toIMotorController();
+    
+    double Get();
+    Set(double value);
+    
     @alias("Set") SetWithTalonControlMode(@cast("ctre::phoenix::motorcontrol::TalonSRXControlMode") int mode, double value);
     int ConfigSelectedFeedbackSensor(@cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
     int ConfigPeakCurrentLimit(int amps, int timeoutMs);
@@ -135,7 +155,7 @@ motors: {
     // We don't need custom signal stuff
     int GetBaseID();
     @explicitcast int GetControlMode();
-    Follow(@cast("ctre::phoenix::motorcontrol::IMotorController&") void* masterToFollow);
+    Follow(@deref @cast("ctre::phoenix::motorcontrol::IMotorController*") void* masterToFollow);
     // Not supporting the aux PID variant of Follow right now
     ValueUpdated();
   }
@@ -144,9 +164,13 @@ motors: {
   TalonFX: {
     @constructor new(int deviceNumber);
     @converter("frc::SpeedController") toSpeedController();
+    @converter("ctre::phoenix::motorcontrol::IMotorController") toIMotorController();
     double Get();
     Set(double value);
     SetInverted(@cast("ctre::phoenix::motorcontrol::InvertType") int invertType);
+
+    // BaseMotorController
+    Follow(@deref @cast("ctre::phoenix::motorcontrol::IMotorController*") void* masterToFollow);
   }
   
   @class("frc::DifferentialDrive")

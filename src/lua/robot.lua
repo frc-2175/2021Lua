@@ -1,10 +1,31 @@
-require("intake")
+-- require("intake")
 
 function robot.robotInit()
-    leftMotor = TalonSRX:new(1)
-    rightMotor = TalonSRX:new(2)
-    gamepad = Joystick:new(0)
-    robotDrive = DifferentialDrive:new(leftMotor, rightMotor)
+    leftMaster = TalonFX:new(15)
+    leftMaster:setInverted(CTRETalonFXInvertType.Clockwise)
+
+    leftFollower1 = VictorSPX:new(11)
+    leftFollower1:follow(leftMaster)
+    leftFollower1:setInverted(CTREInvertType.OpposeMaster)
+
+    leftFollower2 = VictorSPX:new(10)
+    leftFollower2:follow(leftMaster)
+    leftFollower2:setInverted(CTREInvertType.OpposeMaster)
+
+    rightMaster = TalonFX:new(16)
+    rightMaster:setInverted(CTRETalonFXInvertType.Clockwise)
+
+    rightFollower1 = VictorSPX:new(9)
+    rightFollower1:follow(rightMaster)
+    rightFollower1:setInverted(CTREInvertType.OpposeMaster)
+
+    rightFollower2 = VictorSPX:new(8)
+    rightFollower2:follow(rightMaster)
+    rightFollower2:setInverted(CTREInvertType.OpposeMaster)
+
+    robotDrive = DifferentialDrive:new(leftMaster, rightMaster)
+    
+    gamepad = Joystick:new(2)
 end
 
 function robot.teleopPeriodic()
@@ -12,6 +33,11 @@ function robot.teleopPeriodic()
         -gamepad:getAxis(XboxAxes.Y),
         gamepad:getAxis(XboxAxes.RightStickX)
     )
+
+    -- speed = -gamepad:getAxis(XboxAxes.Y)
+
+    -- leftMaster:set(speed)
+    -- leftFollower1:set(speed)
 
     --intake piston 
     if gamepad:getButtonPressed(XboxButtons.B) then 

@@ -4,13 +4,13 @@
     to run.
 --]]
 
-package.path = package.path .. ";.\\src\\lua\\?.lua;.\\src\\lua\\?\\init.lua"
+package.path = package.path .. ";./?/init.lua;/home/lvuser/lua/?.lua;/home/lvuser/lua/?/init.lua;.\\src\\lua\\?.lua;.\\src\\lua\\?\\init.lua"
 
 require("wpilib")
 
 robot = {
     robotInit = function() end,
-    robotPeriodic = function() end,
+    robotPeriodic = function() end, 
     disabledInit = function() end,
     disabledPeriodic = function() end,
     autonomousInit = function() end,
