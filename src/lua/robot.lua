@@ -1,56 +1,67 @@
 require("intake")
 
-
 safeMode = true
-minTurnRateLimit = 0.3  
-simMode = true
+minTurnRateLimit = 0.5
+minSpeedLimit = 0.7
+simMode = false
 
-if simMode then
-    function robot.robotInit()
-        -- leftMaster = TalonFX:new(15) -- -making a motor !
-        -- leftMaster:setInverted(CTRETalonFXInvertType.Clockwise) --setting up, making it inverted
-
+function robot.robotInit()
+    if simMode then
+        -- sim left motor
         leftMaster = TalonSRX:new(15) -- -making a motor !
         leftMaster:setInverted(CTREInvertType.None) --setting up, making it inverted
+    else
+        -- real left motor
+        leftMaster = TalonFX:new(15) -- -making a motor !
+        leftMaster:setInverted(CTRETalonFXInvertType.Clockwise) --setting up, making it inverted
+    end
 
-        leftFollower1 = VictorSPX:new(11)
-        leftFollower1:follow(leftMaster)
-        leftFollower1:setInverted(CTREInvertType.OpposeMaster)
+    leftFollower1 = VictorSPX:new(11)
+    leftFollower1:follow(leftMaster)
+    leftFollower1:setInverted(CTREInvertType.OpposeMaster)
 
-        leftFollower2 = VictorSPX:new(10)
-        leftFollower2:follow(leftMaster)
-        leftFollower2:setInverted(CTREInvertType.OpposeMaster)
+    leftFollower2 = VictorSPX:new(10)
+    leftFollower2:follow(leftMaster)
+    leftFollower2:setInverted(CTREInvertType.OpposeMaster)
 
-        -- rightMaster = TalonFX:new(16)
-        -- rightMaster:setInverted(CTRETalonFXInvertType.Clockwise)
-
+    if simMode then
+        -- sim right motor
         rightMaster = TalonSRX:new(16)
         rightMaster:setInverted(CTREInvertType.None)
-
-        rightFollower1 = VictorSPX:new(9)
-        rightFollower1:follow(rightMaster)
-        rightFollower1:setInverted(CTREInvertType.OpposeMaster)
-
-        rightFollower2 = VictorSPX:new(8)
-        rightFollower2:follow(rightMaster)
-        rightFollower2:setInverted(CTREInvertType.OpposeMaster)
-
-        robotDrive = DifferentialDrive:new(leftMaster, rightMaster) --DifferentialDrive manages all driving math
-        
-        leftStick = Joystick:new(0)
-        rightStick = Joystick:new(1)
-        gamepad = Joystick:new(2)
+    else
+        -- real right motor
+        rightMaster = TalonFX:new(16)
+        rightMaster:setInverted(CTRETalonFXInvertType.Clockwise)
     end
+
+    rightFollower1 = VictorSPX:new(9)
+    rightFollower1:follow(rightMaster)
+    rightFollower1:setInverted(CTREInvertType.OpposeMaster)
+
+    rightFollower2 = VictorSPX:new(8)
+    rightFollower2:follow(rightMaster)
+    rightFollower2:setInverted(CTREInvertType.OpposeMaster)
+
+    robotDrive = DifferentialDrive:new(leftMaster, rightMaster) --DifferentialDrive manages all driving math
+    
+    leftStick = Joystick:new(0)
+    rightStick = Joystick:new(1)
+    gamepad = Joystick:new(2)
 end
 
 --teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function robot.teleopPeriodic()
    
-    speedLimiter = -leftStick:getAxis(JoystickAxes.Throttle) -- Set the speedLimiter to the value of the knob thing on the joystick.
     if -rightStick:getAxis(JoystickAxes.Throttle) < minTurnRateLimit then 
         turnLimiter = minTurnRateLimit
     else
         turnLimiter = -rightStick:getAxis(JoystickAxes.Throttle) -- Set the turnLimiter to the value of the knob thing on the joystick.
+    end
+
+    if -leftStick:getAxis(JoystickAxes.Throttle) < minSpeedLimit then
+        speedLimiter = minSpeedLimit
+    else 
+        speedLimiter = -leftStick:getAxis(JoystickAxes.Throttle)
     end
 
     robotDrive:arcadeDrive(
