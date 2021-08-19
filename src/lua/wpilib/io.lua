@@ -41,6 +41,12 @@ XboxAxes = {
     RightStickY = 5,
 }
 
+JoystickAxes = {
+    X = 0,
+    Y = 1,
+    Throttle = 2,
+}
+
 
 -- Joystick
 

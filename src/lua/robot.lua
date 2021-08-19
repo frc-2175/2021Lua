@@ -1,8 +1,11 @@
 require("intake")
 
+
+safeMode = true
+
 function robot.robotInit()
-    leftMaster = TalonFX:new(15)
-    leftMaster:setInverted(CTRETalonFXInvertType.Clockwise)
+    leftMaster = TalonSRX:new(15) -- -making a motor !
+    leftMaster:setInverted(CTREInvertType.None) --setting up, making it inverted
 
     leftFollower1 = VictorSPX:new(11)
     leftFollower1:follow(leftMaster)
@@ -12,8 +15,8 @@ function robot.robotInit()
     leftFollower2:follow(leftMaster)
     leftFollower2:setInverted(CTREInvertType.OpposeMaster)
 
-    rightMaster = TalonFX:new(16)
-    rightMaster:setInverted(CTRETalonFXInvertType.Clockwise)
+    rightMaster = TalonSRX:new(16)
+    rightMaster:setInverted(CTREInvertType.None)
 
     rightFollower1 = VictorSPX:new(9)
     rightFollower1:follow(rightMaster)
@@ -23,26 +26,34 @@ function robot.robotInit()
     rightFollower2:follow(rightMaster)
     rightFollower2:setInverted(CTREInvertType.OpposeMaster)
 
-    robotDrive = DifferentialDrive:new(leftMaster, rightMaster)
+    robotDrive = DifferentialDrive:new(leftMaster, rightMaster) --DifferentialDrive manages all driving math
     
+    leftStick = Joystick:new(0)
+    rightStick = Joystick:new(1)
     gamepad = Joystick:new(2)
 end
-
+--teleop periodic : WHERE EVERTHING HAPPENS !!i!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function robot.teleopPeriodic()
-    robotDrive:arcadeDrive(
-        -gamepad:getAxis(XboxAxes.Y),
-        gamepad:getAxis(XboxAxes.RightStickX)
-    )
+   
+    speedLimiter = -leftStick:getAxis(JoystickAxes.Throttle) -- Set the speedLimiter to the value of the knob thing on the joystick.
+    turnLimiter = -rightStick:getAxis(JoystickAxes.Throttle) -- Set the turnLimiter to the value of the knob thing on the joystick.
 
+
+    robotDrive:arcadeDrive(
+        -leftStick:getAxis(JoystickAxes.Y) * speedLimiter,  -- multiplies speed in forward and backwards direction by "The value of the knob thing on the joystick."
+        rightStick:getAxis(JoystickAxes.X) * turnLimiter
+    )
     -- speed = -gamepad:getAxis(XboxAxes.Y)
 
     -- leftMaster:set(speed)
     -- leftFollower1:set(speed)
 
     --intake piston 
-    if gamepad:getButtonPressed(XboxButtons.B) then 
-        intakePutOut() 
-    end 
+    if not safeMode :
+        if gamepad:getButtonPressed(XboxButtons.B) then 
+            intakePutOut() 
+        end 
+    end
     --[[ 
     else if gamepad:getButtonPressed(XboxButtons.RightTrigger) or gamepad:getButtonPressed(XboxButtons.RightBumper) 
         intakePutOut() 
