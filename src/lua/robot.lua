@@ -49,7 +49,7 @@ function robot.teleopPeriodic()
     -- leftFollower1:set(speed)
 
     --intake piston 
-    if not safeMode :
+    if not safeMode then
         if gamepad:getButtonPressed(XboxButtons.B) then 
             intakePutOut() 
         end 
