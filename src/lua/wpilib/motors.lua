@@ -28,22 +28,6 @@ CTRETalonFXInvertType = {
 }
 
 
--- PWM Spark Max
-
-PWMSparkMax = {}
-
-function PWMSparkMax:new(channel)
-    o = makeMotorController(ffi.C.PWMSparkMax_new(channel), ffi.C.PWMSparkMax_toSpeedController, nil)
-    setmetatable(o, self)
-    self.__index = self
-    return o
-end
-
-function PWMSparkMax:set(value)
-    ffi.C.PWMSparkMax_Set(self.motor, value)
-end
-
-
 -- Victor SPX
 
 VictorSPX = {}
