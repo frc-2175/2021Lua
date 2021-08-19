@@ -1,5 +1,5 @@
 local intakePiston = DoubleSolenoid:new(1, 0)
-intakeMotor = TalonSRX:new(10)
+local intakeMotor = TalonSRX:new(10)
 
 --rolls intake in at full in
 

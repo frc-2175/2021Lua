@@ -5,6 +5,7 @@
 
 #define NodeLine(node) MD_CodeLocFromNode(node).line
 #define MAX_ARGS 16
+#define MAX_BASE_CLASSES 10
 
 void printIndent(int level) {
     for (int i = 0; i < level; i++) {
@@ -184,6 +185,104 @@ GenFuncResult GenFunc(
     };
 }
 
+// Returns an error message
+MD_String8 addClassFuncs(
+    MD_Node* klass,
+    MD_String8 cppName,
+    MD_String8 luaName,
+    MD_String8List* cppDefs,
+    MD_String8List* luaDefs
+) {
+    MD_Node* fNode = klass->first_child;
+    while (1) {
+        if (MD_NodeIsNil(fNode)) {
+            break;
+        }
+
+        ParseFuncResult res = ParseFunc(fNode);
+        if (res.Error.size > 0) {
+            return res.Error;
+        }
+
+        MD_String8 returnType = res.ReturnType;
+        MD_String8 name = MD_PushStringF("%.*s_%.*s", MD_StringExpand(luaName), MD_StringExpand(res.Name));
+        MD_String8 body = {0};
+        MD_b32 isMethod = 0;
+
+        MD_String8List callArgs = {0};
+        for (int i = 0; i < res.NumArgs; i++) {
+            MD_String8 deref = MD_S8Lit("");
+            if (res.ArgDerefs[i]) {
+                deref = MD_S8Lit("*");
+            }
+
+            MD_String8 cast = MD_S8Lit("");
+            if (res.ArgCasts[i].size > 0) {
+                cast = MD_PushStringF("(%.*s)", MD_StringExpand(res.ArgCasts[i]));
+            }
+
+            MD_PushStringToList(&callArgs, MD_PushStringF(
+                "%.*s%.*s%.*s",
+                MD_StringExpand(deref),
+                MD_StringExpand(cast),
+                MD_StringExpand(res.ArgNames[i])
+            ));
+        }
+
+        if (MD_NodeHasTag(fNode, MD_S8Lit("constructor"))) {
+            returnType = MD_S8Lit("void*");
+
+            body = MD_PushStringF(
+                "    return new %.*s(%.*s);",
+                MD_StringExpand(cppName),
+                MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
+            );
+        } else if (MD_NodeHasTag(fNode, MD_S8Lit("converter"))) {
+            returnType = MD_S8Lit("void*");
+            isMethod = 1;
+
+            MD_String8 convertTo = MD_TagFromString(fNode, MD_S8Lit("converter"))->first_child->string;
+            body = MD_PushStringF(
+                "    %.*s* _converted = (%.*s*)_this;\n"
+                "    return _converted;",
+                MD_StringExpand(convertTo),
+                MD_StringExpand(cppName)
+            );
+        } else {
+            MD_String8 cppFunc = res.Name;
+            MD_Node* aliasTag = MD_TagFromString(fNode, MD_S8Lit("alias"));
+            if (!MD_NodeIsNil(aliasTag)) {
+                cppFunc = aliasTag->first_child->string;
+            }
+
+            MD_String8 returnCast = {0};
+            if (MD_NodeHasTag(fNode, MD_S8Lit("explicitcast"))) {
+                returnCast = MD_PushStringF("(%.*s) ", MD_StringExpand(returnType));
+            }
+
+            isMethod = 1;
+            MD_b32 doReturn = !MD_StringMatch(returnType, MD_S8Lit("void"), 0);
+            body = MD_PushStringF(
+                "    %.*s%.*s((%.*s*)_this)\n"
+                "        ->%.*s(%.*s);",
+                MD_StringExpand(MD_S8Lit(doReturn ? "return " : "")),
+                MD_StringExpand(returnCast),
+                MD_StringExpand(cppName),
+                MD_StringExpand(cppFunc),
+                MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
+            );
+        }
+
+        GenFuncResult genRes = GenFunc(res, returnType, name, body, isMethod);
+        MD_PushStringToList(cppDefs, genRes.CppDef);
+        MD_PushStringToList(luaDefs, genRes.LuaDef);
+        
+        fNode = res.After;
+    }
+
+    return (MD_String8) {0};
+}
+
 int main(int argc, char** argv) {
     MD_ParseResult parse = MD_ParseWholeFile(MD_S8Lit("src/bindings/bindings.metadesk"));
     
@@ -221,6 +320,9 @@ int main(int argc, char** argv) {
 
         fprintf(cppfile, "#include \"luadef.h\"\n\n");
 
+        int numBaseClasses = 0;
+        MD_Node* baseClasses[MAX_BASE_CLASSES] = {0};
+
         MD_String8List cppDefs = {0};
 
         MD_Node* fentry = f->first_child;
@@ -228,100 +330,51 @@ int main(int argc, char** argv) {
             if (MD_NodeIsNil(fentry)) {
                 break;
             }
-            
-            if (MD_NodeHasTag(fentry, MD_S8Lit("class"))) {
+
+            if (MD_NodeHasTag(fentry, MD_S8Lit("baseclass"))) {
+                // Base class (save node for later lookup)
+                baseClasses[numBaseClasses] = fentry;
+                numBaseClasses++;
+                fentry = fentry->next;
+            } else if (MD_NodeHasTag(fentry, MD_S8Lit("class"))) {
                 // Class definition
 
                 MD_String8 cppName = MD_TagFromString(fentry, MD_S8Lit("class"))->first_child->string;
                 MD_String8 luaName = fentry->string;
 
-                MD_Node* fNode = fentry->first_child;
-                while (1) {
-                    if (MD_NodeIsNil(fNode)) {
-                        break;
+                for (MD_EachNode(tag, fentry->first_tag)) {
+                    if (!MD_StringMatch(tag->string, MD_S8Lit("extends"), 0)) {
+                        continue;
                     }
 
-                    ParseFuncResult res = ParseFunc(fNode);
-                    if (res.Error.size > 0) {
+                    // Look up base class
+                    MD_String8 baseClassName = tag->first_child->string;
+                    MD_Node* baseClass = 0;
+                    for (int i = 0; i < numBaseClasses; i++) {
+                        if (MD_StringMatch(baseClasses[i]->string, baseClassName, 0)) {
+                            baseClass = baseClasses[i];
+                            break;
+                        }
+                    }
+                    if (!baseClass) {
                         fclose(cppfile);
-                        fprintf(stderr, "ERROR: %.*s\n", MD_StringExpand(res.Error));
+                        fprintf(stderr, "ERROR: Couldn't find base class \"%.*s\"\n", MD_StringExpand(baseClassName));
                         return 1;
                     }
 
-                    MD_String8 returnType = res.ReturnType;
-                    MD_String8 name = MD_PushStringF("%.*s_%.*s", MD_StringExpand(luaName), MD_StringExpand(res.Name));
-                    MD_String8 body = {0};
-                    MD_b32 isMethod = 0;
-
-                    MD_String8List callArgs = {0};
-                    for (int i = 0; i < res.NumArgs; i++) {
-                        MD_String8 deref = MD_S8Lit("");
-                        if (res.ArgDerefs[i]) {
-                            deref = MD_S8Lit("*");
-                        }
-
-                        MD_String8 cast = MD_S8Lit("");
-                        if (res.ArgCasts[i].size > 0) {
-                            cast = MD_PushStringF("(%.*s)", MD_StringExpand(res.ArgCasts[i]));
-                        }
-
-                        MD_PushStringToList(&callArgs, MD_PushStringF(
-                            "%.*s%.*s%.*s",
-                            MD_StringExpand(deref),
-                            MD_StringExpand(cast),
-                            MD_StringExpand(res.ArgNames[i])
-                        ));
+                    MD_String8 error = addClassFuncs(baseClass, cppName, luaName, &cppDefs, &luaDefs);
+                    if (error.size > 0) {
+                        fclose(cppfile);
+                        fprintf(stderr, "ERROR adding functions from base class \"%.*s\": %.*s\n", MD_StringExpand(baseClass->string), MD_StringExpand(error));
+                        return 1;
                     }
+                }
 
-                    if (MD_NodeHasTag(fNode, MD_S8Lit("constructor"))) {
-                        returnType = MD_S8Lit("void*");
-
-                        body = MD_PushStringF(
-                            "    return new %.*s(%.*s);",
-                            MD_StringExpand(cppName),
-                            MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
-                        );
-                    } else if (MD_NodeHasTag(fNode, MD_S8Lit("converter"))) {
-                        returnType = MD_S8Lit("void*");
-                        isMethod = 1;
-
-                        MD_String8 convertTo = MD_TagFromString(fNode, MD_S8Lit("converter"))->first_child->string;
-                        body = MD_PushStringF(
-                            "    %.*s* _converted = (%.*s*)_this;\n"
-                            "    return _converted;",
-                            MD_StringExpand(convertTo),
-                            MD_StringExpand(cppName)
-                        );
-                    } else {
-                        MD_String8 cppFunc = res.Name;
-                        MD_Node* aliasTag = MD_TagFromString(fNode, MD_S8Lit("alias"));
-                        if (!MD_NodeIsNil(aliasTag)) {
-                            cppFunc = aliasTag->first_child->string;
-                        }
-
-                        MD_String8 returnCast = {0};
-                        if (MD_NodeHasTag(fNode, MD_S8Lit("explicitcast"))) {
-                            returnCast = MD_PushStringF("(%.*s) ", MD_StringExpand(returnType));
-                        }
-
-                        isMethod = 1;
-                        MD_b32 doReturn = !MD_StringMatch(returnType, MD_S8Lit("void"), 0);
-                        body = MD_PushStringF(
-                            "    %.*s%.*s((%.*s*)_this)\n"
-                            "        ->%.*s(%.*s);",
-                            MD_StringExpand(MD_S8Lit(doReturn ? "return " : "")),
-                            MD_StringExpand(returnCast),
-                            MD_StringExpand(cppName),
-                            MD_StringExpand(cppFunc),
-                            MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
-                        );
-                    }
-
-                    GenFuncResult genRes = GenFunc(res, returnType, name, body, isMethod);
-                    MD_PushStringToList(&cppDefs, genRes.CppDef);
-                    MD_PushStringToList(&luaDefs, genRes.LuaDef);
-                    
-                    fNode = res.After;
+                MD_String8 error = addClassFuncs(fentry, cppName, luaName, &cppDefs, &luaDefs);
+                if (error.size > 0) {
+                    fclose(cppfile);
+                    fprintf(stderr, "ERROR adding functions for class \"%.*s\": %.*s\n", MD_StringExpand(luaName), MD_StringExpand(error));
+                    return 1;
                 }
 
                 fentry = fentry->next;

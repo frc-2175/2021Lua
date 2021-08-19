@@ -1,4 +1,4 @@
--- require("intake")
+require("intake")
 
 function robot.robotInit()
     leftMaster = TalonFX:new(15)

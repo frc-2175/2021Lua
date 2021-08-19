@@ -38,58 +38,34 @@ io: {
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonFX.h>")
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>")
 @include("<ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>")
-@include("<frc/PWMSparkMax.h>")
 @include("<frc/drive/DifferentialDrive.h>")
 motors: {
-  @class("ctre::phoenix::motorcontrol::can::WPI_VictorSPX")
-  VictorSPX: {
-    @constructor new(int deviceNumber);
+  @baseclass
+  "frc::SpeedController": {
     @converter("frc::SpeedController") toSpeedController();
-    @converter("ctre::phoenix::motorcontrol::IMotorController") toIMotorController();
-    
-    double Get();
     Set(double value);
-
-    @alias("SetInverted") SetInvertedBool(bool invert);
-    SetInverted(@cast("ctre::phoenix::motorcontrol::InvertType") int invertType);
-    Follow(@deref @cast("ctre::phoenix::motorcontrol::IMotorController*") void* masterToFollow);
+    SetVoltage(@cast("units::volt_t") double output); // TODO: Is it legal to simply cast a double to units::volt_t?
+    double Get();
+    @alias("SetInverted") SetInvertedBool(bool isInverted);
+    @alias("GetInverted") bool GetInvertedBool();
+    Disable();
+    StopMotor();
   }
 
-  @class("ctre::phoenix::motorcontrol::can::WPI_TalonSRX")
-  TalonSRX: {
-    @constructor new(int deviceNumber);
-    @converter("frc::SpeedController") toSpeedController();
+  @baseclass
+  "frc::PIDOutput": {
+    PIDWrite(double output);
+  }
+
+  @baseclass
+  "ctre::phoenix::motorcontrol::can::BaseMotorController": {
     @converter("ctre::phoenix::motorcontrol::IMotorController") toIMotorController();
-    
-    double Get();
-    Set(double value);
-    
-    @alias("Set") SetWithTalonControlMode(@cast("ctre::phoenix::motorcontrol::TalonSRXControlMode") int mode, double value);
-    int ConfigSelectedFeedbackSensor(@cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
-    int ConfigPeakCurrentLimit(int amps, int timeoutMs);
-    int ConfigPeakCurrentDuration(int milliseconds, int timeoutMs);
-    int ConfigContinuousCurrentLimit(int amps, int timeoutMs);
-    EnableCurrentLimit(bool enable);
     @alias("Set") SetWithControlMode(@cast("ctre::phoenix::motorcontrol::ControlMode") int mode, double value);
-
-    // BaseTalon
-    double GetOutputCurrent();
-    double GetStatorCurrent();
-    double GetSupplyCurrent();
-    int ConfigVelocityMeasurementPeriod(@cast("ctre::phoenix::motorcontrol::VelocityMeasPeriod") int period, int timeoutMs);
-    int ConfigVelocityMeasurementWindow(int windowSize, int timeoutMs);
-    int ConfigForwardLimitSwitchSource(@cast("ctre::phoenix::motorcontrol::LimitSwitchSource") int limitSwitchSource, @cast("ctre::phoenix::motorcontrol::LimitSwitchNormal") int normalOpenOrClose, int timeoutMs);
-    int ConfigReverseLimitSwitchSource(@cast("ctre::phoenix::motorcontrol::LimitSwitchSource") int limitSwitchSource, @cast("ctre::phoenix::motorcontrol::LimitSwitchNormal") int normalOpenOrClose, int timeoutMs);
-    int IsFwdLimitSwitchClosed();
-    int IsRevLimitSwitchClosed();
-
-    // BaseMotorController
+    @alias("Set") SetWithControlModeAndDemands(@cast("ctre::phoenix::motorcontrol::ControlMode") int mode, double demand0, @cast("ctre::phoenix::motorcontrol::DemandType") int demand1Type, double demand1);
     NeutralOutput();
     SetNeutralMode(@cast("ctre::phoenix::motorcontrol::NeutralMode") int neutralMode);
     SetSensorPhase(bool PhaseSensor);
-    @alias("SetInverted") SetInvertedBool(bool invert);
     SetInverted(@cast("ctre::phoenix::motorcontrol::InvertType") int invertType);
-    bool GetInverted();
     int ConfigFactoryDefault(int timeoutMs);
     int ConfigOpenloopRamp(double secondsFromNeutralToFull, int timeoutMs);
     int ConfigClosedloopRamp(double secondsFromNeutralToFull, int timeoutMs);
@@ -160,17 +136,73 @@ motors: {
     ValueUpdated();
   }
 
+  @baseclass
+  "ctre::phoenix::motorcontrol::can::BaseTalon": {
+    double GetOutputCurrent();
+    double GetStatorCurrent();
+    double GetSupplyCurrent();
+    int ConfigVelocityMeasurementPeriod(@cast("ctre::phoenix::motorcontrol::VelocityMeasPeriod") int period, int timeoutMs);
+    int ConfigVelocityMeasurementWindow(int windowSize, int timeoutMs);
+    int ConfigForwardLimitSwitchSource(@cast("ctre::phoenix::motorcontrol::LimitSwitchSource") int limitSwitchSource, @cast("ctre::phoenix::motorcontrol::LimitSwitchNormal") int normalOpenOrClose, int timeoutMs);
+    int ConfigReverseLimitSwitchSource(@cast("ctre::phoenix::motorcontrol::LimitSwitchSource") int limitSwitchSource, @cast("ctre::phoenix::motorcontrol::LimitSwitchNormal") int normalOpenOrClose, int timeoutMs);
+    int IsFwdLimitSwitchClosed();
+    int IsRevLimitSwitchClosed();
+  }
+
+  @baseclass
+  "ctre::phoenix::motorcontrol::can::WPI_BaseMotorController": {
+    // GetDescription
+    Feed();
+    SetExpiration(double expirationTime);
+    double GetExpiration();
+    bool IsAlive();
+    SetSafetyEnabled(bool enabled);
+    bool IsSafetyEnabled();
+    // GetMotorSafety
+  }
+
+  @class("ctre::phoenix::motorcontrol::can::WPI_VictorSPX")
+  @extends("frc::PIDOutput")
+  @extends("frc::SpeedController")
+  @extends("ctre::phoenix::motorcontrol::can::BaseMotorController")
+  @extends("ctre::phoenix::motorcontrol::can::WPI_BaseMotorController")
+  VictorSPX: {
+    @constructor new(int deviceNumber);
+    @alias("Set") SetWithVictorSPXControlMode(@cast("ctre::phoenix::motorcontrol::VictorSPXControlMode") int mode, double value);
+    @alias("Set") SetWithVictorSPXControlModeAndDemands(@cast("ctre::phoenix::motorcontrol::VictorSPXControlMode") int mode, double demand0, @cast("ctre::phoenix::motorcontrol::DemandType") int demand1Type, double demand1);
+  }
+
+  @class("ctre::phoenix::motorcontrol::can::WPI_TalonSRX")
+  @extends("frc::PIDOutput")
+  @extends("frc::SpeedController")
+  @extends("ctre::phoenix::motorcontrol::can::BaseMotorController")
+  @extends("ctre::phoenix::motorcontrol::can::WPI_BaseMotorController")
+  @extends("ctre::phoenix::motorcontrol::can::BaseTalon")
+  TalonSRX: {
+    @constructor new(int deviceNumber);
+    @alias("Set") SetWithTalonSRXControlMode(@cast("ctre::phoenix::motorcontrol::TalonSRXControlMode") int mode, double value);
+    @alias("Set") SetWithTalonSRXControlModeAndDemands(@cast("ctre::phoenix::motorcontrol::TalonSRXControlMode") int mode, double demand0, @cast("ctre::phoenix::motorcontrol::DemandType") int demand1Type, double demand1);
+    int ConfigSelectedFeedbackSensor(@cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
+    // ConfigSupplyCurrentLimit
+    int ConfigPeakCurrentLimit(int amps, int timeoutMs);
+    int ConfigPeakCurrentDuration(int milliseconds, int timeoutMs);
+    int ConfigContinuousCurrentLimit(int amps, int timeoutMs);
+    EnableCurrentLimit(bool enable);
+  }
+
   @class("ctre::phoenix::motorcontrol::can::WPI_TalonFX")
+  @extends("frc::PIDOutput")
+  @extends("frc::SpeedController")
+  @extends("ctre::phoenix::motorcontrol::can::BaseMotorController")
+  @extends("ctre::phoenix::motorcontrol::can::WPI_BaseMotorController")
+  @extends("ctre::phoenix::motorcontrol::can::BaseTalon")
   TalonFX: {
     @constructor new(int deviceNumber);
-    @converter("frc::SpeedController") toSpeedController();
-    @converter("ctre::phoenix::motorcontrol::IMotorController") toIMotorController();
-    double Get();
-    Set(double value);
-    SetInverted(@cast("ctre::phoenix::motorcontrol::InvertType") int invertType);
-
-    // BaseMotorController
-    Follow(@deref @cast("ctre::phoenix::motorcontrol::IMotorController*") void* masterToFollow);
+    @alias("Set") SetWithTalonFXControlMode(@cast("ctre::phoenix::motorcontrol::TalonFXControlMode") int mode, double value);
+    @alias("Set") SetWithTalonFXControlModeAndDemands(@cast("ctre::phoenix::motorcontrol::TalonFXControlMode") int mode, double demand0, @cast("ctre::phoenix::motorcontrol::DemandType") int demand1Type, double demand1);
+    @alias("SetInverted") SetInvertedTalonFX(@cast("ctre::phoenix::motorcontrol::TalonFXInvertType") int invertType);
+    int ConfigSelectedFeedbackSensor(@cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
+    // @alias("ConfigSelectedFeedbackSensor") int ConfigSelectedFeedbackSensorTalonFX(@cast("ctre::phoenix::motorcontrol::TalonFXFeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
   }
   
   @class("frc::DifferentialDrive")
