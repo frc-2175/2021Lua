@@ -44,6 +44,8 @@ function robot.robotInit()
 
     robotDrive = DifferentialDrive:new(leftMaster, rightMaster) --DifferentialDrive manages all driving math
     
+    gearSolenoid = Solenoid:new(2)
+    
     leftStick = Joystick:new(0)
     rightStick = Joystick:new(1)
     gamepad = Joystick:new(2)
@@ -72,6 +74,8 @@ function robot.teleopPeriodic()
 
     -- leftMaster:set(speed)
     -- leftFollower1:set(speed)
+
+    gearSolenoid:set(rightStick:getButton(11))
 
     --intake piston 
     if not safeMode then

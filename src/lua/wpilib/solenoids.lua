@@ -8,6 +8,27 @@ DoubleSolenoidValue = {
     Reverse = 2,
 }
 
+-- Solenoid
+
+Solenoid = {}
+
+function Solenoid:new(channel)
+    o = {
+        solenoid = ffi.C.Solenoid_new(channel),
+    }
+    setmetatable(o, self)
+    self.__index = self
+    return o
+end
+
+function Solenoid:get()
+    return ffi.C.Solenoid_Get(self.solenoid)
+end
+
+function Solenoid:set(on)
+    ffi.C.Solenoid_Set(self.solenoid, on)
+end
+
 
 -- Double Solenoid
 
