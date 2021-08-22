@@ -49,11 +49,25 @@ function robot.robotInit()
     leftStick = Joystick:new(0)
     rightStick = Joystick:new(1)
     gamepad = Joystick:new(2)
+
+    -- Set up one shooter motor. The two motor IDs are 21 and 22.
+    shooter = SparkMax:new(5, SparkMaxMotorType.Brushless) -- the motors we use, NEOs, are brushless
+    shooter:restoreFactoryDefaults() -- the controllers can get stuck on old, saved config if we don't do this on startup
+    shooter:setIdleMode(SparkMaxIdleMode.Coast) -- it is really important to let the shooter wheels gently coast to a stop
+
+    -- you can set the speed of the shooter like so:
+    -- shooter:set(0.5)
+
+    -- other motors can use the :follow method like so:
+    -- otherShooterMotor:follow(shooter)
+
+    -- when you are doing master/follower stuff, you only need to set
+    -- a speed on the master motor, and the followers automatically do
+    -- their thing.
 end
 
 --teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-function robot.teleopPeriodic()
-   
+function robot.teleopPeriodic()   
     if -rightStick:getAxis(JoystickAxes.Throttle) < minTurnRateLimit then 
         turnLimiter = minTurnRateLimit
     else

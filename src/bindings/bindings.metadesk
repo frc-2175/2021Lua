@@ -39,6 +39,7 @@ io: {
 @include("<ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>")
 @include("<ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>")
 @include("<frc/drive/DifferentialDrive.h>")
+@include('"rev/CANSparkMax.h"')
 motors: {
   @baseclass
   "frc::SpeedController": {
@@ -203,6 +204,15 @@ motors: {
     @alias("SetInverted") SetInvertedTalonFX(@cast("ctre::phoenix::motorcontrol::TalonFXInvertType") int invertType);
     int ConfigSelectedFeedbackSensor(@cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
     // @alias("ConfigSelectedFeedbackSensor") int ConfigSelectedFeedbackSensorTalonFX(@cast("ctre::phoenix::motorcontrol::TalonFXFeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
+  }
+
+  @class("rev::CANSparkMax")
+  @extends("frc::SpeedController")
+  SparkMax: {
+    @constructor new(int deviceID, @cast("rev::CANSparkMax::MotorType") int type);
+    @explicitcast int RestoreFactoryDefaults(bool persist);
+    @explicitcast int SetIdleMode(@cast("rev::CANSparkMax::IdleMode") int mode);
+    @explicitcast int Follow(@cast("rev::CANSparkMax&") void* leader, bool invert);
   }
   
   @class("frc::DifferentialDrive")

@@ -5,6 +5,7 @@
 #include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
 #include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
 #include <frc/drive/DifferentialDrive.h>
+#include "rev/CANSparkMax.h"
 
 #include "luadef.h"
 
@@ -1463,6 +1464,65 @@ LUAFUNC void TalonFX_SetInvertedTalonFX(void* _this, int invertType) {
 LUAFUNC int TalonFX_ConfigSelectedFeedbackSensor(void* _this, int feedbackDevice, int pidIdx, int timeoutMs) {
     return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigSelectedFeedbackSensor((ctre::phoenix::motorcontrol::FeedbackDevice)feedbackDevice, pidIdx, timeoutMs);
+}
+
+LUAFUNC void* SparkMax_toSpeedController(void* _this) {
+    frc::SpeedController* _converted = (rev::CANSparkMax*)_this;
+    return _converted;
+}
+
+LUAFUNC void SparkMax_Set(void* _this, double value) {
+    return ((rev::CANSparkMax*)_this)
+        ->Set(value);
+}
+
+LUAFUNC void SparkMax_SetVoltage(void* _this, double output) {
+    return ((rev::CANSparkMax*)_this)
+        ->SetVoltage((units::volt_t)output);
+}
+
+LUAFUNC double SparkMax_Get(void* _this) {
+    return ((rev::CANSparkMax*)_this)
+        ->Get();
+}
+
+LUAFUNC void SparkMax_SetInvertedBool(void* _this, bool isInverted) {
+    return ((rev::CANSparkMax*)_this)
+        ->SetInverted(isInverted);
+}
+
+LUAFUNC bool SparkMax_GetInvertedBool(void* _this) {
+    return ((rev::CANSparkMax*)_this)
+        ->GetInverted();
+}
+
+LUAFUNC void SparkMax_Disable(void* _this) {
+    return ((rev::CANSparkMax*)_this)
+        ->Disable();
+}
+
+LUAFUNC void SparkMax_StopMotor(void* _this) {
+    return ((rev::CANSparkMax*)_this)
+        ->StopMotor();
+}
+
+LUAFUNC void* SparkMax_new(int deviceID, int type) {
+    return new rev::CANSparkMax(deviceID, (rev::CANSparkMax::MotorType)type);
+}
+
+LUAFUNC int SparkMax_RestoreFactoryDefaults(void* _this, bool persist) {
+    return (int) ((rev::CANSparkMax*)_this)
+        ->RestoreFactoryDefaults(persist);
+}
+
+LUAFUNC int SparkMax_SetIdleMode(void* _this, int mode) {
+    return (int) ((rev::CANSparkMax*)_this)
+        ->SetIdleMode((rev::CANSparkMax::IdleMode)mode);
+}
+
+LUAFUNC int SparkMax_Follow(void* _this, void* leader, bool invert) {
+    return (int) ((rev::CANSparkMax*)_this)
+        ->Follow((rev::CANSparkMax&)leader, invert);
 }
 
 LUAFUNC void* DifferentialDrive_new(void* leftMotor, void* rightMotor) {

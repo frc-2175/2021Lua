@@ -27,6 +27,16 @@ CTRETalonFXInvertType = {
     OpposeMaster = 3, 
 }
 
+SparkMaxIdleMode = {
+    Coast = 0,
+    Brake = 1,
+}
+
+SparkMaxMotorType = {
+    Brushed = 0,
+    Brushless = 1,
+}
+
 
 -- Victor SPX
 
@@ -123,6 +133,40 @@ function TalonFX:follow(masterToFollow)
     -- TODO: Test that the master is a motor controller
     masterIMC = masterToFollow.toIMotorController(masterToFollow.motor)
     ffi.C.TalonFX_Follow(self.motor, masterIMC)
+end
+
+
+-- Spark Max (Neo)
+
+SparkMax = {}
+
+function SparkMax:new(deviceID, type)
+    o = makeMotorController(ffi.C.SparkMax_new(deviceID, type), ffi.C.SparkMax_toSpeedController, nil)
+    setmetatable(o, self)
+    self.__index = self
+    return o
+end
+
+function SparkMax:get()
+    return ffi.C.SparkMax_Get(self.motor)
+end
+
+function SparkMax:set(value)
+    ffi.C.SparkMax_Set(self.motor, value)
+end
+
+function SparkMax:follow(masterToFollow, invert)
+    invert = invert or false
+    ffi.C.SparkMax_Follow(self.motor, masterToFollow.motor, invert)
+end
+
+function SparkMax:restoreFactoryDefaults(persist)
+    persist = persist or false
+    ffi.C.SparkMax_RestoreFactoryDefaults(self.motor, persist)
+end
+
+function SparkMax:setIdleMode(mode)
+    ffi.C.SparkMax_SetIdleMode(self.motor, mode)
 end
 
 
