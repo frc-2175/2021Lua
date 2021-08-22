@@ -3,7 +3,9 @@ require("intake")
 safeMode = true
 minTurnRateLimit = 0.5
 minSpeedLimit = 0.7
+shooterSpeed = 0.8
 simMode = false
+flywheelOn = false
 
 function robot.robotInit()
     if simMode then
@@ -51,9 +53,25 @@ function robot.robotInit()
     gamepad = Joystick:new(2)
 
     -- Set up one shooter motor. The two motor IDs are 21 and 22.
-    shooter = SparkMax:new(5, SparkMaxMotorType.Brushless) -- the motors we use, NEOs, are brushless
-    shooter:restoreFactoryDefaults() -- the controllers can get stuck on old, saved config if we don't do this on startup
-    shooter:setIdleMode(SparkMaxIdleMode.Coast) -- it is really important to let the shooter wheels gently coast to a stop
+    -- I'm not sure what the "5" in this means, but I'm going to assume it's supposed to be the motor ID, if not, it should be fairly easy to hopefully correct.
+    -- I don't know the setup of the motors on the rest of the robot so the most I can write is the code to spin up and down the flywheel.
+    -- Wish I could write some more comprehensive code, but I just don't have the info.
+    -- Ex. code: shooter = SparkMax:new(5, SparkMaxMotorType.Brushless) -- the motors we use, NEOs, are brushless
+    -- Ex. code: shooter:restoreFactoryDefaults() -- the controllers can get stuck on old, saved config if we don't do this on startup
+    -- Ex. code: shooter:setIdleMode(SparkMaxIdleMode.Coast) -- it is really important to let the shooter wheels gently coast to a stop
+
+    -- Setup the motors
+    -- Master motor setup
+    shooter = SparkMax:new(21, SparkMaxMotorType.Brushless) -- Read above note about motor IDs
+    shooter:restoreFactoryDefaults()
+    shooter:setIdleMode(SparkMaxIdleMode.Coast)
+    -- Follower motor setup
+    secondaryShooter = SparkMax:new(22, SparkMaxMotorType.Brushless)
+    -- Not sure if this setup is necessary for a follower motor
+    secondaryShooter:restoreFactoryDefaults()
+    secondaryShooter(setIdleMode)
+    -- Set secondaryShooter as a follower of shooter
+    secondaryShooter:follow(shooter)
 
     -- you can set the speed of the shooter like so:
     -- shooter:set(0.5)
@@ -64,6 +82,7 @@ function robot.robotInit()
     -- when you are doing master/follower stuff, you only need to set
     -- a speed on the master motor, and the followers automatically do
     -- their thing.
+
 end
 
 --teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -90,7 +109,22 @@ function robot.teleopPeriodic()
     -- leftFollower1:set(speed)
 
     gearSolenoid:set(rightStick:getButton(11))
+    -- I'm going to use this code and assume that rightStick:getButton(11) returns a bool and that "button 10" exists.
+    -- Scratch that, I have a better idea with fewer assumptions; use "button 11" on the left stick.
 
+    -- Pretty simple, if the flywheel isn't on, when the button is pressed, toggle the varible flywheelOn and turn the motors on.
+    if leftStick:getButton(11) then
+        if not flywheelOn then
+            flywheelOn = true
+            shooter:set(shooterSpeed)
+        elseif flywheelOn then
+            flywheelOn = false
+            shooter:set(0)
+
+    -- Just press "button 11" on the left stick and it should turn on the flywheels.
+    -- IDK how useful this is without any mechanism to feed the ball into the flywheel though.
+
+    if rightStick
     --intake piston 
     if not safeMode then
         if gamepad:getButtonPressed(XboxButtons.B) then 
