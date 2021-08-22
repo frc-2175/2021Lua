@@ -3,7 +3,7 @@ require("intake")
 safeMode = true
 minTurnRateLimit = 0.5
 minSpeedLimit = 0.7
-shooterSpeed = 0.8
+shooterSpeed = 0.6
 simMode = false
 flywheelOn = false
 
@@ -69,7 +69,7 @@ function robot.robotInit()
     secondaryShooter = SparkMax:new(22, SparkMaxMotorType.Brushless)
     -- Not sure if this setup is necessary for a follower motor
     secondaryShooter:restoreFactoryDefaults()
-    secondaryShooter(setIdleMode)
+    secondaryShooter:setIdleMode(SparkMaxIdleMode.Coast)
     -- Set secondaryShooter as a follower of shooter
     secondaryShooter:follow(shooter)
 
@@ -82,6 +82,8 @@ function robot.robotInit()
     -- when you are doing master/follower stuff, you only need to set
     -- a speed on the master motor, and the followers automatically do
     -- their thing.
+
+    feeder = VictorSPX:new(3)
 
 end
 
@@ -103,6 +105,7 @@ function robot.teleopPeriodic()
         -leftStick:getAxis(JoystickAxes.Y) * speedLimiter,  -- multiplies speed in forward and backwards
         rightStick:getAxis(JoystickAxes.X) * turnLimiter
     )
+
     -- speed = -gamepad:getAxis(XboxAxes.Y)
 
     -- leftMaster:set(speed)
@@ -113,18 +116,25 @@ function robot.teleopPeriodic()
     -- Scratch that, I have a better idea with fewer assumptions; use "button 11" on the left stick.
 
     -- Pretty simple, if the flywheel isn't on, when the button is pressed, toggle the varible flywheelOn and turn the motors on.
-    if leftStick:getButton(11) then
+    if leftStick:getButtonPressed(11) then
         if not flywheelOn then
             flywheelOn = true
             shooter:set(shooterSpeed)
         elseif flywheelOn then
             flywheelOn = false
             shooter:set(0)
+        end
+    end
+
+    if rightStick:getButton(10) then
+        feeder:set(-1)
+    else
+        feeder:set(0)
+    end
 
     -- Just press "button 11" on the left stick and it should turn on the flywheels.
     -- IDK how useful this is without any mechanism to feed the ball into the flywheel though.
 
-    if rightStick
     --intake piston 
     if not safeMode then
         if gamepad:getButtonPressed(XboxButtons.B) then 
@@ -140,6 +150,7 @@ function robot.teleopPeriodic()
     --]] 
 end
 
+--[[ No autonomous at Woodbury Days
 function robot.autonomousInit()
     autoRoutine = coroutine.create(function()
         function getSpeed()
@@ -161,6 +172,10 @@ function robot.autonomousInit()
 end
 
 function robot.autonomousPeriodic()
+    -- No autonomous at Woodbury Days
+    return
+
     status, err = coroutine.resume(autoRoutine)
     print(status, err)
 end
+--]]
