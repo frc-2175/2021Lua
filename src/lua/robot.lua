@@ -112,33 +112,28 @@ function robot.teleopPeriodic()
     -- leftFollower1:set(speed)
 
     gearSolenoid:set(rightStick:getButton(11))
-    -- I'm going to use this code and assume that rightStick:getButton(11) returns a bool and that "button 10" exists.
-    -- Scratch that, I have a better idea with fewer assumptions; use "button 11" on the left stick.
 
-    -- Pretty simple, if the flywheel isn't on, when the button is pressed, toggle the varible flywheelOn and turn the motors on.
-    if leftStick:getButtonPressed(11) then
-        if not flywheelOn then
-            flywheelOn = true
-            shooter:set(shooterSpeed)
-        elseif flywheelOn then
-            flywheelOn = false
-            shooter:set(0)
+    -- If the trigger on the left trigger is pressed, run the flywheel until it's released.
+    -- At least, I think that's what this does, I don't know, I'm just guessing all of these functions.
+
+    if leftStick:getButton(1) then
+        shooter:set(shooterSpeed)
+        if rightStick:getButton(1) then
+            feeder:set(-1)
+        else
+            feeder:set(0)
         end
-    end
-
-    if rightStick:getButton(10) then
-        feeder:set(-1)
     else
+        shooter:set(0)
         feeder:set(0)
     end
 
-    -- Just press "button 11" on the left stick and it should turn on the flywheels.
-    -- IDK how useful this is without any mechanism to feed the ball into the flywheel though.
+    -- Holding the left joystick trigger, will run the flywheel, and if the left joystick trigger is pressed when the right joystick trigger is pressed, it will turn on the feeder.
 
     --intake piston 
     if not safeMode then
         if gamepad:getButtonPressed(XboxButtons.B) then 
-            intakePutOut() 
+            intakePutOut()
         end 
     end
     --[[ 
