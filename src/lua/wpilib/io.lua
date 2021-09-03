@@ -84,3 +84,8 @@ end
 function Joystick:getAxis(axis)
     return ffi.C.Joystick_GetRawAxis(self.joystick, axis);
 end
+
+function Joystick:getThrottle()
+    x = self:getAxis(JoystickAxes.Throttle)
+    return -0.5 * x + 0.5
+end

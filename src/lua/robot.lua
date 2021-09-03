@@ -2,8 +2,9 @@ require("intake")
 
 safeMode = true
 minTurnRateLimit = 0.5
+minShooterSpeed =  0.2
 minSpeedLimit = 0.7
-shooterSpeed = 0.6
+shooterSpeed = 0
 simMode = false
 flywheelOn = false
 
@@ -89,11 +90,8 @@ end
 
 --teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function robot.teleopPeriodic()   
-    if -rightStick:getAxis(JoystickAxes.Throttle) < minTurnRateLimit then 
-        turnLimiter = minTurnRateLimit
-    else
-        turnLimiter = -rightStick:getAxis(JoystickAxes.Throttle) -- Set the turnLimiter to the value of the knob thing on the joystick.
-    end
+
+    shooterSpeed = rightStick:getThrottle() -- Set the shooterSpeed to the value of the knob thing on the joystick.
 
     if -leftStick:getAxis(JoystickAxes.Throttle) < minSpeedLimit then
         speedLimiter = minSpeedLimit
@@ -103,7 +101,7 @@ function robot.teleopPeriodic()
 
     robotDrive:arcadeDrive(
         -leftStick:getAxis(JoystickAxes.Y) * speedLimiter,  -- multiplies speed in forward and backwards
-        rightStick:getAxis(JoystickAxes.X) * turnLimiter
+        rightStick:getAxis(JoystickAxes.X)
     )
 
     -- speed = -gamepad:getAxis(XboxAxes.Y)
@@ -116,6 +114,8 @@ function robot.teleopPeriodic()
     -- If the trigger on the left trigger is pressed, run the flywheel until it's released.
     -- At least, I think that's what this does, I don't know, I'm just guessing all of these functions.
 
+    print(shooterSpeed)
+    
     if leftStick:getButton(1) then
         shooter:set(shooterSpeed)
         if rightStick:getButton(1) then
@@ -127,6 +127,7 @@ function robot.teleopPeriodic()
         shooter:set(0)
         feeder:set(0)
     end
+
 
     -- Holding the left joystick trigger, will run the flywheel, and if the left joystick trigger is pressed when the right joystick trigger is pressed, it will turn on the feeder.
 
