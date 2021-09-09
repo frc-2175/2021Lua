@@ -49,6 +49,7 @@ JoystickAxes = {
 
 
 -- Joystick
+-- JOYSTICK IS MAPPED FROM -1 TO 1
 
 Joystick = {}
 
@@ -61,12 +62,28 @@ function Joystick:new(port)
     return o
 end
 
+deadband = 0.0
+
 function Joystick:getX()
-    return ffi.C.Joystick_GetX(self.joystick)
+    if (ffi.C.Joystick_GetX(self.joystick) > deadband)
+    then
+        return ffi.C.Joystick_GetX(self.joystick) - deadband) / (1 - deadband);
+    elseif (ffi.C.Joystick_GetX(self.joystick) < -deadband)
+        return ffi.C.Joystick_GetX(self.joystick) + deadband) / (1 - deadband);
+    else
+        return 0
+    end
 end
 
 function Joystick:getY()
-    return ffi.C.Joystick_GetY(self.joystick)
+    if (ffi.C.Joystick_GetY(self.joystick) > deadband)
+    then
+        return ffi.C.Joystick_GetY(self.joystick) - deadband) / (1 - deadband);
+    elseif (ffi.C.Joystick_GetY(self.joystick) < -deadband)
+        return ffi.C.Joystick_GetY(self.joystick) + deadband) / (1 - deadband);
+    else
+        return 0
+    end
 end
 
 function Joystick:getButton(button)
