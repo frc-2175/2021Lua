@@ -28,11 +28,13 @@ function robot.robotInit()
     leftFollower2:setInverted(CTREInvertType.OpposeMaster)
 
     mainMagazine = TalonSRX:new(6)
-    mainMagazine:setInverted(CTREInvertType.InvertMotorOutput)
+    --mainMagazine:setInverted(CTREInvertType.InvertMotorOutput)
 
     followerMagazine = TalonSRX:new(7)
     followerMagazine:follow(mainMagazine)
     followerMagazine:setInverted(CTREInvertType.FollowMaster)
+
+
 
     if simMode then
         -- sim right motor
@@ -111,6 +113,13 @@ function robot.teleopPeriodic()
         rightStick:getAxis(JoystickAxes.X)
     )
 
+    if(gamepad:getButton(GamepadButtons.RightTrigger)) then
+        intakePutOut()
+        intakeRollIn()
+    else
+        stopIntake()
+        intakePutIn()
+    end
     -- speed = -gamepad:getAxis(XboxAxes.Y)
 
     -- leftMaster:set(speed)
@@ -135,7 +144,7 @@ function robot.teleopPeriodic()
         feeder:set(0)
     end
     
-    mainMagazine:set(-gamepad:getAxis(1))
+    mainMagazine:set(-gamepad:getAxis(1)*.87)
 
     
     -- Holding the left joystick trigger, will run the flywheel, and if the left joystick trigger is pressed when the right joystick trigger is pressed, it will turn on the feeder.

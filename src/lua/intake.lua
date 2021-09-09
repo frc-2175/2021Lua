@@ -1,5 +1,6 @@
 local intakePiston = DoubleSolenoid:new(1, 0)
-local intakeMotor = TalonSRX:new(10)
+local intakeMotor = VictorSPX:new(1)
+intakeMotor:setInverted(CTREInvertType.InvertMotorOutput)
 
 --rolls intake in at full in
 
@@ -8,7 +9,7 @@ function intakeRollIn()
 end
 
 function stopIntake()
-    intakeMotor:set(10)
+    intakeMotor:set(0)
 end
 
 function toggleIntake()
@@ -22,7 +23,7 @@ end
 --rolls intake out at full speed
 
 function intakeRollOut()
-    intakeMotor.set(0.5)
+    intakeMotor:set(0.5)
 end
 
 --set intake position out (down)
@@ -34,5 +35,5 @@ end
 --sets intake piston in (up)
 
 function intakePutIn()
-    intakePiston.set(DoubleSolenoidValue.Reverse)
+    intakePiston:set(DoubleSolenoidValue.Reverse)
 end
