@@ -62,27 +62,33 @@ function Joystick:new(port)
     return o
 end
 
-deadband = 0.0
+deadband = 0.1
 
 function Joystick:getX()
+    result = 0
     if (ffi.C.Joystick_GetX(self.joystick) > deadband)
     then
-        return ffi.C.Joystick_GetX(self.joystick) - deadband) / (1 - deadband);
+        result = (ffi.C.Joystick_GetX(self.joystick) - deadband) / (1 - deadband);
     elseif (ffi.C.Joystick_GetX(self.joystick) < -deadband)
-        return ffi.C.Joystick_GetX(self.joystick) + deadband) / (1 - deadband);
+    then
+        result = (ffi.C.Joystick_GetX(self.joystick) + deadband) / (1 - deadband);
     else
-        return 0
+        print("the value is", ffi.C.Joystick_GetX(self.joystick), "deadbanded to 0");
+        return result
     end
 end
 
 function Joystick:getY()
+    result = 0
     if (ffi.C.Joystick_GetY(self.joystick) > deadband)
     then
-        return ffi.C.Joystick_GetY(self.joystick) - deadband) / (1 - deadband);
+        result = (ffi.C.Joystick_GetY(self.joystick) - deadband) / (1 - deadband);
     elseif (ffi.C.Joystick_GetY(self.joystick) < -deadband)
-        return ffi.C.Joystick_GetY(self.joystick) + deadband) / (1 - deadband);
+    then
+        result = (ffi.C.Joystick_GetY(self.joystick) + deadband) / (1 - deadband);
     else
-        return 0
+        print("the value is", ffi.C.Joystick_GetY(self.joystick), "deadbanded to 0");
+        return result
     end
 end
 
@@ -99,7 +105,15 @@ function Joystick:getButtonReleased(button)
 end
 
 function Joystick:getAxis(axis)
-    return ffi.C.Joystick_GetRawAxis(self.joystick, axis);
+    result = 0
+    if (ffi.C.Joystick_GetRawAxis(self.joystick, axis) > deadband)
+    then
+        result = (ffi.C.Joystick_GetRawAxis(self.joystick, axis) - deadband) / (1 - deadband);
+    elseif (ffi.C.Joystick_GetRawAxis(self.joystick, axis) < -deadband)
+    then
+        result = (ffi.C.Joystick_GetRawAxis(self.joystick, axis) + deadband) / (1 - deadband);
+    end
+    return result
 end
 
 function Joystick:getThrottle()
