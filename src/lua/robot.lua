@@ -131,6 +131,13 @@ function robot.teleopPeriodic()
     -- At least, I think that's what this does, I don't know, I'm just guessing all of these functions.
 
     print(shooterSpeed)
+
+    if true then -- if the auto shot button is _held_
+        if true then -- if the auto shot button is pressed _this frame_
+            restartAutoShotSequence()
+        end
+        runAutoShotSequence()
+    end
     
     if leftStick:getButton(1) then
         shooter:set(shooterSpeed)
@@ -162,6 +169,38 @@ function robot.teleopPeriodic()
         intakePutIn() 
     end 
     --]] 
+end
+
+function restartAutoShotSequence()
+    autoShotSequence = coroutine.create(function ()
+        local flywheelTimer = Timer:new()
+        local feederTimer = Timer:new()
+
+        -- wait for the flywheel to get up to speed
+        -- for now we just wait 1 second
+        flywheelTimer:start()
+        while flywheelTimer:getElapsedTimeSeconds() < 1 do
+            print('running flywheel...')
+            coroutine.yield()
+        end
+
+        -- run just the feeder
+        feederTimer:start()
+        while feederTimer:getElapsedTimeSeconds() < 0.5 do
+            print('running flywheel and feeder...')
+            coroutine.yield()
+        end
+
+        -- run both the feeder and the magazine
+        while true do
+            print('running everything...')
+            coroutine.yield()
+        end
+    end)
+end
+
+function runAutoShotSequence()
+    coroutine.resume(autoShotSequence)
 end
 
 --[[ No autonomous at Woodbury Days
