@@ -65,7 +65,7 @@ end
 deadband = 0.1
 
 function Joystick:getX()
-    result = 0
+    result = 0;
     if (ffi.C.Joystick_GetX(self.joystick) > deadband)
     then
         result = (ffi.C.Joystick_GetX(self.joystick) - deadband) / (1 - deadband);
@@ -74,8 +74,8 @@ function Joystick:getX()
         result = (ffi.C.Joystick_GetX(self.joystick) + deadband) / (1 - deadband);
     else
         print("the value is", ffi.C.Joystick_GetX(self.joystick), "deadbanded to 0");
-        return result
     end
+    return result;
 end
 
 function Joystick:getY()
@@ -88,8 +88,8 @@ function Joystick:getY()
         result = (ffi.C.Joystick_GetY(self.joystick) + deadband) / (1 - deadband);
     else
         print("the value is", ffi.C.Joystick_GetY(self.joystick), "deadbanded to 0");
-        return result
     end
+    return result
 end
 
 function Joystick:getButton(button)

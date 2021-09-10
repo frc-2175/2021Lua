@@ -1,4 +1,5 @@
 require("intake")
+require("utils.timer")
 
 safeMode = true
 minTurnRateLimit = 0.5
@@ -130,10 +131,9 @@ function robot.teleopPeriodic()
     -- If the trigger on the left trigger is pressed, run the flywheel until it's released.
     -- At least, I think that's what this does, I don't know, I'm just guessing all of these functions.
 
-    print(shooterSpeed)
 
-    if true then -- if the auto shot button is _held_
-        if true then -- if the auto shot button is pressed _this frame_
+    if gamepad:getButton(XboxButtons.A) then -- if the auto shot button is _held_
+        if gamepad:getButtonPressed(XboxButtons.A) then -- if the auto shot button is pressed _this frame_
             restartAutoShotSequence()
         end
         runAutoShotSequence()
@@ -200,7 +200,8 @@ function restartAutoShotSequence()
 end
 
 function runAutoShotSequence()
-    coroutine.resume(autoShotSequence)
+    status, err = coroutine.resume(autoShotSequence)
+    print(status, err)
 end
 
 --[[ No autonomous at Woodbury Days
