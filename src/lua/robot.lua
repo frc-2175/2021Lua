@@ -1,4 +1,5 @@
 require("intake")
+require("utils.timer")
 
 safeMode = true
 minTurnRateLimit = 0.5
@@ -130,22 +131,26 @@ function robot.teleopPeriodic()
     -- If the trigger on the left trigger is pressed, run the flywheel until it's released.
     -- At least, I think that's what this does, I don't know, I'm just guessing all of these functions.
 
-    print(shooterSpeed)
-    
-    if leftStick:getButton(1) then
-        shooter:set(shooterSpeed)
-        if rightStick:getButton(1) then
-            feeder:set(-1)
+
+    if gamepad:getButton(XboxButtons.A) then -- if the auto shot button is _held_
+        if gamepad:getButtonPressed(XboxButtons.A) then -- if the auto shot button is pressed _this frame_
+            restartAutoShotSequence()
+        end
+        runAutoShotSequence()
+    else
+        if leftStick:getButton(1) then
+            shooter:set(shooterSpeed)
+            if rightStick:getButton(1) then
+                feeder:set(-1)
+            else
+                feeder:set(0)
+            end
         else
+            shooter:set(0)
             feeder:set(0)
         end
-    else
-        shooter:set(0)
-        feeder:set(0)
+        mainMagazine:set(-gamepad:getAxis(1)*.87)
     end
-    
-    mainMagazine:set(-gamepad:getAxis(1)*.87)
-
     
     -- Holding the left joystick trigger, will run the flywheel, and if the left joystick trigger is pressed when the right joystick trigger is pressed, it will turn on the feeder.
 
@@ -162,6 +167,39 @@ function robot.teleopPeriodic()
         intakePutIn() 
     end 
     --]] 
+end
+
+function restartAutoShotSequence()
+    autoShotSequence = coroutine.create(function ()
+        local flywheelTimer = Timer:new()
+        local feederTimer = Timer:new()
+
+        -- wait for the flywheel to get up to speed
+        -- for now we just wait 1 second
+        flywheelTimer:start()
+        while flywheelTimer:getElapsedTimeSeconds() < 1 do
+            shooter:set(1)
+            coroutine.yield()
+        end
+
+        -- run just the feeder
+        feederTimer:start()
+        while feederTimer:getElapsedTimeSeconds() < 0.5 do
+            feeder:set(1)
+            coroutine.yield()
+        end
+
+        -- run both the feeder and the magazine
+        while true do
+            magazine:set(0.87)
+            coroutine.yield()
+        end
+    end)
+end
+
+function runAutoShotSequence()
+    status, err = coroutine.resume(autoShotSequence)
+    print(status, err)
 end
 
 --[[ No autonomous at Woodbury Days
