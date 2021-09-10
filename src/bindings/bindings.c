@@ -255,22 +255,50 @@ MD_String8 addClassFuncs(
                 cppFunc = aliasTag->first_child->string;
             }
 
-            MD_String8 returnCast = {0};
-            if (MD_NodeHasTag(fNode, MD_S8Lit("explicitcast"))) {
-                returnCast = MD_PushStringF("(%.*s) ", MD_StringExpand(returnType));
-            }
-
             isMethod = 1;
-            MD_b32 doReturn = !MD_StringMatch(returnType, MD_S8Lit("void"), 0);
-            body = MD_PushStringF(
-                "    %.*s%.*s((%.*s*)_this)\n"
-                "        ->%.*s(%.*s);",
-                MD_StringExpand(MD_S8Lit(doReturn ? "return " : "")),
-                MD_StringExpand(returnCast),
-                MD_StringExpand(cppName),
-                MD_StringExpand(cppFunc),
-                MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
-            );
+            
+            MD_b32 isVoid = returnType.size == 0 || MD_StringMatch(returnType, MD_S8Lit("void"), 0);
+            if (isVoid) {
+                body = MD_PushStringF(
+                    "    ((%.*s*)_this)\n"
+                    "        ->%.*s(%.*s);",
+                    MD_StringExpand(cppName),
+                    MD_StringExpand(cppFunc),
+                    MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
+                );
+            } else {
+                MD_String8 returnCast = {0};
+                if (MD_NodeHasTag(fNode, MD_S8Lit("cast"))) {
+                    returnCast = MD_PushStringF("(%.*s) ", MD_StringExpand(returnType));
+                }
+
+                MD_Node* allocTag = MD_TagFromString(fNode, MD_S8Lit("alloc"));
+                MD_b32 shouldAlloc = !MD_NodeIsNil(allocTag);
+                
+                if (shouldAlloc) {
+                    MD_String8 allocType = allocTag->first_child->string;
+
+                    body = MD_PushStringF(
+                        "    auto _result = (%.*s*) malloc(sizeof(%.*s));\n"
+                        "    *_result = ((%.*s*)_this)\n"
+                        "        ->%.*s(%.*s);\n"
+                        "    return %.*s_result;",
+                        MD_StringExpand(allocType), MD_StringExpand(allocType),
+                        MD_StringExpand(cppName),
+                        MD_StringExpand(cppFunc), MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", "))),
+                        MD_StringExpand(returnCast)
+                    );
+                } else {
+                    body = MD_PushStringF(
+                        "    auto _result = ((%.*s*)_this)\n"
+                        "        ->%.*s(%.*s);\n"
+                        "    return %.*s_result;",
+                        MD_StringExpand(cppName),
+                        MD_StringExpand(cppFunc), MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", "))),
+                        MD_StringExpand(returnCast)
+                    );
+                }
+            }
         }
 
         GenFuncResult genRes = GenFunc(res, returnType, name, body, isMethod);

@@ -139,9 +139,10 @@ end
 -- Spark Max (Neo)
 
 SparkMax = {}
+SparkMaxEncoder = {}
 
 function SparkMax:new(deviceID, type)
-    o = makeMotorController(ffi.C.SparkMax_new(deviceID, type), ffi.C.SparkMax_toSpeedController, nil)
+    local o = makeMotorController(ffi.C.SparkMax_new(deviceID, type), ffi.C.SparkMax_toSpeedController, nil)
     setmetatable(o, self)
     self.__index = self
     return o
@@ -153,6 +154,15 @@ end
 
 function SparkMax:set(value)
     ffi.C.SparkMax_Set(self.motor, value)
+end
+
+function SparkMax:getEncoder()
+    -- Every time we call GetEncoder, it allocates memory on the robot. This memory
+    -- never gets freed. Therefore, we really do not want to do this more than once.
+    if not self.encoder then
+        self.encoder = SparkMaxEncoder:new(ffi.C.SparkMax_GetEncoder(self.motor))
+    end
+    return self.encoder
 end
 
 function SparkMax:follow(masterToFollow, invert)
@@ -167,6 +177,52 @@ end
 
 function SparkMax:setIdleMode(mode)
     ffi.C.SparkMax_SetIdleMode(self.motor, mode)
+end
+
+-- You should not call this directly. Instead, call SparkMax:getEncoder.
+function SparkMaxEncoder:new(rawEncoder)
+    local o = {
+        encoder = rawEncoder,
+    }
+    setmetatable(o, self)
+    self.__index = self
+    return o
+end
+
+function SparkMaxEncoder:getPosition()
+    return ffi.C.SparkMaxEncoder_GetPosition(self.encoder)
+end
+
+function SparkMaxEncoder:getVelocity()
+    return ffi.C.SparkMaxEncoder_GetPosition(self.encoder)
+end
+
+function SparkMaxEncoder:setPosition(position)
+    return ffi.C.SparkMaxEncoder_SetPosition(self.encoder, position)
+end
+
+function SparkMaxEncoder:setPositionConversionFactor(factor)
+    return ffi.C.SparkMaxEncoder_SetPosition(self.encoder, factor)
+end
+
+function SparkMaxEncoder:setVelocityConversionFactor(factor)
+    return ffi.C.SparkMaxEncoder_SetVelocityConversionFactor(self.encoder, factor)
+end
+
+function SparkMaxEncoder:getPositionConversionFactor()
+    return ffi.C.SparkMaxEncoder_GetPositionConversionFactor(self.encoder)
+end
+
+function SparkMaxEncoder:getVelocityConversionFactor()
+    return ffi.C.SparkMaxEncoder_GetVelocityConversionFactor(self.encoder)
+end
+
+function SparkMaxEncoder:setInverted(inverted)
+    return ffi.C.SparkMaxEncoder_SetInverted(self.encoder, inverted)
+end
+
+function SparkMaxEncoder:getInverted()
+    return ffi.C.SparkMaxEncoder_GetInverted(self.encoder)
 end
 
 

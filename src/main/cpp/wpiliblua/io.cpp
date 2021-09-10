@@ -9,121 +9,144 @@ LUAFUNC void* Joystick_new(int port) {
 }
 
 LUAFUNC double Joystick_GetX(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetX();
+    return _result;
 }
 
 LUAFUNC double Joystick_GetY(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetY();
+    return _result;
 }
 
 LUAFUNC double Joystick_GetZ(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetZ();
+    return _result;
 }
 
 LUAFUNC double Joystick_GetTwist(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetTwist();
+    return _result;
 }
 
 LUAFUNC double Joystick_GetThrottle(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetThrottle();
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetTrigger(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetTrigger();
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetTriggerPressed(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetTriggerPressed();
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetTriggerReleased(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetTriggerReleased();
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetTop(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetTop();
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetTopPressed(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetTopPressed();
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetTopReleased(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetTopReleased();
+    return _result;
 }
 
 LUAFUNC double Joystick_GetMagnitude(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetMagnitude();
+    return _result;
 }
 
 LUAFUNC double Joystick_GetDirectionRadians(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetDirectionRadians();
+    return _result;
 }
 
 LUAFUNC double Joystick_GetDirectionDegrees(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetDirectionDegrees();
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetRawButton(void* _this, int button) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetRawButton(button);
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetRawButtonPressed(void* _this, int button) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetRawButtonPressed(button);
+    return _result;
 }
 
 LUAFUNC bool Joystick_GetRawButtonReleased(void* _this, int button) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetRawButtonReleased(button);
+    return _result;
 }
 
 LUAFUNC double Joystick_GetRawAxis(void* _this, int axis) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetRawAxis(axis);
+    return _result;
 }
 
 LUAFUNC int Joystick_GetPOV(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetPOV();
+    return _result;
 }
 
 LUAFUNC int Joystick_GetAxisCount(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetAxisCount();
+    return _result;
 }
 
 LUAFUNC int Joystick_GetPOVCount(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetPOVCount();
+    return _result;
 }
 
 LUAFUNC int Joystick_GetButtonCount(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetButtonCount();
+    return _result;
 }
 
 LUAFUNC int Joystick_GetPort(void* _this) {
-    return ((frc::Joystick*)_this)
+    auto _result = ((frc::Joystick*)_this)
         ->GetPort();
+    return _result;
 }
 
 LUAFUNC void Joystick_SetRumble(void* _this, int type, double value) {
-    return ((frc::Joystick*)_this)
+    ((frc::Joystick*)_this)
         ->SetRumble((frc::GenericHID::RumbleType)type, value);
 }

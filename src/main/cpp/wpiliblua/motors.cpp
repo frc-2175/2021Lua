@@ -10,7 +10,7 @@
 #include "luadef.h"
 
 LUAFUNC void VictorSPX_PIDWrite(void* _this, double output) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->PIDWrite(output);
 }
 
@@ -20,37 +20,39 @@ LUAFUNC void* VictorSPX_toSpeedController(void* _this) {
 }
 
 LUAFUNC void VictorSPX_Set(void* _this, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Set(value);
 }
 
 LUAFUNC void VictorSPX_SetVoltage(void* _this, double output) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetVoltage((units::volt_t)output);
 }
 
 LUAFUNC double VictorSPX_Get(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Get();
+    return _result;
 }
 
 LUAFUNC void VictorSPX_SetInvertedBool(void* _this, bool isInverted) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetInverted(isInverted);
 }
 
 LUAFUNC bool VictorSPX_GetInvertedBool(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetInverted();
+    return _result;
 }
 
 LUAFUNC void VictorSPX_Disable(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Disable();
 }
 
 LUAFUNC void VictorSPX_StopMotor(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->StopMotor();
 }
 
@@ -60,383 +62,445 @@ LUAFUNC void* VictorSPX_toIMotorController(void* _this) {
 }
 
 LUAFUNC void VictorSPX_SetWithControlMode(void* _this, int mode, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Set((ctre::phoenix::motorcontrol::ControlMode)mode, value);
 }
 
 LUAFUNC void VictorSPX_SetWithControlModeAndDemands(void* _this, int mode, double demand0, int demand1Type, double demand1) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Set((ctre::phoenix::motorcontrol::ControlMode)mode, demand0, (ctre::phoenix::motorcontrol::DemandType)demand1Type, demand1);
 }
 
 LUAFUNC void VictorSPX_NeutralOutput(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->NeutralOutput();
 }
 
 LUAFUNC void VictorSPX_SetNeutralMode(void* _this, int neutralMode) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetNeutralMode((ctre::phoenix::motorcontrol::NeutralMode)neutralMode);
 }
 
 LUAFUNC void VictorSPX_SetSensorPhase(void* _this, bool PhaseSensor) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetSensorPhase(PhaseSensor);
 }
 
 LUAFUNC void VictorSPX_SetInverted(void* _this, int invertType) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetInverted((ctre::phoenix::motorcontrol::InvertType)invertType);
 }
 
 LUAFUNC int VictorSPX_ConfigFactoryDefault(void* _this, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigFactoryDefault(timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigOpenloopRamp(void* _this, double secondsFromNeutralToFull, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigOpenloopRamp(secondsFromNeutralToFull, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigClosedloopRamp(void* _this, double secondsFromNeutralToFull, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigClosedloopRamp(secondsFromNeutralToFull, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigPeakOutputForward(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigPeakOutputForward(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigPeakOutputReverse(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigPeakOutputReverse(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigNominalOutputForward(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigNominalOutputForward(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigNominalOutputReverse(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigNominalOutputReverse(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigNeutralDeadband(void* _this, double percentDeadband, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigNeutralDeadband(percentDeadband, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigVoltageCompSaturation(void* _this, double voltage, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigVoltageCompSaturation(voltage, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigVoltageMeasurementFilter(void* _this, int filterWindowSamples, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigVoltageMeasurementFilter(filterWindowSamples, timeoutMs);
+    return _result;
 }
 
 LUAFUNC void VictorSPX_EnableVoltageCompensation(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->EnableVoltageCompensation(enable);
 }
 
 LUAFUNC bool VictorSPX_IsVoltageCompensationEnabled(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->IsVoltageCompensationEnabled();
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetBusVoltage(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetBusVoltage();
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetMotorOutputPercent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetMotorOutputPercent();
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetMotorOutputVoltage(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetMotorOutputVoltage();
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetTemperature(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetTemperature();
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigSelectedFeedbackCoefficient(void* _this, double coefficient, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigSelectedFeedbackCoefficient(coefficient, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigSensorTerm(void* _this, int sensorTerm, int feedbackDevice) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigSensorTerm((ctre::phoenix::motorcontrol::SensorTerm)sensorTerm, (ctre::phoenix::motorcontrol::FeedbackDevice)feedbackDevice);
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetSelectedSensorPosition(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetSelectedSensorPosition(pidIdx);
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetSelectedSensorVelocity(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetSelectedSensorVelocity(pidIdx);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_SetSelectedSensorPosition(void* _this, double sensorPos, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetSelectedSensorPosition(sensorPos, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_SetControlFramePeriod(void* _this, int frame, int periodMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetControlFramePeriod((ctre::phoenix::motorcontrol::ControlFrame)frame, periodMs);
+    return _result;
 }
 
 LUAFUNC void VictorSPX_OverrideLimitSwitchesEnable(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->OverrideLimitSwitchesEnable(enable);
 }
 
 LUAFUNC int VictorSPX_ConfigForwardSoftLimitThreshold(void* _this, double forwardSensorLimit, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigForwardSoftLimitThreshold(forwardSensorLimit, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigReverseSoftLimitThreshold(void* _this, double reverseSensorLimit, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigReverseSoftLimitThreshold(reverseSensorLimit, timeoutMs);
+    return _result;
 }
 
 LUAFUNC void VictorSPX_OverrideSoftLimitsEnable(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->OverrideSoftLimitsEnable(enable);
 }
 
 LUAFUNC int VictorSPX_Config_kP(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Config_kP(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_Config_kI(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Config_kI(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_Config_kD(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Config_kD(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_Config_kF(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Config_kF(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_Config_IntegralZone(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Config_IntegralZone(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigAllowableClosedloopError(void* _this, int slotIdx, double allowableCloseLoopError, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigAllowableClosedloopError(slotIdx, allowableCloseLoopError, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigMaxIntegralAccumulator(void* _this, int slotIdx, double iaccum, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigMaxIntegralAccumulator(slotIdx, iaccum, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigClosedLoopPeakOutput(void* _this, int slotIdx, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigClosedLoopPeakOutput(slotIdx, percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigClosedLoopPeriod(void* _this, int slotIdx, int loopTimeMs, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigClosedLoopPeriod(slotIdx, loopTimeMs, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigAuxPIDPolarity(void* _this, bool invert, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigAuxPIDPolarity(invert, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_SetIntegralAccumulator(void* _this, double iaccum, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetIntegralAccumulator(iaccum, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetClosedLoopError(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetClosedLoopError(pidIdx);
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetIntegralAccumulator(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetIntegralAccumulator(pidIdx);
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetErrorDerivative(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetErrorDerivative(pidIdx);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_SelectProfileSlot(void* _this, int slotIdx, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SelectProfileSlot(slotIdx, pidIdx);
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetClosedLoopTarget(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetClosedLoopTarget(pidIdx);
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetActiveTrajectoryPosition(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetActiveTrajectoryPosition(pidIdx);
+    return _result;
 }
 
 LUAFUNC double VictorSPX_GetActiveTrajectoryArbFeedFwd(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetActiveTrajectoryArbFeedFwd(pidIdx);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigMotionCruiseVelocity(void* _this, double sensorUnitsPer100ms, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigMotionCruiseVelocity(sensorUnitsPer100ms, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigMotionAcceleration(void* _this, double sensorUnitsPer100msPerSec, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigMotionAcceleration(sensorUnitsPer100msPerSec, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigMotionSCurveStrength(void* _this, int curveStrength, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigMotionSCurveStrength(curveStrength, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ClearMotionProfileTrajectories(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ClearMotionProfileTrajectories();
+    return _result;
 }
 
 LUAFUNC int VictorSPX_GetMotionProfileTopLevelBufferCount(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetMotionProfileTopLevelBufferCount();
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigFeedbackNotContinuous(void* _this, bool feedbackNotContinuous, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigFeedbackNotContinuous(feedbackNotContinuous, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigClearPositionOnLimitF(void* _this, bool clearPositionOnLimitF, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigClearPositionOnLimitF(clearPositionOnLimitF, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigClearPositionOnLimitR(void* _this, bool clearPositionOnLimitR, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigClearPositionOnLimitR(clearPositionOnLimitR, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigClearPositionOnQuadIdx(void* _this, bool clearPositionOnQuadIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigClearPositionOnQuadIdx(clearPositionOnQuadIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigLimitSwitchDisableNeutralOnLOS(void* _this, bool limitSwitchDisableNeutralOnLOS, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigLimitSwitchDisableNeutralOnLOS(limitSwitchDisableNeutralOnLOS, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigSoftLimitDisableNeutralOnLOS(void* _this, bool softLimitDisableNeutralOnLOS, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigSoftLimitDisableNeutralOnLOS(softLimitDisableNeutralOnLOS, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigPulseWidthPeriod_EdgesPerRot(void* _this, int pulseWidthPeriod_EdgesPerRot, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigPulseWidthPeriod_EdgesPerRot(pulseWidthPeriod_EdgesPerRot, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_ConfigPulseWidthPeriod_FilterWindowSz(void* _this, int pulseWidthPeriod_FilterWindowSz, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ConfigPulseWidthPeriod_FilterWindowSz(pulseWidthPeriod_FilterWindowSz, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int VictorSPX_GetLastError(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetLastError();
+    return _result;
 }
 
 LUAFUNC int VictorSPX_GetFirmwareVersion(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetFirmwareVersion();
+    return _result;
 }
 
 LUAFUNC bool VictorSPX_HasResetOccurred(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->HasResetOccurred();
+    return _result;
 }
 
 LUAFUNC int VictorSPX_GetBaseID(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetBaseID();
+    return _result;
 }
 
 LUAFUNC int VictorSPX_GetControlMode(void* _this) {
-    return (int) ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetControlMode();
+    return (int) _result;
 }
 
 LUAFUNC void VictorSPX_Follow(void* _this, void* masterToFollow) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Follow(*(ctre::phoenix::motorcontrol::IMotorController*)masterToFollow);
 }
 
 LUAFUNC void VictorSPX_ValueUpdated(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->ValueUpdated();
 }
 
 LUAFUNC void VictorSPX_Feed(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Feed();
 }
 
 LUAFUNC void VictorSPX_SetExpiration(void* _this, double expirationTime) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetExpiration(expirationTime);
 }
 
 LUAFUNC double VictorSPX_GetExpiration(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->GetExpiration();
+    return _result;
 }
 
 LUAFUNC bool VictorSPX_IsAlive(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->IsAlive();
+    return _result;
 }
 
 LUAFUNC void VictorSPX_SetSafetyEnabled(void* _this, bool enabled) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->SetSafetyEnabled(enabled);
 }
 
 LUAFUNC bool VictorSPX_IsSafetyEnabled(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->IsSafetyEnabled();
+    return _result;
 }
 
 LUAFUNC void* VictorSPX_new(int deviceNumber) {
@@ -444,17 +508,17 @@ LUAFUNC void* VictorSPX_new(int deviceNumber) {
 }
 
 LUAFUNC void VictorSPX_SetWithVictorSPXControlMode(void* _this, int mode, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Set((ctre::phoenix::motorcontrol::VictorSPXControlMode)mode, value);
 }
 
 LUAFUNC void VictorSPX_SetWithVictorSPXControlModeAndDemands(void* _this, int mode, double demand0, int demand1Type, double demand1) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_VictorSPX*)_this)
         ->Set((ctre::phoenix::motorcontrol::VictorSPXControlMode)mode, demand0, (ctre::phoenix::motorcontrol::DemandType)demand1Type, demand1);
 }
 
 LUAFUNC void TalonSRX_PIDWrite(void* _this, double output) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->PIDWrite(output);
 }
 
@@ -464,37 +528,39 @@ LUAFUNC void* TalonSRX_toSpeedController(void* _this) {
 }
 
 LUAFUNC void TalonSRX_Set(void* _this, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Set(value);
 }
 
 LUAFUNC void TalonSRX_SetVoltage(void* _this, double output) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetVoltage((units::volt_t)output);
 }
 
 LUAFUNC double TalonSRX_Get(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Get();
+    return _result;
 }
 
 LUAFUNC void TalonSRX_SetInvertedBool(void* _this, bool isInverted) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetInverted(isInverted);
 }
 
 LUAFUNC bool TalonSRX_GetInvertedBool(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetInverted();
+    return _result;
 }
 
 LUAFUNC void TalonSRX_Disable(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Disable();
 }
 
 LUAFUNC void TalonSRX_StopMotor(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->StopMotor();
 }
 
@@ -504,428 +570,499 @@ LUAFUNC void* TalonSRX_toIMotorController(void* _this) {
 }
 
 LUAFUNC void TalonSRX_SetWithControlMode(void* _this, int mode, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Set((ctre::phoenix::motorcontrol::ControlMode)mode, value);
 }
 
 LUAFUNC void TalonSRX_SetWithControlModeAndDemands(void* _this, int mode, double demand0, int demand1Type, double demand1) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Set((ctre::phoenix::motorcontrol::ControlMode)mode, demand0, (ctre::phoenix::motorcontrol::DemandType)demand1Type, demand1);
 }
 
 LUAFUNC void TalonSRX_NeutralOutput(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->NeutralOutput();
 }
 
 LUAFUNC void TalonSRX_SetNeutralMode(void* _this, int neutralMode) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetNeutralMode((ctre::phoenix::motorcontrol::NeutralMode)neutralMode);
 }
 
 LUAFUNC void TalonSRX_SetSensorPhase(void* _this, bool PhaseSensor) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetSensorPhase(PhaseSensor);
 }
 
 LUAFUNC void TalonSRX_SetInverted(void* _this, int invertType) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetInverted((ctre::phoenix::motorcontrol::InvertType)invertType);
 }
 
 LUAFUNC int TalonSRX_ConfigFactoryDefault(void* _this, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigFactoryDefault(timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigOpenloopRamp(void* _this, double secondsFromNeutralToFull, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigOpenloopRamp(secondsFromNeutralToFull, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigClosedloopRamp(void* _this, double secondsFromNeutralToFull, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigClosedloopRamp(secondsFromNeutralToFull, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigPeakOutputForward(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigPeakOutputForward(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigPeakOutputReverse(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigPeakOutputReverse(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigNominalOutputForward(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigNominalOutputForward(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigNominalOutputReverse(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigNominalOutputReverse(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigNeutralDeadband(void* _this, double percentDeadband, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigNeutralDeadband(percentDeadband, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigVoltageCompSaturation(void* _this, double voltage, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigVoltageCompSaturation(voltage, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigVoltageMeasurementFilter(void* _this, int filterWindowSamples, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigVoltageMeasurementFilter(filterWindowSamples, timeoutMs);
+    return _result;
 }
 
 LUAFUNC void TalonSRX_EnableVoltageCompensation(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->EnableVoltageCompensation(enable);
 }
 
 LUAFUNC bool TalonSRX_IsVoltageCompensationEnabled(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->IsVoltageCompensationEnabled();
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetBusVoltage(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetBusVoltage();
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetMotorOutputPercent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetMotorOutputPercent();
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetMotorOutputVoltage(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetMotorOutputVoltage();
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetTemperature(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetTemperature();
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigSelectedFeedbackCoefficient(void* _this, double coefficient, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigSelectedFeedbackCoefficient(coefficient, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigSensorTerm(void* _this, int sensorTerm, int feedbackDevice) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigSensorTerm((ctre::phoenix::motorcontrol::SensorTerm)sensorTerm, (ctre::phoenix::motorcontrol::FeedbackDevice)feedbackDevice);
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetSelectedSensorPosition(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetSelectedSensorPosition(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetSelectedSensorVelocity(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetSelectedSensorVelocity(pidIdx);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_SetSelectedSensorPosition(void* _this, double sensorPos, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetSelectedSensorPosition(sensorPos, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_SetControlFramePeriod(void* _this, int frame, int periodMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetControlFramePeriod((ctre::phoenix::motorcontrol::ControlFrame)frame, periodMs);
+    return _result;
 }
 
 LUAFUNC void TalonSRX_OverrideLimitSwitchesEnable(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->OverrideLimitSwitchesEnable(enable);
 }
 
 LUAFUNC int TalonSRX_ConfigForwardSoftLimitThreshold(void* _this, double forwardSensorLimit, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigForwardSoftLimitThreshold(forwardSensorLimit, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigReverseSoftLimitThreshold(void* _this, double reverseSensorLimit, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigReverseSoftLimitThreshold(reverseSensorLimit, timeoutMs);
+    return _result;
 }
 
 LUAFUNC void TalonSRX_OverrideSoftLimitsEnable(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->OverrideSoftLimitsEnable(enable);
 }
 
 LUAFUNC int TalonSRX_Config_kP(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Config_kP(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_Config_kI(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Config_kI(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_Config_kD(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Config_kD(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_Config_kF(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Config_kF(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_Config_IntegralZone(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Config_IntegralZone(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigAllowableClosedloopError(void* _this, int slotIdx, double allowableCloseLoopError, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigAllowableClosedloopError(slotIdx, allowableCloseLoopError, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigMaxIntegralAccumulator(void* _this, int slotIdx, double iaccum, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigMaxIntegralAccumulator(slotIdx, iaccum, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigClosedLoopPeakOutput(void* _this, int slotIdx, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigClosedLoopPeakOutput(slotIdx, percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigClosedLoopPeriod(void* _this, int slotIdx, int loopTimeMs, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigClosedLoopPeriod(slotIdx, loopTimeMs, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigAuxPIDPolarity(void* _this, bool invert, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigAuxPIDPolarity(invert, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_SetIntegralAccumulator(void* _this, double iaccum, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetIntegralAccumulator(iaccum, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetClosedLoopError(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetClosedLoopError(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetIntegralAccumulator(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetIntegralAccumulator(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetErrorDerivative(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetErrorDerivative(pidIdx);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_SelectProfileSlot(void* _this, int slotIdx, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SelectProfileSlot(slotIdx, pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetClosedLoopTarget(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetClosedLoopTarget(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetActiveTrajectoryPosition(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetActiveTrajectoryPosition(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetActiveTrajectoryArbFeedFwd(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetActiveTrajectoryArbFeedFwd(pidIdx);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigMotionCruiseVelocity(void* _this, double sensorUnitsPer100ms, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigMotionCruiseVelocity(sensorUnitsPer100ms, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigMotionAcceleration(void* _this, double sensorUnitsPer100msPerSec, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigMotionAcceleration(sensorUnitsPer100msPerSec, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigMotionSCurveStrength(void* _this, int curveStrength, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigMotionSCurveStrength(curveStrength, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ClearMotionProfileTrajectories(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ClearMotionProfileTrajectories();
+    return _result;
 }
 
 LUAFUNC int TalonSRX_GetMotionProfileTopLevelBufferCount(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetMotionProfileTopLevelBufferCount();
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigFeedbackNotContinuous(void* _this, bool feedbackNotContinuous, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigFeedbackNotContinuous(feedbackNotContinuous, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigClearPositionOnLimitF(void* _this, bool clearPositionOnLimitF, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigClearPositionOnLimitF(clearPositionOnLimitF, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigClearPositionOnLimitR(void* _this, bool clearPositionOnLimitR, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigClearPositionOnLimitR(clearPositionOnLimitR, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigClearPositionOnQuadIdx(void* _this, bool clearPositionOnQuadIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigClearPositionOnQuadIdx(clearPositionOnQuadIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigLimitSwitchDisableNeutralOnLOS(void* _this, bool limitSwitchDisableNeutralOnLOS, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigLimitSwitchDisableNeutralOnLOS(limitSwitchDisableNeutralOnLOS, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigSoftLimitDisableNeutralOnLOS(void* _this, bool softLimitDisableNeutralOnLOS, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigSoftLimitDisableNeutralOnLOS(softLimitDisableNeutralOnLOS, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigPulseWidthPeriod_EdgesPerRot(void* _this, int pulseWidthPeriod_EdgesPerRot, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigPulseWidthPeriod_EdgesPerRot(pulseWidthPeriod_EdgesPerRot, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigPulseWidthPeriod_FilterWindowSz(void* _this, int pulseWidthPeriod_FilterWindowSz, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigPulseWidthPeriod_FilterWindowSz(pulseWidthPeriod_FilterWindowSz, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_GetLastError(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetLastError();
+    return _result;
 }
 
 LUAFUNC int TalonSRX_GetFirmwareVersion(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetFirmwareVersion();
+    return _result;
 }
 
 LUAFUNC bool TalonSRX_HasResetOccurred(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->HasResetOccurred();
+    return _result;
 }
 
 LUAFUNC int TalonSRX_GetBaseID(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetBaseID();
+    return _result;
 }
 
 LUAFUNC int TalonSRX_GetControlMode(void* _this) {
-    return (int) ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetControlMode();
+    return (int) _result;
 }
 
 LUAFUNC void TalonSRX_Follow(void* _this, void* masterToFollow) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Follow(*(ctre::phoenix::motorcontrol::IMotorController*)masterToFollow);
 }
 
 LUAFUNC void TalonSRX_ValueUpdated(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ValueUpdated();
 }
 
 LUAFUNC void TalonSRX_Feed(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Feed();
 }
 
 LUAFUNC void TalonSRX_SetExpiration(void* _this, double expirationTime) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetExpiration(expirationTime);
 }
 
 LUAFUNC double TalonSRX_GetExpiration(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetExpiration();
+    return _result;
 }
 
 LUAFUNC bool TalonSRX_IsAlive(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->IsAlive();
+    return _result;
 }
 
 LUAFUNC void TalonSRX_SetSafetyEnabled(void* _this, bool enabled) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->SetSafetyEnabled(enabled);
 }
 
 LUAFUNC bool TalonSRX_IsSafetyEnabled(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->IsSafetyEnabled();
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetOutputCurrent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetOutputCurrent();
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetStatorCurrent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetStatorCurrent();
+    return _result;
 }
 
 LUAFUNC double TalonSRX_GetSupplyCurrent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->GetSupplyCurrent();
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigVelocityMeasurementPeriod(void* _this, int period, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigVelocityMeasurementPeriod((ctre::phoenix::motorcontrol::VelocityMeasPeriod)period, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigVelocityMeasurementWindow(void* _this, int windowSize, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigVelocityMeasurementWindow(windowSize, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigForwardLimitSwitchSource(void* _this, int limitSwitchSource, int normalOpenOrClose, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigForwardLimitSwitchSource((ctre::phoenix::motorcontrol::LimitSwitchSource)limitSwitchSource, (ctre::phoenix::motorcontrol::LimitSwitchNormal)normalOpenOrClose, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigReverseLimitSwitchSource(void* _this, int limitSwitchSource, int normalOpenOrClose, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigReverseLimitSwitchSource((ctre::phoenix::motorcontrol::LimitSwitchSource)limitSwitchSource, (ctre::phoenix::motorcontrol::LimitSwitchNormal)normalOpenOrClose, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_IsFwdLimitSwitchClosed(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->IsFwdLimitSwitchClosed();
+    return _result;
 }
 
 LUAFUNC int TalonSRX_IsRevLimitSwitchClosed(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->IsRevLimitSwitchClosed();
+    return _result;
 }
 
 LUAFUNC void* TalonSRX_new(int deviceNumber) {
@@ -933,42 +1070,46 @@ LUAFUNC void* TalonSRX_new(int deviceNumber) {
 }
 
 LUAFUNC void TalonSRX_SetWithTalonSRXControlMode(void* _this, int mode, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Set((ctre::phoenix::motorcontrol::TalonSRXControlMode)mode, value);
 }
 
 LUAFUNC void TalonSRX_SetWithTalonSRXControlModeAndDemands(void* _this, int mode, double demand0, int demand1Type, double demand1) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->Set((ctre::phoenix::motorcontrol::TalonSRXControlMode)mode, demand0, (ctre::phoenix::motorcontrol::DemandType)demand1Type, demand1);
 }
 
 LUAFUNC int TalonSRX_ConfigSelectedFeedbackSensor(void* _this, int feedbackDevice, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigSelectedFeedbackSensor((ctre::phoenix::motorcontrol::FeedbackDevice)feedbackDevice, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigPeakCurrentLimit(void* _this, int amps, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigPeakCurrentLimit(amps, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigPeakCurrentDuration(void* _this, int milliseconds, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigPeakCurrentDuration(milliseconds, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonSRX_ConfigContinuousCurrentLimit(void* _this, int amps, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->ConfigContinuousCurrentLimit(amps, timeoutMs);
+    return _result;
 }
 
 LUAFUNC void TalonSRX_EnableCurrentLimit(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonSRX*)_this)
         ->EnableCurrentLimit(enable);
 }
 
 LUAFUNC void TalonFX_PIDWrite(void* _this, double output) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->PIDWrite(output);
 }
 
@@ -978,37 +1119,39 @@ LUAFUNC void* TalonFX_toSpeedController(void* _this) {
 }
 
 LUAFUNC void TalonFX_Set(void* _this, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Set(value);
 }
 
 LUAFUNC void TalonFX_SetVoltage(void* _this, double output) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetVoltage((units::volt_t)output);
 }
 
 LUAFUNC double TalonFX_Get(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Get();
+    return _result;
 }
 
 LUAFUNC void TalonFX_SetInvertedBool(void* _this, bool isInverted) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetInverted(isInverted);
 }
 
 LUAFUNC bool TalonFX_GetInvertedBool(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetInverted();
+    return _result;
 }
 
 LUAFUNC void TalonFX_Disable(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Disable();
 }
 
 LUAFUNC void TalonFX_StopMotor(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->StopMotor();
 }
 
@@ -1018,428 +1161,499 @@ LUAFUNC void* TalonFX_toIMotorController(void* _this) {
 }
 
 LUAFUNC void TalonFX_SetWithControlMode(void* _this, int mode, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Set((ctre::phoenix::motorcontrol::ControlMode)mode, value);
 }
 
 LUAFUNC void TalonFX_SetWithControlModeAndDemands(void* _this, int mode, double demand0, int demand1Type, double demand1) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Set((ctre::phoenix::motorcontrol::ControlMode)mode, demand0, (ctre::phoenix::motorcontrol::DemandType)demand1Type, demand1);
 }
 
 LUAFUNC void TalonFX_NeutralOutput(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->NeutralOutput();
 }
 
 LUAFUNC void TalonFX_SetNeutralMode(void* _this, int neutralMode) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetNeutralMode((ctre::phoenix::motorcontrol::NeutralMode)neutralMode);
 }
 
 LUAFUNC void TalonFX_SetSensorPhase(void* _this, bool PhaseSensor) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetSensorPhase(PhaseSensor);
 }
 
 LUAFUNC void TalonFX_SetInverted(void* _this, int invertType) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetInverted((ctre::phoenix::motorcontrol::InvertType)invertType);
 }
 
 LUAFUNC int TalonFX_ConfigFactoryDefault(void* _this, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigFactoryDefault(timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigOpenloopRamp(void* _this, double secondsFromNeutralToFull, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigOpenloopRamp(secondsFromNeutralToFull, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigClosedloopRamp(void* _this, double secondsFromNeutralToFull, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigClosedloopRamp(secondsFromNeutralToFull, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigPeakOutputForward(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigPeakOutputForward(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigPeakOutputReverse(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigPeakOutputReverse(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigNominalOutputForward(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigNominalOutputForward(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigNominalOutputReverse(void* _this, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigNominalOutputReverse(percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigNeutralDeadband(void* _this, double percentDeadband, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigNeutralDeadband(percentDeadband, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigVoltageCompSaturation(void* _this, double voltage, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigVoltageCompSaturation(voltage, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigVoltageMeasurementFilter(void* _this, int filterWindowSamples, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigVoltageMeasurementFilter(filterWindowSamples, timeoutMs);
+    return _result;
 }
 
 LUAFUNC void TalonFX_EnableVoltageCompensation(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->EnableVoltageCompensation(enable);
 }
 
 LUAFUNC bool TalonFX_IsVoltageCompensationEnabled(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->IsVoltageCompensationEnabled();
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetBusVoltage(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetBusVoltage();
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetMotorOutputPercent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetMotorOutputPercent();
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetMotorOutputVoltage(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetMotorOutputVoltage();
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetTemperature(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetTemperature();
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigSelectedFeedbackCoefficient(void* _this, double coefficient, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigSelectedFeedbackCoefficient(coefficient, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigSensorTerm(void* _this, int sensorTerm, int feedbackDevice) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigSensorTerm((ctre::phoenix::motorcontrol::SensorTerm)sensorTerm, (ctre::phoenix::motorcontrol::FeedbackDevice)feedbackDevice);
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetSelectedSensorPosition(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetSelectedSensorPosition(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetSelectedSensorVelocity(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetSelectedSensorVelocity(pidIdx);
+    return _result;
 }
 
 LUAFUNC int TalonFX_SetSelectedSensorPosition(void* _this, double sensorPos, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetSelectedSensorPosition(sensorPos, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_SetControlFramePeriod(void* _this, int frame, int periodMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetControlFramePeriod((ctre::phoenix::motorcontrol::ControlFrame)frame, periodMs);
+    return _result;
 }
 
 LUAFUNC void TalonFX_OverrideLimitSwitchesEnable(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->OverrideLimitSwitchesEnable(enable);
 }
 
 LUAFUNC int TalonFX_ConfigForwardSoftLimitThreshold(void* _this, double forwardSensorLimit, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigForwardSoftLimitThreshold(forwardSensorLimit, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigReverseSoftLimitThreshold(void* _this, double reverseSensorLimit, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigReverseSoftLimitThreshold(reverseSensorLimit, timeoutMs);
+    return _result;
 }
 
 LUAFUNC void TalonFX_OverrideSoftLimitsEnable(void* _this, bool enable) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->OverrideSoftLimitsEnable(enable);
 }
 
 LUAFUNC int TalonFX_Config_kP(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Config_kP(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_Config_kI(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Config_kI(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_Config_kD(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Config_kD(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_Config_kF(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Config_kF(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_Config_IntegralZone(void* _this, int slotIdx, double value, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Config_IntegralZone(slotIdx, value, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigAllowableClosedloopError(void* _this, int slotIdx, double allowableCloseLoopError, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigAllowableClosedloopError(slotIdx, allowableCloseLoopError, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigMaxIntegralAccumulator(void* _this, int slotIdx, double iaccum, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigMaxIntegralAccumulator(slotIdx, iaccum, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigClosedLoopPeakOutput(void* _this, int slotIdx, double percentOut, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigClosedLoopPeakOutput(slotIdx, percentOut, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigClosedLoopPeriod(void* _this, int slotIdx, int loopTimeMs, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigClosedLoopPeriod(slotIdx, loopTimeMs, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigAuxPIDPolarity(void* _this, bool invert, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigAuxPIDPolarity(invert, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_SetIntegralAccumulator(void* _this, double iaccum, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetIntegralAccumulator(iaccum, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetClosedLoopError(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetClosedLoopError(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetIntegralAccumulator(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetIntegralAccumulator(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetErrorDerivative(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetErrorDerivative(pidIdx);
+    return _result;
 }
 
 LUAFUNC int TalonFX_SelectProfileSlot(void* _this, int slotIdx, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SelectProfileSlot(slotIdx, pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetClosedLoopTarget(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetClosedLoopTarget(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetActiveTrajectoryPosition(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetActiveTrajectoryPosition(pidIdx);
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetActiveTrajectoryArbFeedFwd(void* _this, int pidIdx) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetActiveTrajectoryArbFeedFwd(pidIdx);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigMotionCruiseVelocity(void* _this, double sensorUnitsPer100ms, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigMotionCruiseVelocity(sensorUnitsPer100ms, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigMotionAcceleration(void* _this, double sensorUnitsPer100msPerSec, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigMotionAcceleration(sensorUnitsPer100msPerSec, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigMotionSCurveStrength(void* _this, int curveStrength, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigMotionSCurveStrength(curveStrength, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ClearMotionProfileTrajectories(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ClearMotionProfileTrajectories();
+    return _result;
 }
 
 LUAFUNC int TalonFX_GetMotionProfileTopLevelBufferCount(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetMotionProfileTopLevelBufferCount();
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigFeedbackNotContinuous(void* _this, bool feedbackNotContinuous, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigFeedbackNotContinuous(feedbackNotContinuous, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigClearPositionOnLimitF(void* _this, bool clearPositionOnLimitF, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigClearPositionOnLimitF(clearPositionOnLimitF, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigClearPositionOnLimitR(void* _this, bool clearPositionOnLimitR, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigClearPositionOnLimitR(clearPositionOnLimitR, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigClearPositionOnQuadIdx(void* _this, bool clearPositionOnQuadIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigClearPositionOnQuadIdx(clearPositionOnQuadIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigLimitSwitchDisableNeutralOnLOS(void* _this, bool limitSwitchDisableNeutralOnLOS, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigLimitSwitchDisableNeutralOnLOS(limitSwitchDisableNeutralOnLOS, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigSoftLimitDisableNeutralOnLOS(void* _this, bool softLimitDisableNeutralOnLOS, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigSoftLimitDisableNeutralOnLOS(softLimitDisableNeutralOnLOS, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigPulseWidthPeriod_EdgesPerRot(void* _this, int pulseWidthPeriod_EdgesPerRot, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigPulseWidthPeriod_EdgesPerRot(pulseWidthPeriod_EdgesPerRot, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigPulseWidthPeriod_FilterWindowSz(void* _this, int pulseWidthPeriod_FilterWindowSz, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigPulseWidthPeriod_FilterWindowSz(pulseWidthPeriod_FilterWindowSz, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_GetLastError(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetLastError();
+    return _result;
 }
 
 LUAFUNC int TalonFX_GetFirmwareVersion(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetFirmwareVersion();
+    return _result;
 }
 
 LUAFUNC bool TalonFX_HasResetOccurred(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->HasResetOccurred();
+    return _result;
 }
 
 LUAFUNC int TalonFX_GetBaseID(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetBaseID();
+    return _result;
 }
 
 LUAFUNC int TalonFX_GetControlMode(void* _this) {
-    return (int) ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetControlMode();
+    return (int) _result;
 }
 
 LUAFUNC void TalonFX_Follow(void* _this, void* masterToFollow) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Follow(*(ctre::phoenix::motorcontrol::IMotorController*)masterToFollow);
 }
 
 LUAFUNC void TalonFX_ValueUpdated(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ValueUpdated();
 }
 
 LUAFUNC void TalonFX_Feed(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Feed();
 }
 
 LUAFUNC void TalonFX_SetExpiration(void* _this, double expirationTime) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetExpiration(expirationTime);
 }
 
 LUAFUNC double TalonFX_GetExpiration(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetExpiration();
+    return _result;
 }
 
 LUAFUNC bool TalonFX_IsAlive(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->IsAlive();
+    return _result;
 }
 
 LUAFUNC void TalonFX_SetSafetyEnabled(void* _this, bool enabled) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetSafetyEnabled(enabled);
 }
 
 LUAFUNC bool TalonFX_IsSafetyEnabled(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->IsSafetyEnabled();
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetOutputCurrent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetOutputCurrent();
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetStatorCurrent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetStatorCurrent();
+    return _result;
 }
 
 LUAFUNC double TalonFX_GetSupplyCurrent(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->GetSupplyCurrent();
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigVelocityMeasurementPeriod(void* _this, int period, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigVelocityMeasurementPeriod((ctre::phoenix::motorcontrol::VelocityMeasPeriod)period, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigVelocityMeasurementWindow(void* _this, int windowSize, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigVelocityMeasurementWindow(windowSize, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigForwardLimitSwitchSource(void* _this, int limitSwitchSource, int normalOpenOrClose, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigForwardLimitSwitchSource((ctre::phoenix::motorcontrol::LimitSwitchSource)limitSwitchSource, (ctre::phoenix::motorcontrol::LimitSwitchNormal)normalOpenOrClose, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_ConfigReverseLimitSwitchSource(void* _this, int limitSwitchSource, int normalOpenOrClose, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigReverseLimitSwitchSource((ctre::phoenix::motorcontrol::LimitSwitchSource)limitSwitchSource, (ctre::phoenix::motorcontrol::LimitSwitchNormal)normalOpenOrClose, timeoutMs);
+    return _result;
 }
 
 LUAFUNC int TalonFX_IsFwdLimitSwitchClosed(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->IsFwdLimitSwitchClosed();
+    return _result;
 }
 
 LUAFUNC int TalonFX_IsRevLimitSwitchClosed(void* _this) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->IsRevLimitSwitchClosed();
+    return _result;
 }
 
 LUAFUNC void* TalonFX_new(int deviceNumber) {
@@ -1447,23 +1661,24 @@ LUAFUNC void* TalonFX_new(int deviceNumber) {
 }
 
 LUAFUNC void TalonFX_SetWithTalonFXControlMode(void* _this, int mode, double value) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Set((ctre::phoenix::motorcontrol::TalonFXControlMode)mode, value);
 }
 
 LUAFUNC void TalonFX_SetWithTalonFXControlModeAndDemands(void* _this, int mode, double demand0, int demand1Type, double demand1) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->Set((ctre::phoenix::motorcontrol::TalonFXControlMode)mode, demand0, (ctre::phoenix::motorcontrol::DemandType)demand1Type, demand1);
 }
 
 LUAFUNC void TalonFX_SetInvertedTalonFX(void* _this, int invertType) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->SetInverted((ctre::phoenix::motorcontrol::TalonFXInvertType)invertType);
 }
 
 LUAFUNC int TalonFX_ConfigSelectedFeedbackSensor(void* _this, int feedbackDevice, int pidIdx, int timeoutMs) {
-    return ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+    auto _result = ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigSelectedFeedbackSensor((ctre::phoenix::motorcontrol::FeedbackDevice)feedbackDevice, pidIdx, timeoutMs);
+    return _result;
 }
 
 LUAFUNC void* SparkMax_toSpeedController(void* _this) {
@@ -1472,37 +1687,39 @@ LUAFUNC void* SparkMax_toSpeedController(void* _this) {
 }
 
 LUAFUNC void SparkMax_Set(void* _this, double value) {
-    return ((rev::CANSparkMax*)_this)
+    ((rev::CANSparkMax*)_this)
         ->Set(value);
 }
 
 LUAFUNC void SparkMax_SetVoltage(void* _this, double output) {
-    return ((rev::CANSparkMax*)_this)
+    ((rev::CANSparkMax*)_this)
         ->SetVoltage((units::volt_t)output);
 }
 
 LUAFUNC double SparkMax_Get(void* _this) {
-    return ((rev::CANSparkMax*)_this)
+    auto _result = ((rev::CANSparkMax*)_this)
         ->Get();
+    return _result;
 }
 
 LUAFUNC void SparkMax_SetInvertedBool(void* _this, bool isInverted) {
-    return ((rev::CANSparkMax*)_this)
+    ((rev::CANSparkMax*)_this)
         ->SetInverted(isInverted);
 }
 
 LUAFUNC bool SparkMax_GetInvertedBool(void* _this) {
-    return ((rev::CANSparkMax*)_this)
+    auto _result = ((rev::CANSparkMax*)_this)
         ->GetInverted();
+    return _result;
 }
 
 LUAFUNC void SparkMax_Disable(void* _this) {
-    return ((rev::CANSparkMax*)_this)
+    ((rev::CANSparkMax*)_this)
         ->Disable();
 }
 
 LUAFUNC void SparkMax_StopMotor(void* _this) {
-    return ((rev::CANSparkMax*)_this)
+    ((rev::CANSparkMax*)_this)
         ->StopMotor();
 }
 
@@ -1510,19 +1727,197 @@ LUAFUNC void* SparkMax_new(int deviceID, int type) {
     return new rev::CANSparkMax(deviceID, (rev::CANSparkMax::MotorType)type);
 }
 
-LUAFUNC int SparkMax_RestoreFactoryDefaults(void* _this, bool persist) {
-    return (int) ((rev::CANSparkMax*)_this)
-        ->RestoreFactoryDefaults(persist);
+LUAFUNC void* SparkMax_GetEncoder(void* _this) {
+    auto _result = (rev::CANEncoder*) malloc(sizeof(rev::CANEncoder));
+    *_result = ((rev::CANSparkMax*)_this)
+        ->GetEncoder();
+    return (void*) _result;
 }
 
 LUAFUNC int SparkMax_SetIdleMode(void* _this, int mode) {
-    return (int) ((rev::CANSparkMax*)_this)
+    auto _result = ((rev::CANSparkMax*)_this)
         ->SetIdleMode((rev::CANSparkMax::IdleMode)mode);
+    return (int) _result;
+}
+
+LUAFUNC int SparkMax_GetIdleMode(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetIdleMode();
+    return (int) _result;
+}
+
+LUAFUNC int SparkMax_EnableVoltageCompensation(void* _this, double nominalVoltage) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->EnableVoltageCompensation(nominalVoltage);
+    return (int) _result;
+}
+
+LUAFUNC int SparkMax_DisableVoltageCompensation(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->DisableVoltageCompensation();
+    return (int) _result;
+}
+
+LUAFUNC double SparkMax_GetVoltageCompensationNominalVoltage(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetVoltageCompensationNominalVoltage();
+    return _result;
+}
+
+LUAFUNC int SparkMax_SetOpenLoopRampRate(void* _this, double rate) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->SetOpenLoopRampRate(rate);
+    return (int) _result;
+}
+
+LUAFUNC int SparkMax_SetClosedLoopRampRate(void* _this, double rate) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->SetClosedLoopRampRate(rate);
+    return (int) _result;
 }
 
 LUAFUNC int SparkMax_Follow(void* _this, void* leader, bool invert) {
-    return (int) ((rev::CANSparkMax*)_this)
+    auto _result = ((rev::CANSparkMax*)_this)
         ->Follow((rev::CANSparkMax&)leader, invert);
+    return (int) _result;
+}
+
+LUAFUNC bool SparkMax_IsFollower(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->IsFollower();
+    return _result;
+}
+
+LUAFUNC double SparkMax_GetBusVoltage(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetBusVoltage();
+    return _result;
+}
+
+LUAFUNC double SparkMax_GetAppliedOutput(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetAppliedOutput();
+    return _result;
+}
+
+LUAFUNC double SparkMax_GetOutputCurrent(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetOutputCurrent();
+    return _result;
+}
+
+LUAFUNC double SparkMax_GetMotorTemperature(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetMotorTemperature();
+    return _result;
+}
+
+LUAFUNC int SparkMax_SetCANTimeout(void* _this, int milliseconds) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->SetCANTimeout(milliseconds);
+    return (int) _result;
+}
+
+LUAFUNC int SparkMax_EnableSoftLimit(void* _this, int direction, bool enable) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->EnableSoftLimit((rev::CANSparkMax::SoftLimitDirection)direction, enable);
+    return (int) _result;
+}
+
+LUAFUNC bool SparkMax_IsSoftLimitEnabled(void* _this, int direction) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->IsSoftLimitEnabled((rev::CANSparkMax::SoftLimitDirection)direction);
+    return _result;
+}
+
+LUAFUNC int SparkMax_SetSoftLimit(void* _this, int direction, double limit) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->SetSoftLimit((rev::CANSparkMax::SoftLimitDirection)direction, limit);
+    return (int) _result;
+}
+
+LUAFUNC double SparkMax_GetSoftLimit(void* _this, int direction) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetSoftLimit((rev::CANSparkMax::SoftLimitDirection)direction);
+    return _result;
+}
+
+LUAFUNC int SparkMax_GetLastError(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetLastError();
+    return (int) _result;
+}
+
+LUAFUNC int SparkMax_GetFirmwareVersion(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetFirmwareVersion();
+    return _result;
+}
+
+LUAFUNC int SparkMax_GetDeviceId(void* _this) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->GetDeviceId();
+    return _result;
+}
+
+LUAFUNC int SparkMax_RestoreFactoryDefaults(void* _this, bool persist) {
+    auto _result = ((rev::CANSparkMax*)_this)
+        ->RestoreFactoryDefaults(persist);
+    return (int) _result;
+}
+
+LUAFUNC double SparkMaxEncoder_GetPosition(void* _this) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->GetPosition();
+    return _result;
+}
+
+LUAFUNC double SparkMaxEncoder_GetVelocity(void* _this) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->GetVelocity();
+    return _result;
+}
+
+LUAFUNC int SparkMaxEncoder_SetPosition(void* _this, double position) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->SetPosition(position);
+    return (int) _result;
+}
+
+LUAFUNC int SparkMaxEncoder_SetPositionConversionFactor(void* _this, double factor) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->SetPositionConversionFactor(factor);
+    return (int) _result;
+}
+
+LUAFUNC int SparkMaxEncoder_SetVelocityConversionFactor(void* _this, double factor) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->SetVelocityConversionFactor(factor);
+    return (int) _result;
+}
+
+LUAFUNC double SparkMaxEncoder_GetPositionConversionFactor(void* _this) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->GetPositionConversionFactor();
+    return _result;
+}
+
+LUAFUNC double SparkMaxEncoder_GetVelocityConversionFactor(void* _this) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->GetVelocityConversionFactor();
+    return _result;
+}
+
+LUAFUNC int SparkMaxEncoder_SetInverted(void* _this, bool inverted) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->SetInverted(inverted);
+    return (int) _result;
+}
+
+LUAFUNC bool SparkMaxEncoder_GetInverted(void* _this) {
+    auto _result = ((rev::CANEncoder*)_this)
+        ->GetInverted();
+    return _result;
 }
 
 LUAFUNC void* DifferentialDrive_new(void* leftMotor, void* rightMotor) {
@@ -1536,6 +1931,6 @@ LUAFUNC void* DifferentialDrive_new(void* leftMotor, void* rightMotor) {
 }
 
 LUAFUNC void DifferentialDrive_ArcadeDrive(void* _this, double xSpeed, double zRotation, bool squareInputs) {
-    return ((frc::DifferentialDrive*)_this)
+    ((frc::DifferentialDrive*)_this)
         ->ArcadeDrive(xSpeed, zRotation, squareInputs);
 }

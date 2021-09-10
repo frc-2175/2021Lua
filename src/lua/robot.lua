@@ -177,10 +177,12 @@ function restartAutoShotSequence()
         local flywheelTimer = Timer:new()
         local feederTimer = Timer:new()
 
-        -- wait for the flywheel to get up to speed
-        -- for now we just wait 1 second
+        -- wait for the flywheel to get up to speed (or too much time to elapse)
         flywheelTimer:start()
-        while flywheelTimer:getElapsedTimeSeconds() < 1 do
+        while (
+            shooter:getEncoder():getVelocity() < 4500
+            and flywheelTimer:getElapsedTimeSeconds() < 1
+        ) do
             shooter:set(1)
             coroutine.yield()
         end

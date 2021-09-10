@@ -131,7 +131,7 @@ motors: {
     bool HasResetOccurred();
     // We don't need custom signal stuff
     int GetBaseID();
-    @explicitcast int GetControlMode();
+    @cast int GetControlMode();
     Follow(@deref @cast("ctre::phoenix::motorcontrol::IMotorController*") void* masterToFollow);
     // Not supporting the aux PID variant of Follow right now
     ValueUpdated();
@@ -210,9 +210,51 @@ motors: {
   @extends("frc::SpeedController")
   SparkMax: {
     @constructor new(int deviceID, @cast("rev::CANSparkMax::MotorType") int type);
-    @explicitcast int RestoreFactoryDefaults(bool persist);
-    @explicitcast int SetIdleMode(@cast("rev::CANSparkMax::IdleMode") int mode);
-    @explicitcast int Follow(@cast("rev::CANSparkMax&") void* leader, bool invert);
+
+    @alloc("rev::CANEncoder") @cast void* GetEncoder();
+    // not bothering with alternate encoder
+    // current limit stuff seems to be good by default, not binding it right now
+    @cast int SetIdleMode(@cast("rev::CANSparkMax::IdleMode") int mode);
+    @cast int GetIdleMode();
+    @cast int EnableVoltageCompensation(double nominalVoltage);
+    @cast int DisableVoltageCompensation();
+    double GetVoltageCompensationNominalVoltage();
+    @cast int SetOpenLoopRampRate(double rate);
+    @cast int SetClosedLoopRampRate(double rate);
+    @cast int Follow(@cast("rev::CANSparkMax&") void* leader, bool invert);
+    // don't need the other follow mode
+    bool IsFollower();
+    // skipping faults
+    double GetBusVoltage();
+    double GetAppliedOutput();
+    double GetOutputCurrent();
+    double GetMotorTemperature();
+    // faults? flash?
+    @cast int SetCANTimeout(int milliseconds);
+    @cast int EnableSoftLimit(@cast("rev::CANSparkMax::SoftLimitDirection") int direction, bool enable);
+    bool IsSoftLimitEnabled(@cast("rev::CANSparkMax::SoftLimitDirection") int direction);
+    @cast int SetSoftLimit(@cast("rev::CANSparkMax::SoftLimitDirection") int direction, double limit);
+    double GetSoftLimit(@cast("rev::CANSparkMax::SoftLimitDirection") int direction);
+    @cast int GetLastError();
+
+    int GetFirmwareVersion();
+    // uh oh, strings
+    int GetDeviceId();
+    // we don't expose the ability to set motor types here - use the GUI
+    @cast int RestoreFactoryDefaults(bool persist);
+  }
+
+  @class("rev::CANEncoder")
+  SparkMaxEncoder: {
+    double GetPosition();
+    double GetVelocity();
+    @cast int SetPosition(double position);
+    @cast int SetPositionConversionFactor(double factor);
+    @cast int SetVelocityConversionFactor(double factor);
+    double GetPositionConversionFactor();
+    double GetVelocityConversionFactor();
+    @cast int SetInverted(bool inverted);
+    bool GetInverted();
   }
   
   @class("frc::DifferentialDrive")

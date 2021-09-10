@@ -10,13 +10,14 @@ LUAFUNC void* Solenoid_new(int channel) {
 }
 
 LUAFUNC void Solenoid_Set(void* _this, bool on) {
-    return ((frc::Solenoid*)_this)
+    ((frc::Solenoid*)_this)
         ->Set(on);
 }
 
 LUAFUNC bool Solenoid_Get(void* _this) {
-    return ((frc::Solenoid*)_this)
+    auto _result = ((frc::Solenoid*)_this)
         ->Get();
+    return _result;
 }
 
 LUAFUNC void* DoubleSolenoid_new(int forwardChannel, int reverseChannel) {
@@ -28,11 +29,12 @@ LUAFUNC void* DoubleSolenoid_newWithModule(int moduleNumber, int forwardChannel,
 }
 
 LUAFUNC void DoubleSolenoid_Set(void* _this, int value) {
-    return ((frc::DoubleSolenoid*)_this)
+    ((frc::DoubleSolenoid*)_this)
         ->Set((frc::DoubleSolenoid::Value)value);
 }
 
 LUAFUNC int DoubleSolenoid_Get(void* _this) {
-    return ((frc::DoubleSolenoid*)_this)
+    auto _result = ((frc::DoubleSolenoid*)_this)
         ->Get();
+    return _result;
 }
