@@ -62,34 +62,26 @@ function Joystick:new(port)
     return o
 end
 
-deadband = 0.1
+deadvalue = 0.1
+
+function Deadband(value, band)
+    result = 0
+    if (value > band)
+    then
+        result = (value - band) / (1 - band);
+    elseif (value < -band)
+    then
+        result = (value + band) / (1 - band);
+    end
+    return result
+end
 
 function Joystick:getX()
-    result = 0;
-    if (ffi.C.Joystick_GetX(self.joystick) > deadband)
-    then
-        result = (ffi.C.Joystick_GetX(self.joystick) - deadband) / (1 - deadband);
-    elseif (ffi.C.Joystick_GetX(self.joystick) < -deadband)
-    then
-        result = (ffi.C.Joystick_GetX(self.joystick) + deadband) / (1 - deadband);
-    else
-        print("the value is", ffi.C.Joystick_GetX(self.joystick), "deadbanded to 0");
-    end
-    return result;
+    return Deadband(ffi.C.Joystick_GetX(self.joystick), deadvalue)
 end
 
 function Joystick:getY()
-    result = 0
-    if (ffi.C.Joystick_GetY(self.joystick) > deadband)
-    then
-        result = (ffi.C.Joystick_GetY(self.joystick) - deadband) / (1 - deadband);
-    elseif (ffi.C.Joystick_GetY(self.joystick) < -deadband)
-    then
-        result = (ffi.C.Joystick_GetY(self.joystick) + deadband) / (1 - deadband);
-    else
-        print("the value is", ffi.C.Joystick_GetY(self.joystick), "deadbanded to 0");
-    end
-    return result
+    return Deadband(ffi.C.Joystick_GetY(self.joystick), deadvalue)
 end
 
 function Joystick:getButton(button)
@@ -105,15 +97,7 @@ function Joystick:getButtonReleased(button)
 end
 
 function Joystick:getAxis(axis)
-    result = 0
-    if (ffi.C.Joystick_GetRawAxis(self.joystick, axis) > deadband)
-    then
-        result = (ffi.C.Joystick_GetRawAxis(self.joystick, axis) - deadband) / (1 - deadband);
-    elseif (ffi.C.Joystick_GetRawAxis(self.joystick, axis) < -deadband)
-    then
-        result = (ffi.C.Joystick_GetRawAxis(self.joystick, axis) + deadband) / (1 - deadband);
-    end
-    return result
+    return Deadband(ffi.C.Joystick_GetRawAxis(self.joystick, axis), deadvalue)
 end
 
 function Joystick:getThrottle()
