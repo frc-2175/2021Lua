@@ -137,22 +137,20 @@ function robot.teleopPeriodic()
             restartAutoShotSequence()
         end
         runAutoShotSequence()
-    end
-    
-    if leftStick:getButton(1) then
-        shooter:set(shooterSpeed)
-        if rightStick:getButton(1) then
-            feeder:set(-1)
+    else
+        if leftStick:getButton(1) then
+            shooter:set(shooterSpeed)
+            if rightStick:getButton(1) then
+                feeder:set(-1)
+            else
+                feeder:set(0)
+            end
         else
+            shooter:set(0)
             feeder:set(0)
         end
-    else
-        shooter:set(0)
-        feeder:set(0)
+        mainMagazine:set(-gamepad:getAxis(1)*.87)
     end
-    
-    mainMagazine:set(-gamepad:getAxis(1)*.87)
-
     
     -- Holding the left joystick trigger, will run the flywheel, and if the left joystick trigger is pressed when the right joystick trigger is pressed, it will turn on the feeder.
 
@@ -180,20 +178,20 @@ function restartAutoShotSequence()
         -- for now we just wait 1 second
         flywheelTimer:start()
         while flywheelTimer:getElapsedTimeSeconds() < 1 do
-            print('running flywheel...')
+            shooter:set(1)
             coroutine.yield()
         end
 
         -- run just the feeder
         feederTimer:start()
         while feederTimer:getElapsedTimeSeconds() < 0.5 do
-            print('running flywheel and feeder...')
+            feeder:set(1)
             coroutine.yield()
         end
 
         -- run both the feeder and the magazine
         while true do
-            print('running everything...')
+            magazine:set(0.87)
             coroutine.yield()
         end
     end)
