@@ -76,23 +76,26 @@ function robot.robotInit()
     shooter = SparkMax:new(21, SparkMaxMotorType.Brushless) -- Read above note about motor IDs
     shooter:restoreFactoryDefaults()
     shooter:setIdleMode(SparkMaxIdleMode.Coast)
-    -- Follower motor setup
-    secondaryShooter = SparkMax:new(22, SparkMaxMotorType.Brushless)
-    -- Not sure if this setup is necessary for a follower motor
-    secondaryShooter:restoreFactoryDefaults()
-    secondaryShooter:setIdleMode(SparkMaxIdleMode.Coast)
-    -- Set secondaryShooter as a follower of shooter
-    secondaryShooter:follow(shooter)
 
-    -- you can set the speed of the shooter like so:
-    -- shooter:set(0.5)
+    --[[ Here Lies the Code for Motor 22
+        -- Follower motor setup
+        secondaryShooter = SparkMax:new(22, SparkMaxMotorType.Brushless)
+        -- Not sure if this setup is necessary for a follower motor
+        secondaryShooter:restoreFactoryDefaults()
+        secondaryShooter:setIdleMode(SparkMaxIdleMode.Coast)
+        -- Set secondaryShooter as a follower of shooter
+        secondaryShooter:follow(shooter)
 
-    -- other motors can use the :follow method like so:
-    -- otherShooterMotor:follow(shooter)
+        -- you can set the speed of the shooter like so:
+        -- shooter:set(0.5)
 
-    -- when you are doing master/follower stuff, you only need to set
-    -- a speed on the master motor, and the followers automatically do
-    -- their thing.
+        -- other motors can use the :follow method like so:
+        -- otherShooterMotor:follow(shooter)
+
+        -- when you are doing master/follower stuff, you only need to set
+        -- a speed on the master motor, and the followers automatically do
+        -- their thing.
+    --]]
 
     feeder = VictorSPX:new(3)
 
