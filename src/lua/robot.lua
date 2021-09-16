@@ -1,7 +1,8 @@
 require("intake")
 require("utils.timer")
+require("teleop.coroutines")
 
-safeMode = true
+safeMode = false
 minTurnRateLimit = 0.5
 minShooterSpeed =  0.2
 minSpeedLimit = 0.7
@@ -131,16 +132,11 @@ function robot.teleopPeriodic()
 
     gearSolenoid:set(rightStick:getButton(11))
 
-    -- If the trigger on the left trigger is pressed, run the flywheel until it's released.
-    -- At least, I think that's what this does, I don't know, I'm just guessing all of these functions.
 
+    -- this is autofeed behavior, which also disables manual control
+    local didAutoFeed = autoFeed:runWhile(gamepad:getButton(XboxButtons.A))
 
-    if gamepad:getButton(XboxButtons.A) then -- if the auto shot button is _held_
-        if gamepad:getButtonPressed(XboxButtons.A) then -- if the auto shot button is pressed _this frame_
-            restartAutoShotSequence()
-        end
-        runAutoShotSequence()
-    else
+    if not didAutoFeed then
         if leftStick:getButton(1) then
             shooter:set(shooterSpeed)
             if rightStick:getButton(1) then
@@ -172,40 +168,7 @@ function robot.teleopPeriodic()
     --]] 
 end
 
-function restartAutoShotSequence()
-    autoShotSequence = coroutine.create(function ()
-        local flywheelTimer = Timer:new()
-        local feederTimer = Timer:new()
 
-        -- wait for the flywheel to get up to speed (or too much time to elapse)
-        flywheelTimer:start()
-        while (
-            shooter:getEncoder():getVelocity() < 4500
-            and flywheelTimer:getElapsedTimeSeconds() < 1
-        ) do
-            shooter:set(1)
-            coroutine.yield()
-        end
-
-        -- run just the feeder
-        feederTimer:start()
-        while feederTimer:getElapsedTimeSeconds() < 0.5 do
-            feeder:set(1)
-            coroutine.yield()
-        end
-
-        -- run both the feeder and the magazine
-        while true do
-            magazine:set(0.87)
-            coroutine.yield()
-        end
-    end)
-end
-
-function runAutoShotSequence()
-    status, err = coroutine.resume(autoShotSequence)
-    print(status, err)
-end
 
 --[[ No autonomous at Woodbury Days
 function robot.autonomousInit()
