@@ -101,7 +101,6 @@ function robot.teleopPeriodic()
 
     gearSolenoid:set(rightStick:getButton(11))
 
-
     -- this is autofeed behavior, which also disables manual control
     local didAutoFeed = autoFeed:runWhile(gamepad:getButton(XboxButtons.A))
 
