@@ -123,7 +123,7 @@ function robot.teleopPeriodic()
 
     --intake piston 
     if not safeMode then
-        if gamepad:getButtonPressed(XboxButtons.B) then 
+        if gamepad:getButtonPressed(GamepadButtons.B) then 
             intakePutOut()
         end 
     end

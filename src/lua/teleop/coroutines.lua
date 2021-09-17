@@ -10,7 +10,7 @@ autoFeed = NewTeleopCoroutine(function ()
         shooter:getEncoder():getVelocity() < 4500
         and flywheelTimer:getElapsedTimeSeconds() < 1
     ) do
-        shooter:set(1)
+        shooter:set(shooterSpeed)
         coroutine.yield()
     end
 
