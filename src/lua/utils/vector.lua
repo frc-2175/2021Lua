@@ -29,6 +29,12 @@ local vector_metatable = {
     __tostring = function(a)
         return "Vector: {"..a.x..", "..a.y.."}"
     end,
+    rotate = function(a, radAng)
+        return NewVector(
+            (a.x * math.cos(radAng)) - (a.y * math.sin(radAng)),
+            (a.x * math.sin(radAng)) + (a.y * math.cos(radAng))
+        )
+    end,
 }
 
 function NewVector(x, y)
