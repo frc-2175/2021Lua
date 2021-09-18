@@ -6,7 +6,11 @@ local vector_metatable = {
         return NewVector(a.x - b.x, a.y - b.y)
     end,
     __mul = function (a, b)
-        return NewVector(a.x * b, a.y * b)
+        if type(a) == "number" then
+            return NewVector(a * b.x, a * b.y)
+        else
+            return NewVector(a.x * b, a.y * b)
+        end
     end,
     __div = function (a, b)
         return NewVector(a.x / b, a.y / b)
