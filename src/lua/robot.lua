@@ -136,3 +136,22 @@ function robot.teleopPeriodic()
     --]] 
 end
 
+function robot.autonomousInit() 
+    driveTimer = Timer:new()
+    driveTimer:start()
+end
+
+function robot.autonomousPeriodic() 
+    if driveTimer:getElapsedTimeSeconds() < 2 then
+        robotDrive:arcadeDrive(
+            0.5,
+            0
+        )
+    else 
+        robotDrive:arcadeDrive(
+            0,
+            0
+        )
+    end
+end
+
