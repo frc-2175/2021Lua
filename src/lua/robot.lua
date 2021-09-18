@@ -1,6 +1,7 @@
 require("intake")
 require("utils.timer")
 require("teleop.coroutines")
+require("utils.vector")
 
 safeMode = false
 minTurnRateLimit = 0.5
