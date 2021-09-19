@@ -21,23 +21,11 @@ local vector_metatable = {
     __eq = function (a, b)
         return a.x == b.x and a.y == b.y
     end,
-    length = function (a)
-        return math.sqrt (a.x * a.x + a.y * a.y)
-    end,
-    normalized = function (a)
-        return a / a:length()
-    end,
     __newindex = function (a, b, c)
         error("You cannot mutate a vector, it breaks stuff")
     end,
     __tostring = function(a)
         return "Vector: {"..a.x..", "..a.y.."}"
-    end,
-    rotate = function(a, radAng)
-        return NewVector(
-            (a.x * math.cos(radAng)) - (a.y * math.sin(radAng)),
-            (a.x * math.sin(radAng)) + (a.y * math.cos(radAng))
-        )
     end,
 }
 
@@ -45,6 +33,18 @@ function NewVector(x, y)
     local v = {
         x = x,
         y = y,
+        length = function (self)
+            return math.sqrt(self.x * self.x + self.y * self.y)
+        end,
+        normalized = function (self)
+            return self / self:length()
+        end,
+        rotate = function(self, radAng)
+            return NewVector(
+                (a.x * math.cos(radAng)) - (a.y * math.sin(radAng)),
+                (a.x * math.sin(radAng)) + (a.y * math.cos(radAng))
+            )
+        end,
     }
     setmetatable(v, vector_metatable)
     return v
