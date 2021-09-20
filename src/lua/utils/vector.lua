@@ -1,34 +1,3 @@
-local vector_metatable = {
-    __add = function(a, b)
-        return NewVector(a.x + b.x, a.y + b.y)
-    end,
-    __sub = function (a, b)
-        return NewVector(a.x - b.x, a.y - b.y)
-    end,
-    __mul = function (a, b)
-        if type(a) == "number" then
-            return NewVector(a * b.x, a * b.y)
-        else
-            return NewVector(a.x * b, a.y * b)
-        end
-    end,
-    __div = function (a, b)
-        return NewVector(a.x / b, a.y / b)
-    end,
-    __unm = function (a)
-        return NewVector(-a.x, -a.y)
-    end,
-    __eq = function (a, b)
-        return a.x == b.x and a.y == b.y
-    end,
-    __newindex = function (a, b, c)
-        error("You cannot mutate a vector, it breaks stuff")
-    end,
-    __tostring = function(a)
-        return "Vector: {"..a.x..", "..a.y.."}"
-    end,
-}
-
 function NewVector(x, y)
     local v = {
         x = x,
@@ -41,11 +10,41 @@ function NewVector(x, y)
         end,
         rotate = function(self, radAng)
             return NewVector(
-                (a.x * math.cos(radAng)) - (a.y * math.sin(radAng)),
-                (a.x * math.sin(radAng)) + (a.y * math.cos(radAng))
+                (self.x * math.cos(radAng)) - (self.y * math.sin(radAng)),
+                (self.x * math.sin(radAng)) + (self.y * math.cos(radAng))
             )
         end,
     }
-    setmetatable(v, vector_metatable)
+    local metatable = {
+        __add = function(a, b)
+            return NewVector(a.x + b.x, a.y + b.y)
+        end,
+        __sub = function (a, b)
+            return NewVector(a.x - b.x, a.y - b.y)
+        end,
+        __mul = function (a, b)
+            if type(a) == "number" then
+                return NewVector(a * b.x, a * b.y)
+            else
+                return NewVector(a.x * b, a.y * b)
+            end
+        end,
+        __div = function (a, b)
+            return NewVector(a.x / b, a.y / b)
+        end,
+        __unm = function (a)
+            return NewVector(-a.x, -a.y)
+        end,
+        __eq = function (a, b)
+            return a.x == b.x and a.y == b.y
+        end,
+        __newindex = function (a, b, c)
+            error("You cannot mutate a vector, it breaks stuff")
+        end,
+        __tostring = function(a)
+            return "Vector: {"..a.x..", "..a.y.."}"
+        end,
+    }
+    setmetatable(v, metatable)
     return v
 end
