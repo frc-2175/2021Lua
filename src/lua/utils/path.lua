@@ -69,20 +69,20 @@ function MakeRightArcPathSegment(radius, deg)
     local degreesPerInch = 360 / circumfrence
     local numPoints = distanceOfPath + 2
     local path = {}
-    for i = 0, numPoints - 2, 1 do
-        local angle = i * degreesPerInch
+    for i = 1, numPoints - 1 do
+        local angle = (i - 1) * degreesPerInch
         local yPosition = radius * math.sin(math.rad(angle))
         local xPosition = radius - (radius * math.cos(math.rad(angle)))
         path[i] = NewVector(xPosition, yPosition)
     end
-    path[numPoints - 1] = NewVector(xEndpoint, yEndpoint)
+    path[numPoints] = NewVector(xEndpoint, yEndpoint)
     return NewPathSegment(-deg, path)
 end
 
 function MakeLeftArcPathSegment(radius, deg)
     local rightPath = MakeRightArcPathSegment(radius, deg).path
     local leftPath = {}
-    for i = 0, #rightPath - 1,  1 do
+    for i = 1, #rightPath do
         leftPath[i] = NewVector(-rightPath[i].x, rightPath[i].y)
     end
     return NewPathSegment(deg, leftPath)
