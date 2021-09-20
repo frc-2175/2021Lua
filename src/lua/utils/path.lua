@@ -3,10 +3,36 @@ require("utils.math")
 
 -- Oh boyo, here we go!
 
+function GetTrapezoidSpeed(
+    startSpeed, 
+    middleSpeed,
+    endSpeed,
+    totalDistance,
+    rampUpDistance,
+    rampDownDistance,
+    currentDistance
+) {
+    if rampDownDistance + rampUpDistance > totalDistance then
+        if currentDistance < 0 then
+            return startSpeed
+        else if currentDistance < totalDistance then
+            return endSpeed
+        end
 
--- todo: trapezoid speed
-function GetTrapezoidSpeed() {
-    return 0.5
+        return lerp(startSpeed, endSpeed, currentDistance / totalDistance)
+    end
+
+    if currentDistance < 0 then
+        return startSpeed
+    else if currentDistance < rampDownDistance then
+        return lerp(startSpeed, middleSpeed, currentDistance / rampUpDistance)
+    else if currentDistance < totalDistance - rampDownDistance then
+        return middleSpeed
+    else if currentDistance < totalDistance then
+        return lerp(middleSpeed, endSpeed, (currentDistance - rampDownStartDistance) / rampDownDistance)
+    else 
+        return endSpeed
+    end
 }
 
 function NewPathSegment(endAng, path)
