@@ -11,11 +11,11 @@ function GetTrapezoidSpeed(
     rampUpDistance,
     rampDownDistance,
     currentDistance
-) {
+)
     if rampDownDistance + rampUpDistance > totalDistance then
         if currentDistance < 0 then
             return startSpeed
-        else if currentDistance < totalDistance then
+        elseif currentDistance < totalDistance then
             return endSpeed
         end
 
@@ -24,16 +24,16 @@ function GetTrapezoidSpeed(
 
     if currentDistance < 0 then
         return startSpeed
-    else if currentDistance < rampDownDistance then
+    elseif currentDistance < rampDownDistance then
         return lerp(startSpeed, middleSpeed, currentDistance / rampUpDistance)
-    else if currentDistance < totalDistance - rampDownDistance then
+    elseif currentDistance < totalDistance - rampDownDistance then
         return middleSpeed
-    else if currentDistance < totalDistance then
+    elseif currentDistance < totalDistance then
         return lerp(middleSpeed, endSpeed, (currentDistance - rampDownStartDistance) / rampDownDistance)
     else 
         return endSpeed
     end
-}
+end
 
 function NewPathSegment(endAng, path)
     local p = {
