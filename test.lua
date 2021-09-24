@@ -103,21 +103,37 @@ package.loaded["ffi"] = ffi -- "preload" our fake FFI
 -- TODO: Support sub-tests?
 local tests = {}
 function test(name, func)
-    table.insert(tests, {
-        name = name,
-        func = func,
-    })
+    tests[name] = func
+end
+
+local t = {}
+
+function t:assert(value, message)
+    local errorPrefix = message and (message..": ") or ""
+    assert(value, errorPrefix.."assertion failed!")
+end
+
+function t:assertEqual(actual, expected, message)
+    local errorPrefix = message and (message..": ") or ""
+    if type(actual) == "table" and type(expected) == "table" then
+        assert(#actual == #expected, errorPrefix.."tables were not the same size")
+        assert(table.unpack(actual) == table.unpack(expected), errorPrefix.."values were not equal: expected "..tostring(expected)..", but got "..tostring(actual))
+    else
+        assert(actual == expected, errorPrefix.."values were not equal: expected "..tostring(expected)..", but got "..tostring(actual))
+    end
 end
 
 function runTests()
-    table.sort(tests, function(a, b)
-        if a.name < b.name then
-            return -1
-        elseif a.name > b.name then
-            return 1
-        else
-            return 0
-        end
+    local testItems = {}
+    for name, func in pairs(tests) do
+        table.insert(testItems, {
+            name = name,
+            func = func,
+        })
+    end
+
+    table.sort(testItems, function(a, b)
+        return a.name < b.name
     end)
 
     print()
@@ -126,11 +142,11 @@ function runTests()
     print()
 
     local failed = false
-    for _, test in pairs(tests) do
+    for _, test in ipairs(testItems) do
         io.write(Blue..test.name..": "..ResetColor)
         io.flush()
 
-        local ok, err = xpcall(test.func, debug.traceback)
+        local ok, err = xpcall(test.func, debug.traceback, t)
         if err == nil then
             io.write(Green.."OK"..ResetColor.."\n")
         else
