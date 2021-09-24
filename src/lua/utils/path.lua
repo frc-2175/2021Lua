@@ -29,6 +29,7 @@ function GetTrapezoidSpeed(
     elseif currentDistance < totalDistance - rampDownDistance then
         return middleSpeed
     elseif currentDistance < totalDistance then
+        local rampDownStartDistance = (totalDistance - rampDownDistance);
         return lerp(middleSpeed, endSpeed, (currentDistance - rampDownStartDistance) / rampDownDistance)
     else 
         return endSpeed
