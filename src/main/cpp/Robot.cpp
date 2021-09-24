@@ -54,6 +54,9 @@ public:
     L = luaL_newstate();
     luaL_openlibs(L);
 
+    // Disable tests in real robot code
+    runLuaString(L, "function test() end");
+
     int initError = runLuaFile(L, "init.lua");
     if (!initError) {
       ok = true;
