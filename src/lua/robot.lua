@@ -14,11 +14,11 @@ flywheelOn = false
 function robot.robotInit()
     if simMode then
         -- sim left motor
-        leftMaster = TalonSRX:new(15) -- -making a motor !
+        leftMaster = TalonSRX:new(15) -- making a motor !
         leftMaster:setInverted(CTREInvertType.None) --setting up, making it inverted
     else
         -- real left motor
-        leftMaster = TalonFX:new(15) -- -making a motor !
+        leftMaster = TalonFX:new(15) -- making a motor !
         leftMaster:setInverted(CTRETalonFXInvertType.Clockwise) --setting up, making it inverted
     end
 
