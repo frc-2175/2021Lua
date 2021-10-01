@@ -3,6 +3,7 @@ require("utils.math")
 
 -- Oh boyo, here we go!
 
+--- _/‾\_
 function GetTrapezoidSpeed(
     startSpeed, 
     middleSpeed,
@@ -11,7 +12,7 @@ function GetTrapezoidSpeed(
     rampUpDistance,
     rampDownDistance,
     currentDistance
-)
+    )
     if rampDownDistance + rampUpDistance > totalDistance then
         if currentDistance < 0 then
             return startSpeed
@@ -36,6 +37,18 @@ function GetTrapezoidSpeed(
     end
 end
 
+--- Creates a new path segment, given an ending angle
+--- in degrees, `endAng`, and a list of vectors, `path`.
+---
+--- Examples:
+---  - `mySegment = NewPathSegment(90, {})` creates
+--- a new path segment(with an empty path table).
+---  - `mySegment.path = {NewVector(0, 0), NewVector(1, 1)}`
+--- sets the path of the new segment you made.
+---  - `mySegment.path[1]` returns `NewVector(0, 0)`.
+---@param endAng number
+---@param path table
+---@return table PathSegment
 function NewPathSegment(endAng, path)
     local p = {
         endAng = endAng,
@@ -46,6 +59,7 @@ function NewPathSegment(endAng, path)
     }
     return p
 end
+
 
 function MakePathLine(startpoint, endpoint)
     local numPoints = math.floor((endpoint - startpoint):length() + 0.5)
@@ -130,86 +144,3 @@ function MakePath(isBackwards, startingAng, startingPos, pathSegments)
 
     return pathResult
 end
-
-test("GetTrapezoidSpeed", function(t)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, -1) == 0.2)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, 0) == 0.2)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, 0.5) == 0.5)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, 1) == 0.8)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, 2) == 0.8)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, 3) == 0.8)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, 4) == 0.6)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, 5) == 0.4)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 5, 1, 2, 6) == 0.4)
-
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 1, 2, -1) == 0.2)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 1, 2, 0) == 0.2)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 1, 2, 0.5) == 0.5)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 1, 2, 1) == 0.8)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 1, 2, 2) == 0.6)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 1, 2, 3) == 0.4)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 1, 2, 4) == 0.4)
-
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 2, 2, -1) == 0.2)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 2, 2, 0) == 0.2)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 2, 2, 1.5) == 0.3)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 2, 2, 3) == 0.4)
-    t:assert(GetTrapezoidSpeed(0.2, 0.8, 0.4, 3, 2, 2, 4) == 0.4)
-end)
-
-test("MakePathLine", function(t)
-    t:assertEqual(
-        MakePathLine(NewVector(1, 1), NewVector(3.5, 1)),
-        {NewVector(1, 1), NewVector(2, 1), NewVector(3, 1), NewVector(3.5, 1)}
-    )
-    t:assertEqual(
-        MakePathLine(NewVector(1, 1), NewVector(1, 3.5)),
-        {NewVector(1, 1), NewVector(1, 2), NewVector(1, 3), NewVector(1, 3.5)}
-    )
-end)
-
-test("MakeRightPathArc", function(t)
-    local r = 6 / math.pi
-    local path = MakeRightArcPathSegment(r, 95).path
-    t:assertEqual(path[1], NewVector(0, 0))
-    t:assertEqual(path[2], NewVector(r - r * (math.sqrt(3) / 2), r/2))
-    t:assertEqual(path[3], NewVector(r - r/2, r * math.sqrt(3) / 2))
-    t:assertEqual(path[4], NewVector(r, r))
-    t:assert(path[5].x > r)
-    t:assert(path[5].y > r - 0.7)
-end)
-
-test("MakeLeftPathArc", function(t)
-    local r = 6 / math.pi
-    local path = MakeLeftArcPathSegment(r, 95).path
-    t:assert(path[2].x < 0)
-    t:assert(path[3].x < 0)
-    t:assert(path[4].x < 0)
-    t:assert(path[5].x < 0)
-
-    t:assert(path[2].y > 0)
-    t:assert(path[3].y > 0)
-    t:assert(path[4].y > 0)
-    t:assert(path[5].y > 0)
-end)
-
-test("MakePath", function(t)
-    local path = MakePath(false, 0, NewVector(0, 0), {
-        NewPathSegment(-90, { NewVector(0, 0), NewVector(0, 1), NewVector(0, 2) }),
-        NewPathSegment(90, { NewVector(0, 0), NewVector(0, 1), NewVector(0, 2) }),
-        NewPathSegment(-90, { NewVector(0, 0), NewVector(0, 1), NewVector(0, 2) }),
-    })
-    local actualPath = table.pack(table.unpack(path.path, 1, path.numberOfActualPoints))
-    
-    t:assertEqual(actualPath, {
-        NewVector(0, 0),
-        NewVector(0, 1),
-        NewVector(0, 2),
-        NewVector(0, 2),
-        NewVector(1, 2),
-        NewVector(2, 2),
-        NewVector(2, 2),
-        NewVector(2, 3),
-        NewVector(2, 4),
-    })
-end)
