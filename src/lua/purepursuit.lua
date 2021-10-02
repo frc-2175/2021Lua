@@ -8,14 +8,14 @@ function FindClosestPoint(pathResult, fieldPosition, previousClosestPoint)
         startIndex = 0
     end
     if endIndex > pathResult.numberOfActualPoints - 1 then
-        endIndex = pathResult.numberOfActualPoints -1
+        endIndex = pathResult.numberOfActualPoints - 1
     end
-    local minDistance = pathResult.path[0].subtract(fieldPosition).magnitude(); 
+    local minDistance = pathResult.path[0].subtract(fieldPosition).magnitude()
     for i = startIndex, endIndex do
-        local distanceToPoint = pathResult.path[i].subtract(fieldPosition).magnitude();
+        local distanceToPoint = pathResult.path[i].subtract(fieldPosition).magnitude()
         if distanceToPoint <= minDistance then
-            indexOfClosestPoint = i; 
-            minDistance = distanceToPoint; 
+            indexOfClosestPoint = i
+            minDistance = distanceToPoint
         end
     end
     return indexOfClosestPoint;

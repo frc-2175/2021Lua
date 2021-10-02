@@ -5,7 +5,7 @@ function NewRamp()
     local r = {
         currentSpeed = 0,
         maxAccel = 0.2,
-        maxDeccel = 0.1,
+        maxDeccel = 0.1
     }
     setmetatable(r, rampTable)
     return r

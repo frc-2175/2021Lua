@@ -11,5 +11,5 @@
 ---@param t number
 ---@return number blendedValue
 function lerp(a, b, t)
-    return (1-t) * a + t * b
+    return (1 - t) * a + t * b
 end

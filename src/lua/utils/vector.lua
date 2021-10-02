@@ -2,31 +2,31 @@ local vec_metatable = {
     __add = function(a, b)
         return NewVector(a.x + b.x, a.y + b.y)
     end,
-    __sub = function (a, b)
+    __sub = function(a, b)
         return NewVector(a.x - b.x, a.y - b.y)
     end,
-    __mul = function (a, b)
+    __mul = function(a, b)
         if type(a) == "number" then
             return NewVector(a * b.x, a * b.y)
         else
             return NewVector(a.x * b, a.y * b)
         end
     end,
-    __div = function (a, b)
+    __div = function(a, b)
         return NewVector(a.x / b, a.y / b)
     end,
-    __unm = function (a)
+    __unm = function(a)
         return NewVector(-a.x, -a.y)
     end,
-    __eq = function (a, b)
+    __eq = function(a, b)
         return a.x == b.x and a.y == b.y
     end,
-    __newindex = function (a, b, c)
+    __newindex = function(a, b, c)
         error("You cannot mutate a vector, it breaks stuff")
     end,
     __tostring = function(a)
-        return "Vector: {"..a.x..", "..a.y.."}"
-    end,
+        return "Vector: {" .. a.x .. ", " .. a.y .. "}"
+    end
 }
 
 --- Creates a new vector, with two values. The parameters `x` and `y` are
@@ -49,7 +49,7 @@ function NewVector(x, y)
         ---  - `myVector = NewVector(3, 4)` creates a new vector, `(3, 4)`.
         ---  - `myVector:length()` is `5.0`.
         ---@return number Length
-        length = function (self)
+        length = function(self)
             return math.sqrt(self.x * self.x + self.y * self.y)
         end,
         --- Returns the vector, except scaled so that its length is 1
@@ -59,7 +59,7 @@ function NewVector(x, y)
         ---  - `myVector:normalized()` returns a new vector, `(0.6, 0.8)`.
         ---  - `myVector:normalized():length()` will always be 1.
         ---@return table NormalizedVector
-        normalized = function (self)
+        normalized = function(self)
             return self / self:length()
         end,
         --- Returns the vector rotated `radAng` radians
@@ -73,7 +73,7 @@ function NewVector(x, y)
                 (self.x * math.cos(radAng)) - (self.y * math.sin(radAng)),
                 (self.x * math.sin(radAng)) + (self.y * math.cos(radAng))
             )
-        end,
+        end
     }
     setmetatable(v, vec_metatable)
     return v

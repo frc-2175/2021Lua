@@ -5,7 +5,7 @@ require("utils.vector")
 
 safeMode = false
 minTurnRateLimit = 0.5
-minShooterSpeed =  0.2
+minShooterSpeed = 0.2
 minSpeedLimit = 0.7
 shooterSpeed = 0
 simMode = false
@@ -15,11 +15,11 @@ function robot.robotInit()
     if simMode then
         -- sim left motor
         leftMaster = TalonSRX:new(15) -- making a motor !
-        leftMaster:setInverted(CTREInvertType.None) --setting up, making it inverted
+        leftMaster:setInverted(CTREInvertType.None) -- setting up, making it inverted
     else
         -- real left motor
         leftMaster = TalonFX:new(15) -- making a motor !
-        leftMaster:setInverted(CTRETalonFXInvertType.Clockwise) --setting up, making it inverted
+        leftMaster:setInverted(CTRETalonFXInvertType.Clockwise) -- setting up, making it inverted
     end
 
     leftFollower1 = VictorSPX:new(11)
@@ -31,7 +31,7 @@ function robot.robotInit()
     leftFollower2:setInverted(CTREInvertType.OpposeMaster)
 
     mainMagazine = TalonSRX:new(6)
-    --mainMagazine:setInverted(CTREInvertType.InvertMotorOutput)
+    -- mainMagazine:setInverted(CTREInvertType.InvertMotorOutput)
 
     followerMagazine = TalonSRX:new(7)
     followerMagazine:follow(mainMagazine)
@@ -76,14 +76,14 @@ function robot.robotInit()
 
 end
 
---teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+-- teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function robot.teleopPeriodic()   
 
     shooterSpeed = rightStick:getThrottle() -- Set the shooterSpeed to the value of the knob thing on the joystick.
 
     if -leftStick:getAxis(JoystickAxes.Throttle) < minSpeedLimit then
         speedLimiter = minSpeedLimit
-    else 
+    else
         speedLimiter = -leftStick:getAxis(JoystickAxes.Throttle)
     end
 
@@ -92,7 +92,7 @@ function robot.teleopPeriodic()
         rightStick:getAxis(JoystickAxes.X)
     )
 
-    if(gamepad:getButton(GamepadButtons.RightTrigger)) then
+    if gamepad:getButton(GamepadButtons.RightTrigger) then
         intakePutOut()
         intakeRollIn()
     else
@@ -117,16 +117,16 @@ function robot.teleopPeriodic()
             shooter:set(0)
             feeder:set(0)
         end
-        mainMagazine:set(-gamepad:getAxis(1)*.87)
+        mainMagazine:set(-gamepad:getAxis(1) * 0.87)
     end
     
     -- Holding the left joystick trigger, will run the flywheel, and if the left joystick trigger is pressed when the right joystick trigger is pressed, it will turn on the feeder.
 
-    --intake piston 
+    -- intake piston 
     if not safeMode then
         if gamepad:getButtonPressed(GamepadButtons.B) then 
             intakePutOut()
-        end 
+        end
     end
     --[[ 
     else if gamepad:getButtonPressed(XboxButtons.RightTrigger) or gamepad:getButtonPressed(XboxButtons.RightBumper) 
@@ -144,15 +144,9 @@ end
 
 function robot.autonomousPeriodic() 
     if driveTimer:getElapsedTimeSeconds() < 2 then
-        robotDrive:arcadeDrive(
-            0.5,
-            0
-        )
-    else 
-        robotDrive:arcadeDrive(
-            0,
-            0
-        )
+        robotDrive:arcadeDrive(0.5, 0)
+    else
+        robotDrive:arcadeDrive(0, 0)
     end
 end
 

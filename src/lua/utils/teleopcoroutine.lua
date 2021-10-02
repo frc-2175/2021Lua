@@ -18,7 +18,7 @@ function NewTeleopCoroutine(coroutineFunc)
             end
             self.wasRunning = running
             return running
-        end,
+        end
     }
     return t
 end
