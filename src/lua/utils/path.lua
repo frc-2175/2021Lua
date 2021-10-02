@@ -6,10 +6,10 @@ require("utils.math")
 --- _/‾\_
 function GetTrapezoidSpeed(
     startSpeed, 
-    middleSpeed,
-    endSpeed,
-    totalDistance,
-    rampUpDistance,
+    middleSpeed, 
+    endSpeed, 
+    totalDistance, 
+    rampUpDistance, 
     rampDownDistance,
     currentDistance
     )
@@ -32,7 +32,7 @@ function GetTrapezoidSpeed(
     elseif currentDistance < totalDistance then
         local rampDownStartDistance = (totalDistance - rampDownDistance);
         return lerp(middleSpeed, endSpeed, (currentDistance - rampDownStartDistance) / rampDownDistance)
-    else 
+    else
         return endSpeed
     end
 end
@@ -59,7 +59,6 @@ function NewPathSegment(endAng, path)
     }
     return p
 end
-
 
 function MakePathLine(startpoint, endpoint)
     local numPoints = math.floor((endpoint - startpoint):length() + 0.5)
@@ -132,11 +131,11 @@ function MakePath(isBackwards, startingAng, startingPos, pathSegments)
     end
 
     if isBackwards then
-        for i=1, #finalPath, 1 do
+        for i = 1, #finalPath, 1 do
             finalPath[i] = finalPath[i] * -1
         end
     end
-    for i=1, #finalPath, 1 do
+    for i = 1, #finalPath, 1 do
         finalPath[i] = finalPath[i]:rotate(math.rad(startingAng)) + startingPos
     end
 

@@ -37,8 +37,6 @@ function robot.robotInit()
     followerMagazine:follow(mainMagazine)
     followerMagazine:setInverted(CTREInvertType.FollowMaster)
 
-
-
     if simMode then
         -- sim right motor
         rightMaster = TalonSRX:new(16)
@@ -57,10 +55,10 @@ function robot.robotInit()
     rightFollower2:follow(rightMaster)
     rightFollower2:setInverted(CTREInvertType.OpposeMaster)
 
-    robotDrive = DifferentialDrive:new(leftMaster, rightMaster) --DifferentialDrive manages all driving math
-    
+    robotDrive = DifferentialDrive:new(leftMaster, rightMaster) -- DifferentialDrive manages all driving math
+
     gearSolenoid = Solenoid:new(2)
-    
+
     leftStick = Joystick:new(0)
     rightStick = Joystick:new(1)
     gamepad = Joystick:new(2)
@@ -71,13 +69,12 @@ function robot.robotInit()
     shooter:restoreFactoryDefaults()
     shooter:setIdleMode(SparkMaxIdleMode.Coast)
 
-
     feeder = VictorSPX:new(3)
 
 end
 
 -- teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-function robot.teleopPeriodic()   
+function robot.teleopPeriodic()
 
     shooterSpeed = rightStick:getThrottle() -- Set the shooterSpeed to the value of the knob thing on the joystick.
 
@@ -119,12 +116,12 @@ function robot.teleopPeriodic()
         end
         mainMagazine:set(-gamepad:getAxis(1) * 0.87)
     end
-    
+
     -- Holding the left joystick trigger, will run the flywheel, and if the left joystick trigger is pressed when the right joystick trigger is pressed, it will turn on the feeder.
 
     -- intake piston 
     if not safeMode then
-        if gamepad:getButtonPressed(GamepadButtons.B) then 
+        if gamepad:getButtonPressed(GamepadButtons.B) then
             intakePutOut()
         end
     end
@@ -134,15 +131,15 @@ function robot.teleopPeriodic()
     else if gamepad:getButtonReleased(XboxButtons.RightTrigger) or gamepad:getButtonReleased(XboxButtons.RightBumper) 
         intakePutIn() 
     end 
-    --]] 
+    --]]
 end
 
-function robot.autonomousInit() 
+function robot.autonomousInit()
     driveTimer = Timer:new()
     driveTimer:start()
 end
 
-function robot.autonomousPeriodic() 
+function robot.autonomousPeriodic()
     if driveTimer:getElapsedTimeSeconds() < 2 then
         robotDrive:arcadeDrive(0.5, 0)
     else
