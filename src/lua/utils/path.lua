@@ -5,11 +5,11 @@ require("utils.math")
 
 --- _/‾\_
 function GetTrapezoidSpeed(
-    startSpeed, 
-    middleSpeed, 
-    endSpeed, 
-    totalDistance, 
-    rampUpDistance, 
+    startSpeed,
+    middleSpeed,
+    endSpeed,
+    totalDistance,
+    rampUpDistance,
     rampDownDistance,
     currentDistance
     )
@@ -30,7 +30,7 @@ function GetTrapezoidSpeed(
     elseif currentDistance < totalDistance - rampDownDistance then
         return middleSpeed
     elseif currentDistance < totalDistance then
-        local rampDownStartDistance = (totalDistance - rampDownDistance);
+        local rampDownStartDistance = (totalDistance - rampDownDistance)
         return lerp(middleSpeed, endSpeed, (currentDistance - rampDownStartDistance) / rampDownDistance)
     else
         return endSpeed

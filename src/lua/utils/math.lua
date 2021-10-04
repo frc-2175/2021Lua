@@ -13,3 +13,21 @@
 function lerp(a, b, t)
     return (1 - t) * a + t * b
 end
+
+--- Returns the sign of the input number `n`
+---
+--- Examples:
+---  - `sign(2)` is `1`.
+---  - `sign(0)` is `0`.
+---  - `sign(-2)` is `-1`.
+---@param n number
+---@return number sign
+function sign(n)
+    local val = 0
+    if n > 0 then
+        val = 1
+    elseif n < 0 then
+        val = -1
+    end
+    return val
+end
