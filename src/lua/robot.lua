@@ -1,4 +1,5 @@
 require("intake")
+require("drivetrain")
 require("utils.timer")
 require("teleop.coroutines")
 require("utils.vector")
@@ -71,6 +72,7 @@ function robot.robotInit()
 
     feeder = VictorSPX:new(3)
 
+    ramp = NewRamp(0.1, 0.2)
 end
 
 -- teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -85,7 +87,7 @@ function robot.teleopPeriodic()
     end
 
     robotDrive:arcadeDrive(
-        -leftStick:getAxis(JoystickAxes.Y) * speedLimiter,  -- multiplies speed in forward and backwards
+        ramp:Ramp(-leftStick:getAxis(JoystickAxes.Y) * speedLimiter),  -- multiplies speed in forward and backwards
         rightStick:getAxis(JoystickAxes.X)
     )
 

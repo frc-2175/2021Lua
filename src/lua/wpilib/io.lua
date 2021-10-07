@@ -1,5 +1,11 @@
 local ffi = require("ffi")
 
+local constantMetatable = {
+    __index = function(table, key)
+        error('"'..tostring(key)..'" is not a valid constant')
+    end,
+}
+
 -- Constants
 
 GamepadButtons = {
@@ -16,6 +22,7 @@ GamepadButtons = {
     LeftStick = 11,
     RightStick = 12,
 }
+setmetatable(GamepadButtons, constantMetatable)
 
 -- TODO: Gamepad axes
 
@@ -31,6 +38,7 @@ XboxButtons = {
     LeftStick = 9,
     RightStick = 10,
 }
+setmetatable(XboxButtons, constantMetatable)
 
 XboxAxes = {
     X = 0,
@@ -40,12 +48,14 @@ XboxAxes = {
     RightStickX = 4,
     RightStickY = 5,
 }
+setmetatable(XboxAxes, constantMetatable)
 
 JoystickAxes = {
     X = 0,
     Y = 1,
     Throttle = 2,
 }
+setmetatable(JoystickAxes, constantMetatable)
 
 
 -- Joystick

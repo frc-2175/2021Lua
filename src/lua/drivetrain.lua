@@ -3,6 +3,15 @@ require("utils.math")
 local rampTable = {}
 rampTable.__index = rampTable
 
+--- Creates a new ramp, with a time in seconds to accelerate, `timeToMax`,
+--- and a time in seconds to stop, `timeToStop`.
+---
+--- Examples:
+---  - `myRamp = NewRamp(0.5, 1)` creates a new ramp setup that takes
+---&nbsp;0.5 seconds to accelerate to max and 1 second to decelerate to stop.
+---@param timeToMax number
+---@param timeToStop number
+---@return table Ramp
 function NewRamp(timeToMax, timeToStop)
     local r = {
         currentSpeed = 0,
@@ -27,6 +36,9 @@ function DoGrossRampStuff(curr, targ, accel, decel)
     return curr
 end
 
+--- Updates and returns the new speed, limited by the maximum acceleration and deceleration.
+---@param targetSpeed number
+---@return number Speed
 function rampTable:Ramp(targetSpeed)
     self.currentSpeed = DoGrossRampStuff(self.currentSpeed, targetSpeed, self.maxAccel, self.maxDecel)
     return self.currentSpeed
