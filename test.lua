@@ -33,18 +33,27 @@ function hasSuffix(str, suffix)
 end
 
 function listFiles(directory)
-    local i, t, popen = 0, {}, io.popen
-    local pfile
+    local i, t = 0, {}
     if getOS() == "windows" then
-        pfile = popen('dir "'..directory..'" /b /ad')
+        local pfile_all = io.popen('dir "'..directory..'" /b')
+        local pfile_dir = io.popen('dir "'..directory..'" /b /ad 2>&1')
+        if pfile_dir:read() ~= 'File Not Found' then
+            -- is a directory
+            for filename in pfile_all:lines() do
+                i = i + 1
+                t[i] = filename
+            end
+        end
+        pfile_all:close()
+        pfile_dir:close()
     else
-        pfile = popen('ls -a "'..directory..'"')
+        local pfile = io.popen('ls -a "'..directory..'"')
+        for filename in pfile:lines() do
+            i = i + 1
+            t[i] = filename
+        end
+        pfile:close()
     end
-    for filename in pfile:lines() do
-        i = i + 1
-        t[i] = filename
-    end
-    pfile:close()
     return t
 end
 
@@ -146,7 +155,9 @@ function runTests()
         io.write(Blue..test.name..": "..ResetColor)
         io.flush()
 
-        local ok, err = xpcall(test.func, debug.traceback, t)
+        local ok, err = xpcall(function()
+            test.func(t)
+        end, debug.traceback)
         if err == nil then
             io.write(Green.."OK"..ResetColor.."\n")
         else

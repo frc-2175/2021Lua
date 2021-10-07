@@ -8,6 +8,15 @@ package.path = package.path .. ";./?/init.lua;/home/lvuser/lua/?.lua;/home/lvuse
 
 require("wpilib")
 
+table.unpack = table.unpack or unpack
+if not table.pack then
+    table.pack = function(...)
+        local t = { ... }
+        t.n = #t
+        return t
+    end
+end
+
 robot = {
     --- Robot-wide initialization code should go here.
     robotInit = function() end,

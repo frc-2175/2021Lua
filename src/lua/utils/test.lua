@@ -51,6 +51,7 @@ end)
 test("MakeRightPathArc", function(t)
     local r = 6 / math.pi
     local path = MakeRightArcPathSegment(r, 95).path
+    t:assertEqual(#path, 5)
     t:assertEqual(path[1], NewVector(0, 0))
     t:assertEqual(path[2], NewVector(r - r * (math.sqrt(3) / 2), r/2))
     t:assertEqual(path[3], NewVector(r - r/2, r * math.sqrt(3) / 2))
