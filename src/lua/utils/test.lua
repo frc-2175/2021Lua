@@ -94,3 +94,82 @@ test("MakePath", function(t)
         NewVector(2, 4),
     })
 end)
+
+-- ramp tests
+
+test("DoGrossRampStuff", function(t) 
+    -- positive speed
+    t:assertEqual(DoGrossRampStuff(0.5, 1, 0.2, 0.1), 0.7, "should accelerate by 0.2")
+    t:assertEqual(DoGrossRampStuff(0.5, 0.1, 0.2, 0.1), 0.4, "should decelerate by 0.1")
+    t:assertEqual(DoGrossRampStuff(0.5, 0, 0.2, 0.1), 0.4, "should decelerate by 0.1")
+    t:assertEqual(DoGrossRampStuff(0.5, -1, 0.2, 0.1), 0.4, "should decelerate by 0.1")
+    t:assertEqual(DoGrossRampStuff(0.5, 0.5, 0.2, 0.1), 0.5, "speed should not change when current and target are equal")
+
+    -- negative speed
+    t:assertEqual(DoGrossRampStuff(-0.5, 1, 0.2, 0.1), -0.4, "should decelerate by 0.1")
+    t:assertEqual(DoGrossRampStuff(-0.5, 0, 0.2, 0.1), -0.4, "should decelerate by 0.1")
+    t:assertEqual(DoGrossRampStuff(-0.5, -0.1, 0.2, 0.1), -0.4, "should decelerate by 0.1")
+    t:assertEqual(DoGrossRampStuff(-0.5, -1, 0.2, 0.1), -0.7, "should accelerate by 0.2")
+    t:assertEqual(DoGrossRampStuff(-0.5, -0.5, 0.2, 0.1), -0.5, "speed should not change when current and target are equal")
+
+    -- zero
+    t:assertEqual(DoGrossRampStuff(0, 0, 0.2, 0.1), 0, "should go nowhere at zero")
+    t:assertEqual(DoGrossRampStuff(0, 1, 0.2, 0.1), 0.2, "should accelerate by 0.2 positively")
+    t:assertEqual(DoGrossRampStuff(0, -1, 0.2, 0.1), -0.2, "should accelerate by 0.2 negatively")
+
+    -- overshoot
+    t:assertEqual(DoGrossRampStuff(0.5, 0.6, 1, 0.1), 0.6, "acceleration overshot when positive")
+    t:assertEqual(DoGrossRampStuff(-0.5, -0.6, 1, 0.1), -0.6, "acceleration overshot when negative")
+    t:assertEqual(DoGrossRampStuff(0.5, -0.1, 0.1, 1), -0.1, "deceleration overshot when positive")
+    t:assertEqual(DoGrossRampStuff(-0.5, 0.1, 0.1, 1), 0.1, "deceleration overshot when negative")
+end)
+
+test("Ramp", function(t)
+    -- five ticks to max, ten ticks to stop
+    local ramp = NewRamp(0.1, 0.2)
+
+    t:assertEqual(ramp.maxAccel, 0.2)
+    t:assertEqual(ramp.maxDecel, 0.1)
+
+    -- accelerate (positively)
+    t:assertEqual(ramp:Ramp(0.9), 0.2)
+    t:assertEqual(ramp:Ramp(0.9), 0.4)
+    t:assertEqual(ramp:Ramp(1.1), 0.6)
+    t:assertEqual(ramp:Ramp(1.1), 0.8)
+    t:assertEqual(ramp:Ramp(1), 1.0)
+    t:assertEqual(ramp:Ramp(1), 1.0)
+
+    -- decelerate (while positive)
+    t:assertEqual(ramp:Ramp(0.1), 0.9)
+    t:assertEqual(ramp:Ramp(0.1), 0.8)
+    t:assertEqual(ramp:Ramp(0), 0.7)
+    t:assertEqual(ramp:Ramp(0), 0.6)
+    t:assertEqual(ramp:Ramp(-0.1), 0.5)
+    t:assertEqual(ramp:Ramp(-0.1), 0.4)
+    t:assertEqual(ramp:Ramp(-1), 0.3)
+    t:assertEqual(ramp:Ramp(-1), 0.2)
+    t:assertEqual(ramp:Ramp(-1), 0.1)
+    t:assertEqual(ramp:Ramp(0), 0.0)
+    t:assertEqual(ramp:Ramp(0), 0.0)
+
+    -- accelerate (negatively)
+    t:assertEqual(ramp:Ramp(-0.9), -0.2)
+    t:assertEqual(ramp:Ramp(-0.9), -0.4)
+    t:assertEqual(ramp:Ramp(-1.1), -0.6)
+    t:assertEqual(ramp:Ramp(-1.1), -0.8)
+    t:assertEqual(ramp:Ramp(-1), -1.0)
+    t:assertEqual(ramp:Ramp(-1), -1.0)
+
+    -- decelerate (while negative)
+    t:assertEqual(ramp:Ramp(-0.1), -0.9)
+    t:assertEqual(ramp:Ramp(-0.1), -0.8)
+    t:assertEqual(ramp:Ramp(0), -0.7)
+    t:assertEqual(ramp:Ramp(0), -0.6)
+    t:assertEqual(ramp:Ramp(0.1), -0.5)
+    t:assertEqual(ramp:Ramp(0.1), -0.4)
+    t:assertEqual(ramp:Ramp(1), -0.3)
+    t:assertEqual(ramp:Ramp(1), -0.2)
+    t:assertEqual(ramp:Ramp(1), -0.1)
+    t:assertEqual(ramp:Ramp(0), 0.0)
+    t:assertEqual(ramp:Ramp(0), 0.0)
+end)

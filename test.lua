@@ -117,11 +117,18 @@ end
 
 local t = {}
 
+--- Assert that a condition is true.
+---@param value The value to check - must be true for the test to pass.
+---@param message An optional message to show in case of failure.
 function t:assert(value, message)
     local errorPrefix = message and (message..": ") or ""
     assert(value, errorPrefix.."assertion failed!")
 end
 
+--- Assert that two values are equal (or in the case of numbers, very nearly equal).
+---@param actual The actual value produced by your code. Usually the result of a function call.
+---@param expected The value you expect to see.
+---@param message An optional message to show in case of failure.
 function t:assertEqual(actual, expected, message)
     local errorPrefix = message and (message..": ") or ""
     local defaultMsg = errorPrefix.."values were not equal: expected "..tostring(expected)..", but got "..tostring(actual)
