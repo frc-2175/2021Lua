@@ -124,11 +124,15 @@ end
 
 function t:assertEqual(actual, expected, message)
     local errorPrefix = message and (message..": ") or ""
+    local defaultMsg = errorPrefix.."values were not equal: expected "..tostring(expected)..", but got "..tostring(actual)
+    
     if type(actual) == "table" and type(expected) == "table" then
         assert(#actual == #expected, errorPrefix.."tables were not the same size")
         assert(table.unpack(actual) == table.unpack(expected), errorPrefix.."values were not equal: expected "..tostring(expected)..", but got "..tostring(actual))
+    elseif type(actual) == "number" and type(expected) == "number" then
+        assert(math.abs(actual - expected) < 0.00001, defaultMsg)
     else
-        assert(actual == expected, errorPrefix.."values were not equal: expected "..tostring(expected)..", but got "..tostring(actual))
+        assert(actual == expected, defaultMsg)
     end
 end
 

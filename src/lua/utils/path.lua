@@ -81,7 +81,7 @@ function MakeRightArcPathSegment(radius, deg)
     local yEndpoint = radius * math.sin(math.rad(deg))
     local xEndpoint = radius - (radius * math.cos(math.rad(deg)))
     local degreesPerInch = 360 / circumfrence
-    local numPoints = distanceOfPath + 2
+    local numPoints = math.floor(distanceOfPath + 2)
     local path = {}
     for i = 1, numPoints - 1 do
         local angle = (i - 1) * degreesPerInch
