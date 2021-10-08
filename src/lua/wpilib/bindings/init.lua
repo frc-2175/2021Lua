@@ -370,4 +370,7 @@ void* DoubleSolenoid_newWithModule(int moduleNumber, int forwardChannel, int rev
 void DoubleSolenoid_Set(void* _this, int value);
 int DoubleSolenoid_Get(void* _this);
 double GetFPGATimestamp();
+void* AHRS_new(int value);
+float AHRS_GetPitch(void* _this);
+void AHRS_Reset(void* _this);
 ]]

@@ -1,10 +1,12 @@
 require("utils.vector")
 require("utils.math")
 require("utils.pid")
+require("wpilib.ahrs")
 
 local previousClosestPoint = 0;
 local purePursuitPID = NewPIDController(0.02, 0, 0.002);
 local position = NewVector(0, 0)
+local navx = NewAHRS(PortList.kMXP)
 
 function FindClosestPoint(pathResult, fieldPosition, previousClosestPoint)
     local indexOfClosestPoint = 0
@@ -52,7 +54,7 @@ end
 function PurePursuit(pathResult, isBackwards)
     local indexOfClosestPoint = FindClosestPoint(pathResult, position, previousClosestPoint)
     local indexOfGoalPoint = FindGoalPoint(pathResult, position, 25, indexOfClosestPoint)
-    local goalPoint = (pathResult.path[indexOfGoalPoint] - position):rotate(navx.getAngle())
+    local goalPoint = (pathResult.path[indexOfGoalPoint] - position):rotate(math.rad(navx:getAngle()))
     local angle
     if isBackwards then
         angle = -GetAngleToPoint(-goalPoint)
