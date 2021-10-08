@@ -299,14 +299,14 @@ time: {
 }
 
 @include("<frc/SPI.h>")
-@include("<AHRS.h>")
+@include('"AHRS.h"')
 
 arhs: {
   @class("AHRS")
   AHRS: {
     // if i'm getting this right, ports just go to an enum
     // the port we will be using(kMXP) is set to 1. I'll add this enum as a table in lua somewhere
-    @constructor new(@cast("AHRS::Port") int value);
+    @constructor new(@cast("frc::SPI::Port") int value);
     float GetPitch();
     void Reset();
   }
