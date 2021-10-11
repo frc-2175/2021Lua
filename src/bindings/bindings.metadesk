@@ -301,7 +301,7 @@ time: {
 @include("<frc/SPI.h>")
 @include('"AHRS.h"')
 
-arhs: {
+ahrs: {
   @class("AHRS")
   AHRS: {
     // if i'm getting this right, ports just go to an enum
