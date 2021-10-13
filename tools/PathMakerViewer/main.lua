@@ -5,6 +5,7 @@ local width, height = love.graphics.getDimensions()
 local currentMode = "line"
 local wasDown = false
 local gridSnap = 6
+local src1 
 
 function Round(num)
     return num + (2^52 + 2^51) - (2^52 + 2^51)
@@ -108,10 +109,17 @@ end
 local lines = NewLines()
 
 function love.load()
+    src1 = love.audio.newSource("sus.mp3", "static")
+
+    
     love.graphics.setPointSize(3)
 end
 
 function love.update()
+    if not src1:isPlaying( ) then
+		love.audio.play( src1 )
+	end
+    
     if love.keyboard.isDown("lctrl") and love.keyboard.isDown("z") then
         if wasDown == false then
             wasDown = true
