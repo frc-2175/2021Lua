@@ -145,7 +145,7 @@ function love.draw()
     for counter2 = height/2, height, 63 do 
         for counter = width/2, width, 63 do
             love.graphics.setColor(255,255,255,0.5)
-            love.graphics.circle("fill",Snap(counter),Snap(counter2),3)
+            love.graphics.circle("fill", gridSnap * Round(counter/gridSnap),gridSnap*Round(counter2/gridSnap),3)
             love.graphics.setColor(1,1,1,1)
             
         end
