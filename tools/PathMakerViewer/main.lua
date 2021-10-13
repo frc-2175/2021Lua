@@ -1,3 +1,4 @@
+require("src.lua.utils.vector")
 require("coord")
 
 love.window.maximize()
@@ -7,11 +8,14 @@ local wasDown = false
 local gridSnap = 6
 
 function Round(num)
-    return num + (2^52 + 2^51) - (2^52 + 2^51)
+    return math.floor(num + 0.5)
 end
 
-function Snap(num)
-    return gridSnap * Round(num / gridSnap)
+function Snap(vector)
+    return NewVector(
+        gridSnap * Round(vector.x / gridSnap),
+        gridSnap * Round(vector.y / gridSnap)
+    )
 end
 
 function NewPoints()
@@ -33,71 +37,71 @@ local points = NewPoints()
 function NewLines()
     local l = {
         list = {},
-        add = function (self, px1, py1)
+        add = function (self, vector)
             self.list[#self.list+1] = {
-                x1 = px1,
-                y1 = py1,
-                cx1 = Snap(CoordX(px1)),
-                cy1 = Snap(CoordY(py1))
+                a = Snap(vector)
             }
         end,
-        draw = function (self, mx, my)
-            mx = Snap(CoordX(mx))
-            my = Snap(CoordY(my))
+        draw = function (self, mouseVector)
+            mx = Snap(mouseVector).x
+            my = Snap(mouseVector).y
             love.graphics.setLineWidth(2)
             love.graphics.setColor(1, 0, 0)
+            local x
+            local y
             for i, v in ipairs(self.list) do
+                if v.b == nil then
+                    x = mx
+                    y = my
+                else
+                    x = v.b.x
+                    y = v.b.y
+                end
                 love.graphics.line(
-                    FromXCoord(v.cx1),
-                    FromYCoord(v.cy1),
-                    FromXCoord(v.cx2 or mx),
-                    FromYCoord(v.cy2 or my)
+                    FromXCoord(v.a.x),
+                    FromYCoord(v.a.y),
+                    FromXCoord(x),
+                    FromYCoord(y)
                 )
             end
         end,
-        length = function (self, index)
-            local line = self.list[index]
-            return math.sqrt((line.cx1 - line.cx2)^2 + (line.cy1 - line.cy2)^2)
-        end,
         makePathFunc = function (self)
-            local funcString = ""
+            local funcTable = {}
             local startLine = self.list[1]
-            local xOffset = -startLine.cx1
-            local yOffset = -startLine.cy1
-            local angleOffset = math.deg(math.acos(startLine.cx2/self:length(1) - startLine.cx1/self:length(1)))
-            local angle, angleDiff, x1, y1, x2, y2, length
-            local oldAngle = 0
+            local xOffset = -startLine.a.x
+            local yOffset = -startLine.a.y
+            local angle, x1, y1, x2, y2, length, stand, prev, angSign
             for i, line in ipairs(self.list) do
-                x1 = line.cx1 + xOffset
-                y1 = line.cy1 + yOffset
-                x2 = line.cx2 + xOffset
-                y2 = line.cy2 + yOffset
-                length = self:length(i)
+                length = (line.b - line.a):length()
+                stand = (line.b - line.a):normalized()
 
-                if y1 < y2 then
-                    angle = math.deg(math.acos(x2/length - x1/length)) - angleOffset
-                elseif y1 > y2 then
-                    angle = -math.deg(math.acos(x2/length - x1/length)) - angleOffset
+                if i > 1 then
+                    prev = self.list[i-1]
+                    prev = (prev.b - prev.a):normalized()
+                    angle = math.acos(stand.x * prev.x + stand.y * prev.y)
+                    angle = math.deg(angle)
+                    angSign = stand.x * -prev.y + stand.y * prev.x
                 else
-                    angle = 0 - angleOffset
+                    angle = 0
+                    angSign = 0
                 end
 
-                angleDiff = angle - oldAngle
-
-                if angleDiff > 0 then
-                    funcString = funcString .. "MakeLeftArcPathSegment(1, " .. angleDiff .. "), "
-                elseif angleDiff < 0 then
-                    funcString = funcString .. "MakeRightArcPathSegment(1, " .. -angleDiff .. "), "
+                if angSign > 0 then
+                    funcTable[#funcTable+1] = "MakeLeftArcPathSegment(1, " .. angle .. "), "
+                elseif angSign < 0 then
+                    funcTable[#funcTable+1] = "MakeRightArcPathSegment(1, " .. angle .. "), "
+                elseif angle == 180 then
+                    funcTable[#funcTable+1] = "MakeLeftArcPathSegment(1, 180), "
                 end
-                
+
                 if i == #self.list then
-                    funcString = funcString .. "MakeLinePathSegment(" .. length .. ")"
+                    funcTable[#funcTable+1] = "MakeLinePathSegment(" .. length .. ")"
                 else
-                    funcString = funcString .. "MakeLinePathSegment(" .. length .. "), "
+                    funcTable[#funcTable+1] = "MakeLinePathSegment(" .. length .. "), "
                 end
-
-                oldAngle = angle
             end
+            
+            local funcString = table.concat(funcTable)
             love.system.setClipboardText(funcString)
         end
     }
@@ -125,7 +129,7 @@ end
 function love.draw()
     -- get mouse
     local mx, my = love.mouse.getPosition();
-    local mouse = Coord(mx, my);
+    local mouse = Coord(NewVector(mx, my));
 
 
     -- draw axes
@@ -136,14 +140,14 @@ function love.draw()
     love.graphics.line(width/2, 0, width/2, height)
 
     points:draw()
-    lines:draw(mx, my)
+    lines:draw(mouse)
 
 end
 
 function love.mousepressed(x, y, button)
     if button == 1 then
         if currentMode == "line" then
-            lines:add(x, y)
+            lines:add(Coord(NewVector(x, y)))
         elseif currentMode == "point" then
             points:add(x, y)
         end
@@ -155,10 +159,7 @@ end
 function love.mousereleased(x, y, button)
     if button == 1 then
         if currentMode == "line" then
-            lines.list[#lines.list].x2 = x
-            lines.list[#lines.list].y2 = y
-            lines.list[#lines.list].cx2 = Snap(CoordX(x))
-            lines.list[#lines.list].cy2 = Snap(CoordY(y))
+            lines.list[#lines.list].b = Snap(Coord(NewVector(x, y)))
         end
     end
 end

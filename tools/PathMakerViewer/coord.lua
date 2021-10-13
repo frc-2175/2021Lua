@@ -2,13 +2,11 @@ love.window.maximize()
 local width, height = love.graphics.getDimensions()
 local scale = 50
 
-function Coord(px, py)
-    local c = {
-        x = 2 * scale * width / height * (px/width - 0.5),
-        y = -2 * scale * ((py or 0)/height - 0.5)
-    }
-
-    return c
+function Coord(vector)
+    return NewVector(
+        2 * scale * width / height * (vector.x/width - 0.5),
+        -2 * scale * (vector.y/height - 0.5)
+    )
 end
 
 function CoordX(px)

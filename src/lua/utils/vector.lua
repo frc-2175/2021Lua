@@ -1,9 +1,21 @@
 local vec_metatable = {
     __add = function(a, b)
-        return NewVector(a.x + b.x, a.y + b.y)
+        if type(b) == "number" then
+            return NewVector(a.x + b, a.x + b)
+        elseif type(a) == "number" then
+            return NewVector(a + b.x, a + b.y)
+        else
+            return NewVector(a.x + b.x, a.y + b.y)
+        end
     end,
     __sub = function(a, b)
-        return NewVector(a.x - b.x, a.y - b.y)
+        if type(b) == "number" then
+            return NewVector(a.x - b, a.x - b)
+        elseif type(a) == "number" then
+            return NewVector(a - b.x, a - b.y)
+        else
+            return NewVector(a.x - b.x, a.y - b.y)
+        end
     end,
     __mul = function(a, b)
         if type(a) == "number" then
