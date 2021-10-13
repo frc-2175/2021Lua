@@ -1,6 +1,8 @@
 require("src.lua.utils.vector")
 require("coord")
 
+love.window.setTitle("Path Maker/Viewer")
+love.window.setIcon(love.image.newImageData("icon.png"))
 love.window.maximize()
 local width, height = love.graphics.getDimensions()
 local currentMode = "line"
@@ -70,6 +72,14 @@ function NewLines()
             end
         end,
         makePathFunc = function (self)
+            if self.list[#self.list] == nil then
+                love.system.setClipboardText("Nothing to copy!")
+                return
+            elseif self.list[#self.list].b == nil then
+                love.system.setClipboardText("You didn't finish your line!")
+                return
+            end
+
             local funcTable = {}
             local startLine = self.list[1]
             local xOffset = -startLine.a.x
@@ -116,7 +126,7 @@ end
 local lines = NewLines()
 
 function love.load()
-    love.graphics.setPointSize(3)
+    love.graphics.setPointSize(2)
 end
 
 function love.update()
