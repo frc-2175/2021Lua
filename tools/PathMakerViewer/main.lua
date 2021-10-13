@@ -49,6 +49,10 @@ function NewLines()
             love.graphics.setColor(1, 0, 0)
             local x
             local y
+            if self.list == nil then
+                love.system.setClipboardText("Nothing to copy")
+                return 0
+            end
             for i, v in ipairs(self.list) do
                 if v.b == nil then
                     x = mx
@@ -124,6 +128,14 @@ function love.update()
     else
         wasDown = false
     end
+
+    if love.keyboard.isDown("=") then
+        scale = scale / zoomFactor
+    end
+    if love.keyboard.isDown("-") then
+        scale = scale * zoomFactor
+    end
+    
 end
 
 function love.draw()
@@ -139,18 +151,17 @@ function love.draw()
     love.graphics.line(0, height/2, width, height/2)
     love.graphics.line(width/2, 0, width/2, height)
 
+    -- draw grid
+    local gridUnits = (gridSnap*height)/(2*scale)
+    for x = width / 2 + gridUnits, width, gridUnits do
+        for y = height / 2 + gridUnits, height, gridUnits do
+            love.graphics.setColor(0.33, 0.33, 0.33)
+            love.graphics.points(x, y, width-x, y, x, height-y, width-x, height-y)
+        end
+    end
+
     points:draw()
     lines:draw(mouse)
-
-    for counter2 = height/2, height, 63 do 
-        for counter = width/2, width, 63 do
-            love.graphics.setColor(255,255,255,0.5)
-            love.graphics.circle("fill", gridSnap * Round(counter/gridSnap),gridSnap*Round(counter2/gridSnap),3)
-            love.graphics.setColor(1,1,1,1)
-            
-        end
-      
-    end
 
 end
 

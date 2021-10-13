@@ -1,6 +1,8 @@
 love.window.maximize()
 local width, height = love.graphics.getDimensions()
-local scale = 50
+
+zoomFactor = 1.05
+scale = 50
 
 function Coord(vector)
     return NewVector(
