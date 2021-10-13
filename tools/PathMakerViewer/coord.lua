@@ -2,6 +2,7 @@ love.window.maximize()
 local width, height = love.graphics.getDimensions()
 
 zoomFactor = 1.05
+scrollZoomFactor = 1.02
 scale = 50
 
 function Coord(vector)

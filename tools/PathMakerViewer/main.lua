@@ -138,18 +138,14 @@ function love.update()
     
 end
 
+function love.wheelmoved(x, y)
+    scale = scale * scrollZoomFactor^-y
+end
+
 function love.draw()
     -- get mouse
     local mx, my = love.mouse.getPosition();
     local mouse = Coord(NewVector(mx, my));
-
-
-    -- draw axes
-    love.graphics.setLineWidth(3);
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print("X: " .. string.format("%.1f", mouse.x) .. "\nY: " .. string.format("%.1f", mouse.y), 0, 0)
-    love.graphics.line(0, height/2, width, height/2)
-    love.graphics.line(width/2, 0, width/2, height)
 
     -- draw grid
     local gridUnits = (gridSnap*height)/(2*scale)
@@ -159,6 +155,13 @@ function love.draw()
             love.graphics.points(x, y, width-x, y, x, height-y, width-x, height-y)
         end
     end
+
+    -- draw axes
+    love.graphics.setLineWidth(3);
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("X: " .. string.format("%.1f", mouse.x) .. "\nY: " .. string.format("%.1f", mouse.y), 0, 0)
+    love.graphics.line(0, height/2, width, height/2)
+    love.graphics.line(width/2, 0, width/2, height)
 
     points:draw()
     lines:draw(mouse)
