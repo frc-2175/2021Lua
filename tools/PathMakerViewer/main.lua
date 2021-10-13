@@ -7,6 +7,7 @@ local wasDown = false
 local gridSnap = 6
 local src1 
 
+
 function Round(num)
     return num + (2^52 + 2^51) - (2^52 + 2^51)
 end
@@ -138,14 +139,27 @@ function love.draw()
 
     -- draw axes
     love.graphics.setLineWidth(3);
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print("X: " .. string.format("%.1f", mouse.x) .. "\nY: " .. string.format("%.1f", mouse.y), 0, 0)
+    love.graphics.setColor(1, 1, 1,0.9)
+    love.graphics.print("X: " .. string.format("%.1f", love.mouse.getX()-width/2) .. "\nY: " .. string.format("%.1f", love.mouse.getY()-(height/2)), 0, 0)
+    love.graphics.print("X: " .. string.format("%.1f", mouse.x) .. "\nY: " .. string.format("%.1f", mouse.y), 0, 50)
+    love.graphics.setColor(1, 1, 1,0.25)
     love.graphics.line(0, height/2, width, height/2)
     love.graphics.line(width/2, 0, width/2, height)
 
     points:draw()
     lines:draw(mx, my)
 
+    --grid?? 90.8 max for x and 50 max for y 
+
+    for counter2 = height/2, height, 63 do 
+        for counter = width/2, width, 63 do
+            love.graphics.setColor(255,255,255,0.5)
+            love.graphics.circle("fill",counter,counter2,3)
+            love.graphics.setColor(1,1,1,1)
+            
+        end
+      
+    end
 end
 
 function love.mousepressed(x, y, button)
