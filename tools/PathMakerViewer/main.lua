@@ -20,22 +20,6 @@ function Snap(vector)
     )
 end
 
-function NewPoints()
-    local p = {
-        list = {},
-        add = function (self, px, py)
-            self.list[#self.list+1] = {px, py}
-        end,
-        draw = function (self)
-            love.graphics.points(self.list)
-        end
-    }
-
-    return p
-end
-
-local points = NewPoints()
-
 function NewLines()
     local l = {
         list = {},
@@ -173,7 +157,6 @@ function love.draw()
     love.graphics.line(0, height/2, width, height/2)
     love.graphics.line(width/2, 0, width/2, height)
 
-    points:draw()
     lines:draw(mouse)
 
 end
@@ -182,8 +165,6 @@ function love.mousepressed(x, y, button)
     if button == 1 then
         if currentMode == "line" then
             lines:add(Coord(NewVector(x, y)))
-        elseif currentMode == "point" then
-            points:add(x, y)
         end
     elseif button == 2 then
         lines:makePathFunc()
