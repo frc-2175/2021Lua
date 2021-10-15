@@ -16,6 +16,22 @@ arcCenter = {
     y = nil,
 }
 
+function renderList()
+    local r = {
+        list = {},
+        drawAll = function(self)
+            for i, v in ipairs(self.list) do
+                local f = loadstring(v)
+                f()
+            end
+        end,
+    }
+
+    return r
+end
+
+drawList = renderList()
+
 function Round(num)
     return math.floor(num + 0.5)
 end
@@ -32,7 +48,8 @@ function NewLines()
         list = {},
         add = function (self, vector)
             self.list[#self.list+1] = {
-                a = Snap(vector)
+                a = Snap(vector),
+                a2 = Snap(vector)
             }
         end,
         draw = function (self, mouseVector)
@@ -47,16 +64,16 @@ function NewLines()
                 return 0
             end
             for i, v in ipairs(self.list) do
-                if v.b == nil then
+                if v.b2 == nil then
                     x = mx
                     y = my
                 else
-                    x = v.b.x
-                    y = v.b.y
+                    x = v.b2.x
+                    y = v.b2.y
                 end
                 love.graphics.line(
-                    FromXCoord(v.a.x),
-                    FromYCoord(v.a.y),
+                    FromXCoord(v.a2.x),
+                    FromYCoord(v.a2.y),
                     FromXCoord(x),
                     FromYCoord(y)
                 )
@@ -75,9 +92,8 @@ function NewLines()
             local startLine = self.list[1]
             local xOffset = -startLine.a.x
             local yOffset = -startLine.a.y
-            local angle, length, stand, prev, prevn, angSign, angBetween, tanMult
+            local angle, length, stand, prev, prevn, angSign, angBetween, tanMult, future, futAng
             for i, line in ipairs(self.list) do
-                length = (line.b - line.a):length()
                 stand = (line.b - line.a):normalized()
 
                 if i > 1 then
@@ -89,9 +105,22 @@ function NewLines()
                     angBetween = 180 - angle
                     arcCenter = prev.b + (((prev.a - line.a):normalized() + stand)*(turnRadius/math.sin(math.rad(angBetween))))
                     tanMult = turnRadius / math.tan(math.rad(angBetween / 2))
+                    self.list[i].a2 = line.a + (tanMult * (line.b - line.a):normalized())
+                    -- drawList.list[#drawList.list+1] = 'love.graphics.arc( "line", "open", ' .. arcCenter.x .. ", " .. arcCenter.y .. ", " ..    turnRadius .. ", " .. angle1 .. ", " .. angle2 .. ', 32)'
                 else
                     angle = 0
                     angSign = 0
+                end
+                
+                if i ~= #self.list then
+                    future = self.list[i+1]
+                    futStand = (future.b - future.a):normalized()
+                    futAng = math.acos(futStand.x * stand.x + futStand.y * stand.y)
+                    futAng = math.deg(futAng)
+                    angSign = futStand.x * -stand.y + futStand.y * stand.x
+                    angBetween = 180 - futAng
+                    tanMult = turnRadius / math.tan(math.rad(angBetween / 2))
+                    self.list[i].b2 = line.b + (tanMult * (line.a - line.b):normalized())
                 end
 
                 if angSign > 0 then
@@ -101,6 +130,8 @@ function NewLines()
                 elseif angle == 180 then
                     funcTable[#funcTable+1] = "MakeLeftArcPathSegment(1, 180), "
                 end
+
+                length  = (line.b - line.a):length()
 
                 if i == #self.list then
                     funcTable[#funcTable+1] = "MakeLinePathSegment(" .. length .. ")"
@@ -198,6 +229,7 @@ function love.mousereleased(x, y, button)
     if button == 1 then
         if currentMode == "line" then
             lines.list[#lines.list].b = Snap(Coord(NewVector(x, y)))
+            lines.list[#lines.list].b2 = Snap(Coord(NewVector(x, y)))
         end
     end
 end
