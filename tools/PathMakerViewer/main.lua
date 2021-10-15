@@ -1,5 +1,6 @@
 require("src.lua.utils.vector")
 require("coord")
+require("ui")
 
 love.window.setTitle("Path Maker/Viewer")
 love.window.setIcon(love.image.newImageData("icon.png"))
@@ -174,7 +175,14 @@ function love.draw()
 
     lines:draw(mouse)
     
+    love.graphics.setColor(0.8, 0.8, 0.8)
     love.graphics.circle("line", FromXCoord(arcCenter.x or 6), FromYCoord(arcCenter.y or 3.5147), turnRadius * gridUnits / 6, 64)
+
+    if DoButton(NewRectangle(100, 100, 200, 50), "Hi I'm a button") then
+        print("Clicked a button")
+    end
+
+    UpdateUI()
 end
 
 function love.mousepressed(x, y, button)
