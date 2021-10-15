@@ -8,6 +8,12 @@ local width, height = love.graphics.getDimensions()
 local currentMode = "line"
 local wasDown = false
 local gridSnap = 6
+local gridUnits = (gridSnap*height)/(2*scale)
+local turnRadius = 6
+arcCenter = {
+    x = nil,
+    y = nil,
+}
 
 function Round(num)
     return math.floor(num + 0.5)
@@ -57,10 +63,10 @@ function NewLines()
         end,
         makePathFunc = function (self)
             if self.list[#self.list] == nil then
-                love.system.setClipboardText("Nothing to copy!")
+                love.window.showMessageBox("You fool!", "There's nothing to copy.", "error")
                 return
             elseif self.list[#self.list].b == nil then
-                love.system.setClipboardText("You didn't finish your line!")
+                love.window.showMessageBox("You fool!", "You didn't finish a line.", "error")
                 return
             end
 
@@ -68,17 +74,20 @@ function NewLines()
             local startLine = self.list[1]
             local xOffset = -startLine.a.x
             local yOffset = -startLine.a.y
-            local angle, x1, y1, x2, y2, length, stand, prev, angSign
+            local angle, length, stand, prev, prevn, angSign, angBetween, tanMult
             for i, line in ipairs(self.list) do
                 length = (line.b - line.a):length()
                 stand = (line.b - line.a):normalized()
 
                 if i > 1 then
                     prev = self.list[i-1]
-                    prev = (prev.b - prev.a):normalized()
-                    angle = math.acos(stand.x * prev.x + stand.y * prev.y)
+                    prevn = (prev.b - prev.a):normalized()
+                    angle = math.acos(stand.x * prevn.x + stand.y * prevn.y)
                     angle = math.deg(angle)
-                    angSign = stand.x * -prev.y + stand.y * prev.x
+                    angSign = stand.x * -prevn.y + stand.y * prevn.x
+                    angBetween = 180 - angle
+                    arcCenter = prev.b + (((prev.a - line.a):normalized() + stand)*(turnRadius/math.sin(math.rad(angBetween))))
+                    tanMult = turnRadius / math.tan(math.rad(angBetween / 2))
                 else
                     angle = 0
                     angSign = 0
@@ -123,6 +132,10 @@ function love.update()
         wasDown = false
     end
 
+    if love.keyboard.isDown("lctrl") and love.keyboard.isDown("c") then
+        lines:makePathFunc()
+    end
+
     if love.keyboard.isDown("=") then
         scale = scale / zoomFactor
     end
@@ -142,11 +155,13 @@ function love.draw()
     local mouse = Coord(NewVector(mx, my));
 
     -- draw grid
-    local gridUnits = (gridSnap*height)/(2*scale)
-    for x = width / 2 + gridUnits, width, gridUnits do
-        for y = height / 2 + gridUnits, height, gridUnits do
-            love.graphics.setColor(0.33, 0.33, 0.33)
-            love.graphics.points(x, y, width-x, y, x, height-y, width-x, height-y)
+    gridUnits = (gridSnap*height)/(2*scale)
+    if gridUnits > 2 then
+        for x = width / 2 + gridUnits, width, gridUnits do
+            for y = height / 2 + gridUnits, height, gridUnits do
+                love.graphics.setColor(0.33, 0.33, 0.33)
+                love.graphics.points(x, y, width-x, y, x, height-y, width-x, height-y)
+            end
         end
     end
 
@@ -158,7 +173,8 @@ function love.draw()
     love.graphics.line(width/2, 0, width/2, height)
 
     lines:draw(mouse)
-
+    
+    love.graphics.circle("line", FromXCoord(arcCenter.x or 6), FromYCoord(arcCenter.y or 3.5147), turnRadius * gridUnits / 6, 64)
 end
 
 function love.mousepressed(x, y, button)
@@ -167,7 +183,6 @@ function love.mousepressed(x, y, button)
             lines:add(Coord(NewVector(x, y)))
         end
     elseif button == 2 then
-        lines:makePathFunc()
     end
 end
 
