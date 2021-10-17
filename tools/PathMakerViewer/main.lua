@@ -1,4 +1,5 @@
 require("src.lua.utils.vector")
+require("src.lua.utils.math")
 require("coord")
 require("ui")
 
@@ -11,10 +12,18 @@ local wasDown = false
 local gridSnap = 6
 local gridUnits = (gridSnap*height)/(2*scale)
 local turnRadius = 6
-arcCenter = {
+local arcCenter = {
     x = nil,
     y = nil,
 }
+
+function deg(n)
+    return math.deg(n)
+end
+
+function rad(n)
+    return math.rad(n)
+end
 
 function renderList()
     local r = {
@@ -46,10 +55,20 @@ end
 function NewLines()
     local l = {
         list = {},
+        arcList = {},
         add = function (self, vector)
             self.list[#self.list+1] = {
                 a = Snap(vector),
                 a2 = Snap(vector)
+            }
+        end,
+        addArc = function (self, x, y, rad, ang1, ang2)
+            self.arcList[#self.arcList+1] = {
+                x = x,
+                y = y,
+                rad = rad,
+                ang1 = ang1,
+                ang2 = ang2
             }
         end,
         draw = function (self, mouseVector)
@@ -79,6 +98,12 @@ function NewLines()
                 )
             end
         end,
+        drawArcs = function(self)
+            for i, v in ipairs(self.arcList) do
+                love.graphics.setColor(1, 0, 0)
+                love.graphics.arc("line", "open", FromXCoord(v.x), FromYCoord(v.y), v.rad, -v.ang1, v.ang2, 32)
+            end
+        end,
         makePathFunc = function (self)
             if self.list[#self.list] == nil then
                 love.window.showMessageBox("You fool!", "There's nothing to copy.", "error")
@@ -92,7 +117,11 @@ function NewLines()
             local startLine = self.list[1]
             local xOffset = -startLine.a.x
             local yOffset = -startLine.a.y
-            local angle, length, stand, prev, prevn, angSign, angBetween, tanMult, future, futAng
+            local arcAng1 = 0
+            local arcAng2 = 0
+            local arcOffset = 0
+            local length, stand, prev, prevn, angSign, tanMult, future, futAng
+            self.arcList = {}
             for i, line in ipairs(self.list) do
                 stand = (line.b - line.a):normalized()
 
@@ -106,7 +135,17 @@ function NewLines()
                     arcCenter = prev.b + (((prev.a - line.a):normalized() + stand)*(turnRadius/math.sin(math.rad(angBetween))))
                     tanMult = turnRadius / math.tan(math.rad(angBetween / 2))
                     self.list[i].a2 = line.a + (tanMult * (line.b - line.a):normalized())
-                    -- drawList.list[#drawList.list+1] = 'love.graphics.arc( "line", "open", ' .. arcCenter.x .. ", " .. arcCenter.y .. ", " ..    turnRadius .. ", " .. angle1 .. ", " .. angle2 .. ', 32)'
+                    arcAng1 = sign(math.sin((self.list[i].a2 - arcCenter):normalized().y))*math.acos((self.list[i].a2 - arcCenter):normalized().x)
+                    arcAng2 = sign(math.sin((prev.b2 - arcCenter):normalized().y))*math.acos((prev.b2 - arcCenter):normalized().x)
+                    if sign(math.sin((prev.b2 - arcCenter):normalized().y)) == 0 and angSign ~= 0 then
+                        arcAng2 = math.pi
+                    end
+                    print("\n")
+                    print("ang1: " .. deg(arcAng1))
+                    print("ang2: " .. deg(arcAng2))
+                    if arcAng2 > arcAng1 then
+                        arcAng2 = -arcAng2
+                    end
                 else
                     angle = 0
                     angSign = 0
@@ -117,16 +156,17 @@ function NewLines()
                     futStand = (future.b - future.a):normalized()
                     futAng = math.acos(futStand.x * stand.x + futStand.y * stand.y)
                     futAng = math.deg(futAng)
-                    angSign = futStand.x * -stand.y + futStand.y * stand.x
                     angBetween = 180 - futAng
                     tanMult = turnRadius / math.tan(math.rad(angBetween / 2))
                     self.list[i].b2 = line.b + (tanMult * (line.a - line.b):normalized())
                 end
 
                 if angSign > 0 then
-                    funcTable[#funcTable+1] = "MakeLeftArcPathSegment(1, " .. angle .. "), "
+                    funcTable[#funcTable+1] = "MakeLeftArcPathSegment(" .. turnRadius ..", " .. angle .. "), "
+                    self:addArc(arcCenter.x, arcCenter.y, turnRadius * gridUnits / gridSnap, arcAng1, -arcAng2)
                 elseif angSign < 0 then
-                    funcTable[#funcTable+1] = "MakeRightArcPathSegment(1, " .. angle .. "), "
+                    funcTable[#funcTable+1] = "MakeRightArcPathSegment(" .. turnRadius ..", " .. angle .. "), "
+                    self:addArc(arcCenter.x, arcCenter.y, turnRadius * gridUnits / gridSnap, arcAng1, arcAng2)
                 elseif angle == 180 then
                     funcTable[#funcTable+1] = "MakeLeftArcPathSegment(1, 180), "
                 end
@@ -141,6 +181,7 @@ function NewLines()
             end
             
             local funcString = table.concat(funcTable)
+            print(funcString)
             love.system.setClipboardText(funcString)
         end
     }
@@ -162,6 +203,7 @@ function love.update()
     if love.keyboard.isDown("lctrl") and love.keyboard.isDown("z") then
         if wasDown == false then
             wasDown = true
+            table.remove(lines.arcList, #lines.arcList)
             table.remove(lines.list, #lines.list)
         end
     else
@@ -214,10 +256,9 @@ function love.draw()
     love.graphics.line(width/2, 0, width/2, height)
 
     lines:draw(mouse)
-    
-    love.graphics.setColor(0.8, 0.8, 0.8)
-    love.graphics.circle("line", FromXCoord(arcCenter.x or 6), FromYCoord(arcCenter.y or 3.5147), turnRadius * gridUnits / 6, 64)
+    lines:drawArcs()
 
+    love.graphics.setColor(1, 1, 1)
     ui.draw()
 end
 
