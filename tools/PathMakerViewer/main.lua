@@ -154,7 +154,11 @@ function love.load()
     love.graphics.setPointSize(2)
 end
 
+local handlePos = NewVector(200, 200)
+
 function love.update()
+    ui.update()
+
     if love.keyboard.isDown("lctrl") and love.keyboard.isDown("z") then
         if wasDown == false then
             wasDown = true
@@ -175,6 +179,11 @@ function love.update()
         scale = scale * zoomFactor
     end
     
+    if ui.doButton(NewRectangle(100, 100, 200, 50), "Hi I'm a button") then
+        print("Clicked a button")
+    end
+
+    handlePos = ui.doDragHandle(handlePos, 20)
 end
 
 function love.wheelmoved(x, y)
@@ -209,11 +218,7 @@ function love.draw()
     love.graphics.setColor(0.8, 0.8, 0.8)
     love.graphics.circle("line", FromXCoord(arcCenter.x or 6), FromYCoord(arcCenter.y or 3.5147), turnRadius * gridUnits / 6, 64)
 
-    if DoButton(NewRectangle(100, 100, 200, 50), "Hi I'm a button") then
-        print("Clicked a button")
-    end
-
-    UpdateUI()
+    ui.draw()
 end
 
 function love.mousepressed(x, y, button)
