@@ -6,7 +6,6 @@ require("utils.vector")
 
 safeMode = false
 minTurnRateLimit = 0.5
-minShooterSpeed = 0.2
 minSpeedLimit = 0.7
 shooterSpeed = 0
 simMode = false
@@ -102,12 +101,15 @@ function robot.teleopPeriodic()
     gearSolenoid:set(rightStick:getButton(11))
 
     -- this is autofeed behavior, which also disables manual control
+
+    -- Clarify what didAutoFeed does.
     local didAutoFeed = autoFeed:runWhile(gamepad:getButton(XboxButtons.A))
 
     if not didAutoFeed then
         if leftStick:getButton(1) then
             shooter:set(shooterSpeed)
             if rightStick:getButton(1) then
+                
                 feeder:set(-1)
             else
                 feeder:set(0)
@@ -148,4 +150,3 @@ function robot.autonomousPeriodic()
         robotDrive:arcadeDrive(0, 0)
     end
 end
-

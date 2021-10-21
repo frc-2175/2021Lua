@@ -194,7 +194,7 @@ function SparkMaxEncoder:getPosition()
 end
 
 function SparkMaxEncoder:getVelocity()
-    return ffi.C.SparkMaxEncoder_GetPosition(self.encoder)
+    return ffi.C.SparkMaxEncoder_GetVelocity(self.encoder)
 end
 
 function SparkMaxEncoder:setPosition(position)
@@ -202,7 +202,7 @@ function SparkMaxEncoder:setPosition(position)
 end
 
 function SparkMaxEncoder:setPositionConversionFactor(factor)
-    return ffi.C.SparkMaxEncoder_SetPosition(self.encoder, factor)
+    return ffi.C.SparkMaxEncoder_SetPositionConversionFactor(self.encoder, factor)
 end
 
 function SparkMaxEncoder:setVelocityConversionFactor(factor)

@@ -13,14 +13,17 @@ autoFeed = NewTeleopCoroutine(function()
 
     -- run just the feeder
     feederTimer:start()
-    while feederTimer:getElapsedTimeSeconds() < 0.5 do
-        feeder:set(1)
+    while feederTimer:getElapsedTimeSeconds() < 1 do
+        shooter:set(shooterSpeed)
+        feeder:set(-1)
         coroutine.yield()
     end
 
     -- run both the feeder and the magazine
     while true do
-        magazine:set(0.87)
+        shooter:set(shooterSpeed)
+        feeder:set(-1)
+        mainMagazine:set(-0.87)
         coroutine.yield()
     end
 end)
