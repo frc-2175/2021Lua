@@ -19,16 +19,12 @@ function robot.robotInit()
     else
         -- real left motor
         leftMaster = TalonFX:new(15) -- making a motor !
-        leftMaster:setInverted(CTRETalonFXInvertType.Clockwise) -- setting up, making it inverted
+        leftMaster:setInverted(CTRETalonFXInvertType.CounterClockwise) -- setting up, making it inverted
     end
 
-    leftFollower1 = VictorSPX:new(11)
+    leftFollower1 = TalonFX:new(16)
     leftFollower1:follow(leftMaster)
-    leftFollower1:setInverted(CTREInvertType.OpposeMaster)
-
-    leftFollower2 = VictorSPX:new(10)
-    leftFollower2:follow(leftMaster)
-    leftFollower2:setInverted(CTREInvertType.OpposeMaster)
+    leftFollower1:setInverted(CTREInvertType.FollowMaster)
 
     mainMagazine = TalonSRX:new(6)
     -- mainMagazine:setInverted(CTREInvertType.InvertMotorOutput)
@@ -39,21 +35,17 @@ function robot.robotInit()
 
     if simMode then
         -- sim right motor
-        rightMaster = TalonSRX:new(16)
+        rightMaster = TalonSRX:new(17)
         rightMaster:setInverted(CTREInvertType.None)
     else
         -- real right motor
-        rightMaster = TalonFX:new(16)
-        rightMaster:setInverted(CTRETalonFXInvertType.Clockwise)
+        rightMaster = TalonFX:new(17)
+        rightMaster:setInverted(CTRETalonFXInvertType.CounterClockwise)
     end
 
-    rightFollower1 = VictorSPX:new(9)
+    rightFollower1 = TalonFX:new(18)
     rightFollower1:follow(rightMaster)
-    rightFollower1:setInverted(CTREInvertType.OpposeMaster)
-
-    rightFollower2 = VictorSPX:new(8)
-    rightFollower2:follow(rightMaster)
-    rightFollower2:setInverted(CTREInvertType.OpposeMaster)
+    rightFollower1:setInverted(CTREInvertType.FollowMaster)
 
     robotDrive = DifferentialDrive:new(leftMaster, rightMaster) -- DifferentialDrive manages all driving math
 
@@ -71,7 +63,7 @@ function robot.robotInit()
 
     feeder = VictorSPX:new(3)
 
-    ramp = NewRamp(0.1, 0.2)
+    ramp = NewRamp(0.2, 0.4)
 end
 
 -- teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
