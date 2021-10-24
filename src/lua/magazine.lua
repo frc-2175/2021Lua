@@ -16,9 +16,8 @@ function stopMagazine()
     otherMagazineMotor:set(0)
 end
 
--- ✩ Actually just sets speed of magazine motor ✩
--- @param speed speed to set magazine motor to
-
+--- ✩ Actually just sets speed of magazine motor ✩
+---@param speed number
 function setMagazineMotor(speed) 
     magazineMotor:set(speed)
     otherMagazineMotor:set(speed)

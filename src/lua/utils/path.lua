@@ -3,7 +3,34 @@ require("utils.math")
 
 -- Oh boyo, here we go!
 
---- _/‾\_
+--- A way of moving a robot from a starting speed to a middle speed and then to an ending speed, ramping inbetween. 
+--- A graph of velocity over time would look like \_|/‾\\\_ with the `|` symbol representing time = 0.
+---
+--- This function takes 7 arguments:
+--- - `startSpeed`, `middleSpeed`, and `endSpeed` are pretty self-explanatory. 
+--- - `totalDistance` is the total distance you want the 'trapezoid' shape to occur over.
+--- - `rampUpDistance` and `rampDownDistance` are the distances along the 'trapezoid' 
+--- that the robot will start accelerating or decelerating.
+--- - `currentDistance` is how far along the 'trapezoid' the robot already is.
+---
+--- Examples:
+--- - `GetTrapezoidSpeed(0, 1, 0.5, 3, 1, 1, -1)` returns the startSpeed `0`
+--- - `GetTrapezoidSpeed(0, 1, 0.5, 3, 1, 1, 0)` returns the startSpeed `0`
+--- - `GetTrapezoidSpeed(0, 1, 0.5, 3, 1, 1, 0.5)` returns `0.5` which is halfway between the startSpeed `0` and the
+--- middleSpeed `1` because currentDistance `0.5` is half of the rampUpDistance `1`
+--- - `GetTrapezoidSpeed(0, 1, 0.5, 3, 1, 1, 1.5)` returns the middleSpeed `1` because the currentDistance `1.5` is
+--- after the rampUpDistance but before the totalDistance - rampDownDistance
+--- - `GetTrapezoidSpeed(0, 1, 0.5, 3, 1, 1, 2.5)` returns `0.75` which is halfway between the middleSpeed `1` and
+--- endSpeed `0.5` because currentDistance `2.5` is halfway between totalDistance - rampDownDistance and totalDistance
+--- - `GetTrapezoidSpeed(0, 1, 0.5, 3, 1, 1, 3)` returns the endSpeed `0.5`
+---@param startSpeed number
+---@param middleSpeed number
+---@param endSpeed number
+---@param totalDistance number
+---@param rampUpDistance number
+---@param rampDownDistance number
+---@param currentDistance number
+---@return number speed
 function GetTrapezoidSpeed(
     startSpeed,
     middleSpeed,
