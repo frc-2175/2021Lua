@@ -135,6 +135,9 @@ function TalonFX:follow(masterToFollow)
     ffi.C.TalonFX_Follow(self.motor, masterIMC)
 end
 
+function TalonFX:configStatorCurrentLimit(enable, limit, threshold, time)
+    ffi.C.TalonFX_ConfigStatorCurrentLimit(enable, limit, threshold, time)
+end
 
 -- Spark Max (Neo)
 
