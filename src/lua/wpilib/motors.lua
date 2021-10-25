@@ -101,6 +101,10 @@ function TalonSRX:getOutputCurrent()
     return ffi.C.TalonSRX_GetOutputCurrent(self.motor)
 end
 
+function TalonSRX:getStatorCurrent()
+    return ffi.C.TalonSRX_GetStatorCurrent(self.motor)
+end
+
 function TalonSRX:getMotorOutputVoltage()
     return ffi.C.TalonSRX_GetMotorOutputVoltage(self.motor)
 end
@@ -121,6 +125,10 @@ function TalonFX:get()
     return ffi.C.TalonFX_Get(self.motor)
 end
 
+function TalonFX:getStatorCurrent()
+    return ffi.C.TalonFX_GetStatorCurrent(self.motor)
+end
+
 function TalonFX:set(value)
     ffi.C.TalonFX_Set(self.motor, value)
 end
@@ -138,6 +146,7 @@ end
 function TalonFX:configStatorCurrentLimit(enable, limit, threshold, time)
     ffi.C.TalonFX_ConfigStatorCurrentLimit(enable, limit, threshold, time)
 end
+
 
 -- Spark Max (Neo)
 

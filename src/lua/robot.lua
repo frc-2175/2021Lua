@@ -64,10 +64,24 @@ function robot.robotInit()
     feeder = VictorSPX:new(3)
 
     ramp = NewRamp(0.2, 0.4)
+
+    peakCurrent = {
+        left = 0,
+        right = 0
+    }
 end
 
 -- teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function robot.teleopPeriodic()
+
+    if leftMaster:getStatorCurrent() > peakCurrent.left then
+        peakCurrent.left = leftMaster:getStatorCurrent()
+        print("Peak left current:  " .. rightMaster:getStatorCurrent())
+    end
+    if rightMaster:getStatorCurrent() > peakCurrent.right then
+        peakCurrent.right = rightMaster:getStatorCurrent()
+        print("Peak right current: " .. rightMaster:getStatorCurrent())
+    end
 
     shooterSpeed = rightStick:getThrottle() -- Set the shooterSpeed to the value of the knob thing on the joystick.
 
