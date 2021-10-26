@@ -374,4 +374,5 @@ double GetFPGATimestamp();
 void* AHRS_new(int value);
 float AHRS_GetPitch(void* _this);
 void AHRS_Reset(void* _this);
+bool IsReal();
 ]]

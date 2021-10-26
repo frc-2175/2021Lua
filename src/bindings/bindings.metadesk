@@ -304,7 +304,6 @@ time: {
 
 @include("<frc/SPI.h>")
 @include('"AHRS.h"')
-
 ahrs: {
   @class("AHRS")
   AHRS: {
@@ -315,3 +314,8 @@ ahrs: {
     void Reset();
   }
 } 
+
+@include("<frc/RobotBase.h>")
+robotbase: {
+  bool IsReal() """    return frc::RobotBase::IsReal();""";
+}
