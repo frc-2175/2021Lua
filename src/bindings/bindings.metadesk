@@ -329,11 +329,7 @@ dashboard: {
     PutNumber("const char* keyName", double value) """    frc::SmartDashboard::PutNumber((wpi::StringRef)keyName, value);""";
     PutNumberArray("const char* keyName", "double* value", size_t size) """    frc::SmartDashboard::PutNumberArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));""";
     PutString("const char* keyName", "const char* value") """    frc::SmartDashboard::PutString((wpi::StringRef)keyName, (wpi::StringRef)value);""";
-    PutStringArray("const char* keyName", "const char * " *value, size_t size) """    std::vector<std::string> arr(size);
-    for(int i = 0; i < size; i++) {
-        arr[i] = std::string(value[i]);
-    }
-    frc::SmartDashboard::PutStringArray((wpi::StringRef)keyName, wpi::ArrayRef(arr));""";
+    PutStringArray("const char* keyName", "const char * " *value, size_t size) """    frc::SmartDashboard::PutStringArray((wpi::StringRef)keyName, wpi::ArrayRef(std::vector<std::string>(value, value + size)));""";
     PutBoolean("const char* keyName", bool value) """    frc::SmartDashboard::PutBoolean((wpi::StringRef)keyName, value);""";
     PutBooleanArray("const char* keyName", "int* value", size_t size) """    frc::SmartDashboard::PutBooleanArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));""";
 }

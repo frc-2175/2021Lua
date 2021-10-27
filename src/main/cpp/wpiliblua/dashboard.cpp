@@ -20,11 +20,7 @@ LUAFUNC void PutString( const char* keyName,  const char* value) {
 }
 
 LUAFUNC void PutStringArray( const char* keyName, const char * * value, size_t size) {
-    std::vector<std::string> arr(size);
-    for(int i = 0; i < size; i++) {
-        arr[i] = std::string(value[i]);
-    }
-    frc::SmartDashboard::PutStringArray((wpi::StringRef)keyName, wpi::ArrayRef(arr));
+    frc::SmartDashboard::PutStringArray((wpi::StringRef)keyName, wpi::ArrayRef(std::vector<std::string>(value, value + size)));
 }
 
 LUAFUNC void PutBoolean( const char* keyName, bool value) {
