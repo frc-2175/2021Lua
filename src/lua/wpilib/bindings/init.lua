@@ -375,4 +375,10 @@ void* AHRS_new(int value);
 float AHRS_GetPitch(void* _this);
 void AHRS_Reset(void* _this);
 bool IsReal();
+void PutNumber( const char* keyName, double value);
+void PutNumberArray( const char* keyName,  double* value, size_t size);
+void PutString( const char* keyName,  const char* value);
+void PutStringArray( const char* keyName, const char * * value, size_t size);
+void PutBoolean( const char* keyName, bool value);
+void PutBooleanArray( const char* keyName,  int* value, size_t size);
 ]]

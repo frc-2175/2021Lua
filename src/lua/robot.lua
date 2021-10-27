@@ -4,6 +4,7 @@ require("utils.timer")
 require("teleop.coroutines")
 require("utils.vector")
 require("wpilib.robotbase")
+require("wpilib.dashboard")
 
 safeMode = false
 minTurnRateLimit = 0.5
