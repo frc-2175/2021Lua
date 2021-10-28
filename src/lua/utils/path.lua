@@ -87,6 +87,9 @@ function NewPathSegment(endAng, path)
     return p
 end
 
+---@param startpoint any
+---@param endpoint any
+---@return table path
 function MakePathLine(startpoint, endpoint)
     local numPoints = math.floor((endpoint - startpoint):length() + 0.5)
     local pathVector = (endpoint - startpoint):normalized()
@@ -98,10 +101,15 @@ function MakePathLine(startpoint, endpoint)
     return path
 end
 
+---@param dist number
+---@return table PathSegment
 function MakeLinePathSegment(dist)
     return NewPathSegment(0, MakePathLine(NewVector(0, 0), NewVector(0, dist)))
 end
 
+---@param radius number
+---@param deg number
+---@return table PathSegment
 function MakeRightArcPathSegment(radius, deg)
     local circumfrence = 2 * math.pi * radius
     local distanceOfPath = circumfrence * (deg / 360)
@@ -120,6 +128,9 @@ function MakeRightArcPathSegment(radius, deg)
     return NewPathSegment(-deg, path)
 end
 
+---@param radius number
+---@param deg number
+---@return table PathSegment
 function MakeLeftArcPathSegment(radius, deg)
     local rightPath = MakeRightArcPathSegment(radius, deg).path
     local leftPath = {}
@@ -129,6 +140,9 @@ function MakeLeftArcPathSegment(radius, deg)
     return NewPathSegment(deg, leftPath)
 end
 
+---@param path table
+---@param numberOfActualPoints number
+---@return table path
 function NewPath(path, numberOfActualPoints)
     local p = {
         path = path,
@@ -137,6 +151,11 @@ function NewPath(path, numberOfActualPoints)
     return p
 end
 
+---@param isBackwards boolean
+---@param startingAng number
+---@param startingPos any
+---@param pathSegments table
+---@return table path
 function MakePath(isBackwards, startingAng, startingPos, pathSegments)
     local finalPath = {}
     local previousAng = 0

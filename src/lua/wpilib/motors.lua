@@ -43,7 +43,7 @@ SparkMaxMotorType = {
 VictorSPX = {}
 
 function VictorSPX:new(deviceNumber)
-    o = makeMotorController(ffi.C.VictorSPX_new(deviceNumber), ffi.C.VictorSPX_toSpeedController, ffi.C.VictorSPX_toIMotorController)
+    local o = makeMotorController(ffi.C.VictorSPX_new(deviceNumber), ffi.C.VictorSPX_toSpeedController, ffi.C.VictorSPX_toIMotorController)
     setmetatable(o, self)
     self.__index = self
     return o
@@ -63,7 +63,7 @@ end
 
 function VictorSPX:follow(masterToFollow)
     -- TODO: Test that the master is a motor controller
-    masterIMC = masterToFollow.toIMotorController(masterToFollow.motor)
+    local masterIMC = masterToFollow.toIMotorController(masterToFollow.motor)
     ffi.C.VictorSPX_Follow(self.motor, masterIMC)
 end
 
@@ -73,7 +73,7 @@ end
 TalonSRX = {}
 
 function TalonSRX:new(deviceNumber)
-    o = makeMotorController(ffi.C.TalonSRX_new(deviceNumber), ffi.C.TalonSRX_toSpeedController, ffi.C.TalonSRX_toIMotorController)
+    local o = makeMotorController(ffi.C.TalonSRX_new(deviceNumber), ffi.C.TalonSRX_toSpeedController, ffi.C.TalonSRX_toIMotorController)
     setmetatable(o, self)
     self.__index = self
     return o
@@ -115,7 +115,7 @@ end
 TalonFX = {}
 
 function TalonFX:new(deviceNumber)
-    o = makeMotorController(ffi.C.TalonFX_new(deviceNumber), ffi.C.TalonFX_toSpeedController, ffi.C.TalonFX_toIMotorController)
+    local o = makeMotorController(ffi.C.TalonFX_new(deviceNumber), ffi.C.TalonFX_toSpeedController, ffi.C.TalonFX_toIMotorController)
     setmetatable(o, self)
     self.__index = self
     return o
@@ -139,7 +139,7 @@ end
 
 function TalonFX:follow(masterToFollow)
     -- TODO: Test that the master is a motor controller
-    masterIMC = masterToFollow.toIMotorController(masterToFollow.motor)
+    local masterIMC = masterToFollow.toIMotorController(masterToFollow.motor)
     ffi.C.TalonFX_Follow(self.motor, masterIMC)
 end
 
@@ -178,12 +178,12 @@ function SparkMax:getEncoder()
 end
 
 function SparkMax:follow(masterToFollow, invert)
-    invert = invert or false
+    local invert = invert or false
     ffi.C.SparkMax_Follow(self.motor, masterToFollow.motor, invert)
 end
 
 function SparkMax:restoreFactoryDefaults(persist)
-    persist = persist or false
+    local persist = persist or false
     ffi.C.SparkMax_RestoreFactoryDefaults(self.motor, persist)
 end
 
@@ -243,9 +243,9 @@ end
 DifferentialDrive = {}
 
 function DifferentialDrive:new(leftMotor, rightMotor)
-    leftSC = leftMotor.toSpeedController(leftMotor.motor)
-    rightSC = rightMotor.toSpeedController(rightMotor.motor)
-    o = {
+    local leftSC = leftMotor.toSpeedController(leftMotor.motor)
+    local rightSC = rightMotor.toSpeedController(rightMotor.motor)
+    local o = {
         drive = ffi.C.DifferentialDrive_new(leftSC, rightSC),
     }
     setmetatable(o, self)
@@ -254,6 +254,6 @@ function DifferentialDrive:new(leftMotor, rightMotor)
 end
 
 function DifferentialDrive:arcadeDrive(xSpeed, zRotation, squareInputs)
-    squareInputs = squareInputs == nil and true or squareInputs
+    local squareInputs = squareInputs == nil and true or squareInputs
     ffi.C.DifferentialDrive_ArcadeDrive(self.drive, xSpeed, zRotation, squareInputs)
 end

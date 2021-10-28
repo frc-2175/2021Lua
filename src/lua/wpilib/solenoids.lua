@@ -29,13 +29,12 @@ function Solenoid:set(on)
     ffi.C.Solenoid_Set(self.solenoid, on)
 end
 
-
 -- Double Solenoid
 
 DoubleSolenoid = {}
 
 function DoubleSolenoid:new(forwardChannel, reverseChannel)
-    o = {
+    local o = {
         solenoid = ffi.C.DoubleSolenoid_new(forwardChannel, reverseChannel),
     }
     setmetatable(o, self)

@@ -8,6 +8,10 @@ local purePursuitPID = NewPIDController(0.02, 0, 0.002);
 local position = NewVector(0, 0)
 local navx = NewAHRS(PortList.kMXP)
 
+---@param pathResult table
+---@param fieldPosition any 
+---@param previousClosestPoint number
+---@return number indexOfClosestPoint
 function FindClosestPoint(pathResult, fieldPosition, previousClosestPoint)
     local indexOfClosestPoint = 0
     local startIndex = previousClosestPoint - 36
@@ -29,11 +33,18 @@ function FindClosestPoint(pathResult, fieldPosition, previousClosestPoint)
     return indexOfClosestPoint
 end
 
+---@param pathResult table
+---@param fieldPosition any
+---@param lookAhead number
+---@param closestPoint number
+---@return number goalPoint
 function FindGoalPoint(pathResult, fieldPosition, lookAhead, closestPoint)
     closestPoint = closestPoint or 0
     return math.min(closestPoint + lookAhead, #pathResult.path)
 end
 
+---@param point any
+---@return number degAngle
 function GetAngleToPoint(point)
     if point:length() == 0 then
         return 0
@@ -42,6 +53,10 @@ function GetAngleToPoint(point)
     return sign(point.x) * math.deg(angle)
 end
 
+---@param indexOfClosestPoint number
+---@param indexOfGoalPoint number
+---@param goalPoint any
+---@return table result
 function NewPurePursuitResult(indexOfClosestPoint, indexOfGoalPoint, goalPoint)
     local p = {
         indexOfClosestPoint = indexOfClosestPoint,
@@ -51,6 +66,9 @@ function NewPurePursuitResult(indexOfClosestPoint, indexOfGoalPoint, goalPoint)
     return p
 end
 
+---@param pathResult table
+---@param isBackwards boolean
+---@return table result
 function PurePursuit(pathResult, isBackwards)
     local indexOfClosestPoint = FindClosestPoint(pathResult, position, previousClosestPoint)
     local indexOfGoalPoint = FindGoalPoint(pathResult, position, 25, indexOfClosestPoint)

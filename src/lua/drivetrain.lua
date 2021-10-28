@@ -22,6 +22,11 @@ function NewRamp(timeToMax, timeToStop)
     return r
 end
 
+---@param curr number
+---@param targ number
+---@param accel number
+---@param decel number
+---@return number rampedValue
 function DoGrossRampStuff(curr, targ, accel, decel)
     if curr == 0 or (curr > 0 and targ > curr) or (curr < 0 and targ < curr) then
         -- accelerating

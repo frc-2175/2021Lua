@@ -119,7 +119,6 @@ function robot.teleopPeriodic()
         if leftStick:getButton(1) then
             shooter:set(shooterSpeed)
             if rightStick:getButton(1) then
-                
                 feeder:set(-1)
             else
                 feeder:set(0)

@@ -11,7 +11,7 @@ require("wpilib")
 table.unpack = table.unpack or unpack
 if not table.pack then
     table.pack = function(...)
-        local t = { ... }
+        local t = {...}
         t.n = #t
         return t
     end

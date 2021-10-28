@@ -1,5 +1,6 @@
 local ffi = require("ffi")
 
-function IsReal() 
+---@return boolean isReal
+function IsReal()
     return ffi.C.IsReal()
 end

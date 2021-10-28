@@ -45,7 +45,7 @@ typedef struct {
     MD_String8 ReturnType;
     MD_String8 Name;
     MD_String8 CustomBody;
-    
+
     int NumArgs;
     MD_String8 ArgTypes[MAX_ARGS];
     MD_String8 ArgNames[MAX_ARGS];
@@ -87,7 +87,7 @@ ParseFuncResult ParseFunc(MD_Node* n) {
             .Error = MD_S8Lit("Did not find arguments for function"),
         };
     }
-    
+
     MD_Node* nameNode = argsNode->prev;
     res.Name = nameNode->string;
 
@@ -110,7 +110,7 @@ ParseFuncResult ParseFunc(MD_Node* n) {
             if (!MD_NodeIsNil(derefTag)) {
                 res.ArgDerefs[res.NumArgs] = 1;
             }
-            
+
             MD_Node* castTag = MD_TagFromString(argStart, MD_S8Lit("cast"));
             if (!MD_NodeIsNil(castTag)) {
                 res.ArgCasts[res.NumArgs] = castTag->first_child->string;
@@ -271,7 +271,7 @@ MD_String8 addClassFuncs(
             }
 
             isMethod = 1;
-            
+
             MD_b32 isVoid = returnType.size == 0 || MD_StringMatch(returnType, MD_S8Lit("void"), 0);
             if (isVoid) {
                 body = MD_PushStringF(
@@ -289,7 +289,7 @@ MD_String8 addClassFuncs(
 
                 MD_Node* allocTag = MD_TagFromString(fNode, MD_S8Lit("alloc"));
                 MD_b32 shouldAlloc = !MD_NodeIsNil(allocTag);
-                
+
                 if (shouldAlloc) {
                     MD_String8 allocType = allocTag->first_child->string;
 
@@ -319,24 +319,24 @@ MD_String8 addClassFuncs(
         GenFuncResult genRes = GenFunc(res, returnType, name, body, isMethod);
         MD_PushStringToList(cppDefs, genRes.CppDef);
         MD_PushStringToList(luaDefs, genRes.LuaDef);
-        
+
         fNode = res.After;
     }
 
-    return (MD_String8) {0};
+    return (MD_String8) { 0 };
 }
 
 int main(int argc, char** argv) {
     MD_ParseResult parse = MD_ParseWholeFile(MD_S8Lit("src/bindings/bindings.metadesk"));
-    
+
     if (parse.first_error) {
-        for (MD_Error *error = parse.first_error; error != 0; error = error->next) {
+        for (MD_Error* error = parse.first_error; error != 0; error = error->next) {
             MD_CodeLoc loc = MD_CodeLocFromNode(error->node);
             printf("ERROR (line %d, column %d): %.*s\n", loc.line, loc.column, MD_StringExpand(error->string));
         }
         return 1;
     }
-    
+
     // DumpNode(parse.node);
 
     char filename_buf[128];
