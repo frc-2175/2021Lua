@@ -70,21 +70,23 @@ function robot.robotInit()
     ramp = NewRamp(0.2, 0.4)
 
     peakCurrent = {
-        left = 0,
-        right = 0
+        left = -1,
+        right = -1
     }
 end
 
 -- teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function robot.teleopPeriodic()
 
+    
+    PutNumber("Peak left current", rightMaster:getStatorCurrent())
+    PutNumber("Peak right current", rightMaster:getStatorCurrent())
+
     if leftMaster:getStatorCurrent() > peakCurrent.left then
         peakCurrent.left = leftMaster:getStatorCurrent()
-        PutNumber("Peak left current", rightMaster:getStatorCurrent())
     end
     if rightMaster:getStatorCurrent() > peakCurrent.right then
         peakCurrent.right = rightMaster:getStatorCurrent()
-        PutNumber("Peak right current", rightMaster:getStatorCurrent())
     end
 
     shooterSpeed = rightStick:getThrottle() -- Set the shooterSpeed to the value of the knob thing on the joystick.
