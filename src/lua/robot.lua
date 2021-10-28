@@ -5,6 +5,7 @@ require("teleop.coroutines")
 require("utils.vector")
 require("wpilib.robotbase")
 require("wpilib.dashboard")
+require("wpilib.shuffleboard")
 
 safeMode = false
 minTurnRateLimit = 0.5
@@ -15,11 +16,12 @@ flywheelOn = false
 
 function robot.robotInit()
     if simMode then
-        print("Sim mode activated!")
+        PutBoolean("Sim Mode", true)
         -- sim left motor
         leftMaster = TalonSRX:new(15) -- making a motor !
         leftMaster:setInverted(CTREInvertType.None) -- setting up, making it inverted
     else
+        PutBoolean("Sim Mode", false)
         -- real left motor
         leftMaster = TalonFX:new(15) -- making a motor !
         leftMaster:setInverted(CTRETalonFXInvertType.CounterClockwise) -- setting up, making it inverted

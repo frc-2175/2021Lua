@@ -248,6 +248,21 @@ MD_String8 addClassFuncs(
                 MD_StringExpand(convertTo),
                 MD_StringExpand(cppName)
             );
+        } else if (MD_NodeHasTag(fNode, MD_S8Lit("static"))) {
+            isMethod = 0;
+            MD_String8 staticName = res.Name;
+
+            MD_Node* aliasTag = MD_TagFromString(fNode, MD_S8Lit("alias"));
+            if (!MD_NodeIsNil(aliasTag)) {
+                staticName = aliasTag->first_child->string;
+            }
+
+            body = MD_PushStringF(
+                "   %.*s::%.*s(%.*s);",
+                MD_StringExpand(cppName),
+                MD_StringExpand(staticName),
+                MD_StringExpand(MD_JoinStringList(callArgs, MD_S8Lit(", ")))
+            );
         } else {
             MD_String8 cppFunc = res.Name;
             MD_Node* aliasTag = MD_TagFromString(fNode, MD_S8Lit("alias"));
