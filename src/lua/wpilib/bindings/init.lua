@@ -376,9 +376,9 @@ float AHRS_GetPitch(void* _this);
 void AHRS_Reset(void* _this);
 bool IsReal();
 void SmartDashboard_PutNumber(const char* keyName, double value);
-void SmartDashboard_PutNumberArray(void* _this,  const char* keyName,  double* value, size_t size);
+void SmartDashboard_PutNumberArray( const char* keyName,  double* value, size_t size);
 void SmartDashboard_PutString(const char* keyName, const char* value);
-void SmartDashboard_PutStringArray(void* _this,  const char* keyName, const char * * value, size_t size);
+void SmartDashboard_PutStringArray( const char* keyName, const char * * value, size_t size);
 void SmartDashboard_PutBoolean(const char* keyName, bool value);
-void SmartDashboard_PutBooleanArray(void* _this,  const char* keyName,  int* value, size_t size);
+void SmartDashboard_PutBooleanArray( const char* keyName,  int* value, size_t size);
 ]]

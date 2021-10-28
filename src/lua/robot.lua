@@ -5,7 +5,6 @@ require("teleop.coroutines")
 require("utils.vector")
 require("wpilib.robotbase")
 require("wpilib.dashboard")
-require("wpilib.shuffleboard")
 
 safeMode = false
 minTurnRateLimit = 0.5
