@@ -25,6 +25,7 @@ int Joystick_GetPOV(void* _this);
 int Joystick_GetAxisCount(void* _this);
 int Joystick_GetPOVCount(void* _this);
 int Joystick_GetButtonCount(void* _this);
+const char* Joystick_GetName(void* _this);
 int Joystick_GetPort(void* _this);
 void Joystick_SetRumble(void* _this, int type, double value);
 void VictorSPX_PIDWrite(void* _this, double output);

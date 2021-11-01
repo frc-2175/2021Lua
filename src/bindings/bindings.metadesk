@@ -27,7 +27,9 @@ io: {
     int GetAxisCount();
     int GetPOVCount();
     int GetButtonCount();
-    // Someday we could do GetName if we figure out strings
+    "const char*" GetName() """    auto _result = ((frc::Joystick*)_this)
+        ->GetName();
+    return _result.c_str();""";
     int GetPort();
     SetRumble(@cast("frc::GenericHID::RumbleType") int type, double value);
   }
@@ -311,7 +313,7 @@ ahrs: {
     // the port we will be using(kMXP) is set to 1. I'll add this enum as a table in lua somewhere
     @constructor new(@cast("frc::SPI::Port") int value);
     float GetPitch();
-    void Reset();
+    Reset();
   }
 } 
 

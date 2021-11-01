@@ -192,7 +192,7 @@ MD_String8 addClassFuncs(
     MD_String8 luaName,
     MD_String8List* cppDefs,
     MD_String8List* luaDefs
-) {
+    ) {
     MD_Node* fNode = klass->first_child;
     while (1) {
         if (MD_NodeIsNil(fNode)) {
