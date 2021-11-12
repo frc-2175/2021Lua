@@ -319,7 +319,7 @@ void* TalonFX_new(int deviceNumber);
 void TalonFX_SetWithTalonFXControlMode(void* _this, int mode, double value);
 void TalonFX_SetWithTalonFXControlModeAndDemands(void* _this, int mode, double demand0, int demand1Type, double demand1);
 void TalonFX_SetInvertedTalonFX(void* _this, int invertType);
-void TalonFX_ConfigStatorCurrentLimit(void* _this, bool enable, double currentLimit, double triggerThresholdCurrent, double triggerThresholdTime);
+void TalonFX_ConfigStatorCurrentLimit(void* _this, bool enable, double currentLimit);
 int TalonFX_ConfigSelectedFeedbackSensor(void* _this, int feedbackDevice, int pidIdx, int timeoutMs);
 void* SparkMax_toSpeedController(void* _this);
 void SparkMax_Set(void* _this, double value);

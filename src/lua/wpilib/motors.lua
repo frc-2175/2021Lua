@@ -143,8 +143,10 @@ function TalonFX:follow(masterToFollow)
     ffi.C.TalonFX_Follow(self.motor, masterIMC)
 end
 
-function TalonFX:configStatorCurrentLimit(enable, limit, threshold, time)
-    ffi.C.TalonFX_ConfigStatorCurrentLimit(enable, limit, threshold, time)
+---@param enable boolean
+---@param limit number
+function TalonFX:configStatorCurrentLimit(enable, limit)
+    ffi.C.TalonFX_ConfigStatorCurrentLimit(enable, limit)
 end
 
 

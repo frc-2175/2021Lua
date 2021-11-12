@@ -73,6 +73,12 @@ function robot.robotInit()
         left = -1,
         right = -1
     }
+
+    if not simMode then
+        leftMaster:configStatorCurrentLimit(true, 50)
+        rightMaster:configStatorCurrentLimit(true, 50)
+    end
+
 end
 
 -- teleop periodic : WHERE EVERTHING HAPPENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!

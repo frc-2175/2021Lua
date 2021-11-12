@@ -204,9 +204,9 @@ motors: {
     @alias("Set") SetWithTalonFXControlMode(@cast("ctre::phoenix::motorcontrol::TalonFXControlMode") int mode, double value);
     @alias("Set") SetWithTalonFXControlModeAndDemands(@cast("ctre::phoenix::motorcontrol::TalonFXControlMode") int mode, double demand0, @cast("ctre::phoenix::motorcontrol::DemandType") int demand1Type, double demand1);
     @alias("SetInverted") SetInvertedTalonFX(@cast("ctre::phoenix::motorcontrol::TalonFXInvertType") int invertType);
-    ConfigStatorCurrentLimit(bool enable, double currentLimit, double triggerThresholdCurrent, double triggerThresholdTime) """
+    ConfigStatorCurrentLimit(bool enable, double currentLimit) """
     ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
-        ->ConfigStatorCurrentLimit(ctre::phoenix::motorcontrol::StatorCurrentLimitConfiguration(enable, currentLimit, triggerThresholdCurrent, triggerThresholdTime));
+        ->ConfigStatorCurrentLimit(ctre::phoenix::motorcontrol::StatorCurrentLimitConfiguration(enable, currentLimit, 0, 0));
     """;
     int ConfigSelectedFeedbackSensor(@cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
     // @alias("ConfigSelectedFeedbackSensor") int ConfigSelectedFeedbackSensorTalonFX(@cast("ctre::phoenix::motorcontrol::TalonFXFeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
