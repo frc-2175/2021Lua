@@ -98,7 +98,7 @@ function robot.teleopPeriodic()
     end
 
     robotDrive:arcadeDrive(
-        ramp:Ramp(-leftStick:getAxis(JoystickAxes.Y) * speedLimiter),  -- multiplies speed in forward and backwards
+        -leftStick:getAxis(JoystickAxes.Y) * speedLimiter,  -- multiplies speed in forward and backwards
         rightStick:getAxis(JoystickAxes.X)
     )
 

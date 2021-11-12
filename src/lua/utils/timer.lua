@@ -1,3 +1,5 @@
+require("wpilib.time")
+
 Timer = {}
 
 function Timer:new()
