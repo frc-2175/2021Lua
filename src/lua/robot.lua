@@ -1,6 +1,6 @@
 function robot.robotInit()
     leftMotor = TalonSRX:new(1)
-    rightMotor = TalonSRX:new(2)
+    rightMotor = TalonSRX:new(6)
 
     leftStick = Joystick:new(0)
     rightStick = Joystick:new(1)
