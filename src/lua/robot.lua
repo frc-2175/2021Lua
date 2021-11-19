@@ -75,8 +75,8 @@ function robot.robotInit()
     }
 
     if not simMode then
-        leftMaster:configStatorCurrentLimit(true, 50)
-        rightMaster:configStatorCurrentLimit(true, 50)
+        leftMaster:configStatorCurrentLimit(true, 25, 20)
+        rightMaster:configStatorCurrentLimit(true, 25, 20)
     end
 
 end
@@ -108,13 +108,6 @@ function robot.teleopPeriodic()
         rightStick:getAxis(JoystickAxes.X)
     )
 
-    if gamepad:getButton(GamepadButtons.RightTrigger) then
-        intakePutOut()
-        intakeRollIn()
-    else
-        stopIntake()
-        intakePutIn()
-    end
 
     gearSolenoid:set(rightStick:getButton(11))
 
@@ -138,6 +131,15 @@ function robot.teleopPeriodic()
         mainMagazine:set(-gamepad:getAxis(1) * 0.87)
     end
 
+    
+    if gamepad:getButton(GamepadButtons.RightTrigger) then
+        intakePutOut()
+        intakeRollIn()
+        mainMagazine:set(-0.25)
+    else
+        stopIntake()
+        intakePutIn()
+    end
     -- Holding the left joystick trigger, will run the flywheel, and if the left joystick trigger is pressed when the right joystick trigger is pressed, it will turn on the feeder.
 
     -- intake piston 
@@ -161,8 +163,8 @@ function robot.autonomousInit()
 end
 
 function robot.autonomousPeriodic()
-    if driveTimer:getElapsedTimeSeconds() < 2 then
-        robotDrive:arcadeDrive(0.5, 0)
+    if driveTimer:getElapsedTimeSeconds() < 3 then
+        robotDrive:arcadeDrive(0.7, 0)
     else
         robotDrive:arcadeDrive(0, 0)
     end

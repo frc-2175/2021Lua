@@ -37,6 +37,16 @@ SparkMaxMotorType = {
     Brushless = 1,
 }
 
+talonFeedbackType = {
+    integrated = 0,
+    sum = 1,
+    difference = 2,
+    remote0 = 3,
+    remote1 = 4,
+    none = 5,
+    software = 6
+}
+
 
 -- Victor SPX
 
@@ -145,8 +155,13 @@ end
 
 ---@param enable boolean
 ---@param limit number
-function TalonFX:configStatorCurrentLimit(enable, limit)
-    ffi.C.TalonFX_ConfigStatorCurrentLimit(enable, limit)
+function TalonFX:configStatorCurrentLimit(enable, limit, time)
+    time = time or 50
+    ffi.C.TalonFX_ConfigStatorCurrentLimit(enable, limit, time)
+end
+
+function TalonFX:configSelectedFeedbackSensor(device, pididx, timeoutms)
+    TalonFX_ConfigSelectedFeedbackSensor(self.motor, device, pididx, timeoutms)
 end
 
 
