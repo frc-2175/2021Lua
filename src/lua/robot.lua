@@ -96,6 +96,7 @@ function robot.teleopPeriodic()
     end
 
     shooterSpeed = rightStick:getThrottle() -- Set the shooterSpeed to the value of the knob thing on the joystick.
+    PutNumber("Shooter Speed", rightStick:getThrottle())
 
     if -leftStick:getAxis(JoystickAxes.Throttle) < minSpeedLimit then
         speedLimiter = minSpeedLimit
