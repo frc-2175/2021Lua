@@ -11,7 +11,7 @@ LUAFUNC void SmartDashboard_PutNumber(const char* keyName, double value) {
 }
 
 LUAFUNC void SmartDashboard_PutNumberArray( const char* keyName,  double* value, size_t size) {
-    frc::SmartDashboard::PutNumberArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));
+      frc::SmartDashboard::PutNumberArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));
 }
 
 LUAFUNC void SmartDashboard_PutString(const char* keyName, const char* value) {
@@ -19,7 +19,7 @@ LUAFUNC void SmartDashboard_PutString(const char* keyName, const char* value) {
 }
 
 LUAFUNC void SmartDashboard_PutStringArray( const char* keyName, const char * * value, size_t size) {
-    frc::SmartDashboard::PutStringArray((wpi::StringRef)keyName, wpi::ArrayRef(std::vector<std::string>(value, value + size)));
+      frc::SmartDashboard::PutStringArray((wpi::StringRef)keyName, wpi::ArrayRef(std::vector<std::string>(value, value + size)));
 }
 
 LUAFUNC void SmartDashboard_PutBoolean(const char* keyName, bool value) {
@@ -27,5 +27,5 @@ LUAFUNC void SmartDashboard_PutBoolean(const char* keyName, bool value) {
 }
 
 LUAFUNC void SmartDashboard_PutBooleanArray( const char* keyName,  int* value, size_t size) {
-    frc::SmartDashboard::PutBooleanArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));
+      frc::SmartDashboard::PutBooleanArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));
 }

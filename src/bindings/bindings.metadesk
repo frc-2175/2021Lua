@@ -27,9 +27,11 @@ io: {
     int GetAxisCount();
     int GetPOVCount();
     int GetButtonCount();
-    "const char*" GetName() """    auto _result = ((frc::Joystick*)_this)
+    "const char*" GetName() """
+      auto _result = ((frc::Joystick*)_this)
         ->GetName();
-    return _result.c_str();""";
+      return _result.c_str();
+    """;
     int GetPort();
     SetRumble(@cast("frc::GenericHID::RumbleType") int type, double value);
   }
@@ -205,7 +207,7 @@ motors: {
     @alias("Set") SetWithTalonFXControlModeAndDemands(@cast("ctre::phoenix::motorcontrol::TalonFXControlMode") int mode, double demand0, @cast("ctre::phoenix::motorcontrol::DemandType") int demand1Type, double demand1);
     @alias("SetInverted") SetInvertedTalonFX(@cast("ctre::phoenix::motorcontrol::TalonFXInvertType") int invertType);
     ConfigStatorCurrentLimit(bool enable, double currentLimit, double time) """
-    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+      ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
         ->ConfigStatorCurrentLimit(ctre::phoenix::motorcontrol::StatorCurrentLimitConfiguration(enable, currentLimit, 0, time), 0);
     """;
     int ConfigSelectedFeedbackSensor(@cast("ctre::phoenix::motorcontrol::FeedbackDevice") int feedbackDevice, int pidIdx, int timeoutMs);
@@ -319,9 +321,10 @@ ahrs: {
 
 @include("<frc/RobotBase.h>")
 robotbase: {
-  bool IsReal() """    return frc::RobotBase::IsReal();""";
+  bool IsReal() """
+    return frc::RobotBase::IsReal();
+  """;
 }
-
 
 @include("<wpi/StringRef.h>")
 @include("<wpi/ArrayRef.h>")
@@ -330,10 +333,16 @@ dashboard: {
   @class("frc::SmartDashboard")
   SmartDashboard: {
     @static PutNumber(@cast("wpi::StringRef") "const char*" keyName, double value);
-    @static PutNumberArray("const char* keyName", "double* value", size_t size) """    frc::SmartDashboard::PutNumberArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));""";
+    @static PutNumberArray("const char* keyName", "double* value", size_t size) """
+      frc::SmartDashboard::PutNumberArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));
+    """;
     @static PutString(@cast("wpi::StringRef")"const char*" keyName, @cast("wpi::StringRef")"const char*" value);
-    @static PutStringArray("const char* keyName", "const char * " *value, size_t size) """    frc::SmartDashboard::PutStringArray((wpi::StringRef)keyName, wpi::ArrayRef(std::vector<std::string>(value, value + size)));""";
+    @static PutStringArray("const char* keyName", "const char * " *value, size_t size) """
+      frc::SmartDashboard::PutStringArray((wpi::StringRef)keyName, wpi::ArrayRef(std::vector<std::string>(value, value + size)));
+    """;
     @static PutBoolean(@cast("wpi::StringRef")"const char*" keyName, bool value);
-    @static PutBooleanArray("const char* keyName", "int* value", size_t size) """    frc::SmartDashboard::PutBooleanArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));""";
+    @static PutBooleanArray("const char* keyName", "int* value", size_t size) """
+      frc::SmartDashboard::PutBooleanArray((wpi::StringRef)keyName, wpi::ArrayRef(value, size));
+    """;
   }
 }

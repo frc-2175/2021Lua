@@ -1676,10 +1676,8 @@ LUAFUNC void TalonFX_SetInvertedTalonFX(void* _this, int invertType) {
 }
 
 LUAFUNC void TalonFX_ConfigStatorCurrentLimit(void* _this, bool enable, double currentLimit, double time) {
-
-    ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
-        ->ConfigStatorCurrentLimit(ctre::phoenix::motorcontrol::StatorCurrentLimitConfiguration(enable, currentLimit, 0, time), 0);
-    
+      ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
+        ->ConfigStatorCurrentLimit(ctre::phoenix::motorcontrol::StatorCurrentLimitConfiguration(enable, currentLimit, 0, time), 0);
 }
 
 LUAFUNC int TalonFX_ConfigSelectedFeedbackSensor(void* _this, int feedbackDevice, int pidIdx, int timeoutMs) {
@@ -1928,13 +1926,11 @@ LUAFUNC bool SparkMaxEncoder_GetInverted(void* _this) {
 }
 
 LUAFUNC void* DifferentialDrive_new(void* leftMotor, void* rightMotor) {
-
-      assert(leftMotor);
-      assert(rightMotor);
-      auto l = (frc::SpeedController*)leftMotor;
-      auto r = (frc::SpeedController*)rightMotor;
-      return new frc::DifferentialDrive(*l, *r);
-    
+      assert(leftMotor);
+      assert(rightMotor);
+      auto l = (frc::SpeedController*)leftMotor;
+      auto r = (frc::SpeedController*)rightMotor;
+      return new frc::DifferentialDrive(*l, *r);
 }
 
 LUAFUNC void DifferentialDrive_ArcadeDrive(void* _this, double xSpeed, double zRotation, bool squareInputs) {

@@ -141,9 +141,9 @@ LUAFUNC int Joystick_GetButtonCount(void* _this) {
 }
 
 LUAFUNC const char* Joystick_GetName(void* _this) {
-    auto _result = ((frc::Joystick*)_this)
-        ->GetName();
-    return _result.c_str();
+      auto _result = ((frc::Joystick*)_this)
+        ->GetName();
+      return _result.c_str();
 }
 
 LUAFUNC int Joystick_GetPort(void* _this) {
