@@ -24,6 +24,18 @@ GamepadButtons = {
 }
 setmetatable(GamepadButtons, constantMetatable)
 
+POV = {
+    Up = 0,
+    UpRight = 45,
+    Right = 90,
+    DownRight = 135,
+    Down = 180,
+    DownLeft = 225,
+    Left = 270,
+    UpLeft = 315
+}
+setmetatable(POV, constantMetatable)
+
 -- TODO: Gamepad axes
 
 XboxButtons = {
@@ -126,4 +138,8 @@ end
 function Joystick:getThrottle()
     local x = self:getAxis(JoystickAxes.Throttle)
     return -0.5 * x + 0.5
+end
+
+function Joystick:getPOV(direction)
+    return ffi.C.Joystick_GetPOV(self.joystick) == direction
 end

@@ -37,16 +37,29 @@ SparkMaxMotorType = {
     Brushless = 1,
 }
 
-talonFeedbackType = {
-    integrated = 0,
-    sum = 1,
-    difference = 2,
-    remote0 = 3,
-    remote1 = 4,
-    none = 5,
-    software = 6
+TalonFXFeedbackDevice = {
+    IntegratedSensor = 1,
+    SensorSum = 9,
+    SensorDifference = 10,
+    RemoteSensor0 = 11,
+    RemoteSensor1 = 12,
+    None = 14,
+    SoftwareEmulatedSensor = 15
 }
 
+TalonSRXFeedbackDevice = {
+    QuadEncoder = 0,
+    CTRE_MagEncoder_Relative = 0,
+    Analog = 2,
+    PulseWidthEncodedPosition = 4,
+    CTRE_MagEncoder_Absolute = 8,
+    SensorSum = 9,
+    SensorDifference = 10,
+    RemoteSensor0 = 11,
+    RemoteSensor1 = 12,
+    None = 14,
+    SoftwareEmulatedSensor = 15,
+}
 
 -- Victor SPX
 
@@ -119,6 +132,11 @@ function TalonSRX:getMotorOutputVoltage()
     return ffi.C.TalonSRX_GetMotorOutputVoltage(self.motor)
 end
 
+function TalonSRX:configSelectedFeedbackSensor(device, pididx, timeoutms)
+    timeoutms = timeoutms or 0
+    ffi.C.TalonSRX_ConfigSelectedFeedbackSensor(self.motor, device, pididx, timeoutms)
+end
+
 
 -- Talon FX
 
@@ -156,12 +174,13 @@ end
 ---@param enable boolean
 ---@param limit number
 function TalonFX:configStatorCurrentLimit(enable, limit, time)
-    time = time or 50
+    time = time or 0
     ffi.C.TalonFX_ConfigStatorCurrentLimit(enable, limit, time)
 end
 
 function TalonFX:configSelectedFeedbackSensor(device, pididx, timeoutms)
-    TalonFX_ConfigSelectedFeedbackSensor(self.motor, device, pididx, timeoutms)
+    timeoutms = timeoutms or 0
+    ffi.C.TalonFX_ConfigSelectedFeedbackSensor(self.motor, device, pididx, timeoutms)
 end
 
 

@@ -1678,7 +1678,7 @@ LUAFUNC void TalonFX_SetInvertedTalonFX(void* _this, int invertType) {
 LUAFUNC void TalonFX_ConfigStatorCurrentLimit(void* _this, bool enable, double currentLimit, double time) {
 
     ((ctre::phoenix::motorcontrol::can::WPI_TalonFX*)_this)
-        ->ConfigStatorCurrentLimit(ctre::phoenix::motorcontrol::StatorCurrentLimitConfiguration(enable, currentLimit, 0, 0), 50);
+        ->ConfigStatorCurrentLimit(ctre::phoenix::motorcontrol::StatorCurrentLimitConfiguration(enable, currentLimit, 0, time), 0);
     
 }
 
