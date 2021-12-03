@@ -6,11 +6,11 @@ function robot.robotInit()
     rightStick = Joystick:new(1)
     gamepad = Joystick:new(2)
 
+    robotDrive = DifferentialDrive:new(leftMotor, rightMotor)
 end
 
 function robot.teleopPeriodic()
-    leftMotor.set(leftStick:getAxis(JoystickAxes.Y) + rightStick:getAxis(JoystickAxes.X))
-    rightMotor.set(leftStick:getAxis(JoystickAxes.Y) - rightStick:getAxis(JoystickAxes.X))
+    robotDrive:arcadeDrive(-leftStick:getAxis(JoystickAxes.Y), rightStick:getAxis(JoystickAxes.X))
 end
 
 function robot.autonomousInit()
@@ -22,7 +22,7 @@ function robot.autonomousPeriodic()
 end
 
 function deadband(joystickVal)
-    if joystickVal < 0.05 and joystickVal > -0.05
+    if joystickVal < 0.05 and joystickVal > -0.05 then
         return 0
     else
         return joystickVal
