@@ -9,12 +9,13 @@ function robot.robotInit()
     robotDrive = DifferentialDrive:new(leftMotor, rightMotor)
 
     lights = PWM:new(0)
-    lights:setBounds(2000, 1540, 1500, 1460, 1000)
-    lights:setSpeed(0.61)
 end
 
 function robot.teleopPeriodic()
     robotDrive:arcadeDrive(-leftStick:getAxis(JoystickAxes.Y), rightStick:getAxis(JoystickAxes.X))
+    local isTimeEven = math.fmod(math.floor(getTimeSeconds() * 2), 2) == 0
+    print(isTimeEven and 0.61 or 0.77)
+    lights:set(isTimeEven and 0.61 or 0.77)
 end
 
 function robot.autonomousInit()
