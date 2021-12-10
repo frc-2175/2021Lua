@@ -6,7 +6,7 @@
 #include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
 #include <frc/drive/DifferentialDrive.h>
 #include "rev/CANSparkMax.h"
-#include <PWM.h>
+#include <frc/Spark.h>
 
 #include "luadef.h"
 
@@ -1943,22 +1943,17 @@ LUAFUNC void DifferentialDrive_ArcadeDrive(void* _this, double xSpeed, double zR
         ->ArcadeDrive(xSpeed, zRotation, squareInputs);
 }
 
-LUAFUNC void* PWM_new(int channel) {
-    return new frc::PWM(channel);
+LUAFUNC void* Spark_new(int channel) {
+    return new frc::Spark(channel);
 }
 
-LUAFUNC void PWM_SetBounds(void* _this, double max, double deadbandMax, double center, double deadbandMin, double min) {
-    ((frc::PWM*)_this)
-        ->SetBounds(max, deadbandMax, center, deadbandMin, min);
+LUAFUNC void Spark_Set(void* _this, double value) {
+    ((frc::Spark*)_this)
+        ->Set(value);
 }
 
-LUAFUNC void PWM_SetSpeed(void* _this, double value) {
-    ((frc::PWM*)_this)
-        ->SetSpeed(value);
-}
-
-LUAFUNC double PWM_GetSpeed(void* _this) {
-    auto _result = ((frc::PWM*)_this)
-        ->GetSpeed();
+LUAFUNC double Spark_Get(void* _this) {
+    auto _result = ((frc::Spark*)_this)
+        ->Get();
     return _result;
 }

@@ -42,7 +42,7 @@ io: {
 @include("<ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>")
 @include("<frc/drive/DifferentialDrive.h>")
 @include('"rev/CANSparkMax.h"')
-@include('<PWM.h>')
+@include('<frc/Spark.h>')
 motors: {
   @baseclass
   "frc::SpeedController": {
@@ -276,12 +276,11 @@ motors: {
     ArcadeDrive(double xSpeed, double zRotation, bool squareInputs);
   }
 
-  @class("frc::PWM")
-  PWM: {
+  @class("frc::Spark")
+  Spark: {
     @constructor new(int channel);
-    SetBounds(double max, double deadbandMax, double center, double deadbandMin, double min);
-    SetSpeed(double value);
-    double GetSpeed();
+    Set(double value);
+    double Get();
   }
 }
 

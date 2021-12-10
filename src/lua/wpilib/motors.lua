@@ -264,21 +264,17 @@ PWM = {}
 
 function PWM:new(channel)
     local p = {
-        PWM = ffi.C.PWM_new(channel)
+        PWM = ffi.C.Spark_new(channel)
     }
     setmetatable(p, self)
     self.__index = self
     return p
 end
 
-function PWM:setBounds(max, deadmax, center, deadmin, min)
-    ffi.C.PWM_SetBounds(self.PWM, max, deadmax, center, deadmin, min)
+function PWM:set(value)
+    ffi.C.Spark_Set(self.PWM, value)
 end
 
-function PWM:setSpeed(value)
-    ffi.C.PWM_SetSpeed(self.PWM, value)
-end
-
-function PWM:getSpeed(value)
-    ffi.C.PWM_GetSpeed(self.PWM)
+function PWM:get(value)
+    return ffi.C.Spark_Get(self.PWM)
 end
