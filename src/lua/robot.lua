@@ -7,6 +7,10 @@ function robot.robotInit()
     gamepad = Joystick:new(2)
 
     robotDrive = DifferentialDrive:new(leftMotor, rightMotor)
+
+    lights = PWM:new(0)
+    lights:setBounds(2000, 1540, 1500, 1460, 1000)
+    lights:setSpeed(0.61)
 end
 
 function robot.teleopPeriodic()
